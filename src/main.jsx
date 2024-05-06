@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import App from "./App.jsx";
+import authSaga from "./auth/authSaga.js";
 import authReducer from "./auth/authSlice.js";
 import "./index.css";
 
@@ -13,8 +14,10 @@ const store = configureStore({
 	reducer: {
 		authCheck: authReducer,
 	},
-	middleware: [saga],
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saga),
 });
+
+saga.run(authSaga);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
