@@ -4,9 +4,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	isLoading: false,
 	error: null,
-	isUserLoggedIn: false,
-	user: {},
-	userData: null,
 };
 
 // define slice with name, initial state and list of reducers
@@ -18,13 +15,12 @@ export const authSlice = createSlice({
 			state.isLoading = true;
 			state.error = null;
 		},
-		checkSignInSuccess(state, action) {
-			state.user = action.payload;
+		checkSignInSuccess(state) {
 			state.isLoading = false;
 		},
 		checkSignInFailure(state, action) {
-			state.error = action.payload;
 			state.isLoading = false;
+			state.error = action;
 		},
 	},
 });
