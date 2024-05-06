@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { put, takeEvery } from "redux-saga/effects";
-import { auth } from "../config/firebase_config";
+import { auth } from "../../config/firebase_config";
 import { checkSignInFailure, checkSignInSuccess } from "./authSlice";
 
 function* workCheckSignIn(action) {

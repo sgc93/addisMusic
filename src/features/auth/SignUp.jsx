@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Card } from "rebass";
-import { auth, googleProvider } from "../config/firebase_config";
+import { auth, googleProvider } from "../../config/firebase_config";
 import { checkSignIn } from "./authSlice";
 
 const SignUP = () => {
