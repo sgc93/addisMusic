@@ -11,7 +11,7 @@ const initialState = {
 
 // define slice with name, initial state and list of reducers
 export const authSlice = createSlice({
-	name: "auth",
+	name: "authCheck",
 	initialState,
 	reducers: {
 		checkSignIn(state) {
