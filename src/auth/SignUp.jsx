@@ -1,6 +1,6 @@
 import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Card } from "rebass";
 import { auth, googleProvider } from "../config/firebase_config";
@@ -10,6 +10,8 @@ const SignUP = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
+	const isLoading = useSelector((state) => state.authCheck.isLoading);
+	const error = useSelector((state) => state.authCheck.error);
 
 	// const signUp = async (event) => {
 	// 	event.preventDefault();
@@ -26,6 +28,9 @@ const SignUP = () => {
 		dispatch(
 			checkSignIn({ email: email, password: password, isWithGoogle: false })
 		);
+		console.log(
+			`isloading after dispatching: ${isLoading} and error: ${error}`
+		);
 	};
 
 	const signUpWithGoogle = async () => {
@@ -38,27 +43,31 @@ const SignUP = () => {
 
 	return (
 		<Card>
-			<form action="">
-				<input
-					type="text"
-					placeholder="email"
-					name="email"
-					value={email}
-					onChange={(event) => setEmail(event.target.value)}
-					required
-				/>
-				<input
-					type="password"
-					placeholder="password"
-					name="password"
-					value={password}
-					onChange={(event) => setPassword(event.target.value)}
-					required
-				/>
-				<button type="submit" onClick={(event) => signUp(event)}>
-					Sign Up
-				</button>
-			</form>
+			{isLoading && <h2>Loading ...</h2>}
+			{!isLoading && error && <h2>{error}</h2>}
+			{!isLoading && !error && (
+				<form action="">
+					<input
+						type="text"
+						placeholder="email"
+						name="email"
+						value={email}
+						onChange={(event) => setEmail(event.target.value)}
+						required
+					/>
+					<input
+						type="password"
+						placeholder="password"
+						name="password"
+						value={password}
+						onChange={(event) => setPassword(event.target.value)}
+						required
+					/>
+					<button type="submit" onClick={(event) => signUp(event)}>
+						Sign Up
+					</button>
+				</form>
+			)}
 			<h4>or</h4>
 			<button onClick={() => signUpWithGoogle()}>
 				sign up with with you google account
