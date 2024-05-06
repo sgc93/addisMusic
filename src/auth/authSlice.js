@@ -14,7 +14,7 @@ export const authSlice = createSlice({
 	name: "authCheck",
 	initialState,
 	reducers: {
-		checkSignIn(state) {
+		checkSignIn(state, action) {
 			state.isLoading = true;
 			state.error = null;
 		},
