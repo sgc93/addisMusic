@@ -30,7 +30,7 @@ const SidebarChild = styled.div`
 `;
 
 const IconStyle = styled.div`
-	font-size: 26px;
+	font-size: 20px;
 `;
 
 const SideBar = () => {
