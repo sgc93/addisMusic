@@ -1,9 +1,20 @@
 import styled from "@emotion/styled";
-import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
+import {
+	MdAlbum,
+	MdHome,
+	MdLibraryMusic,
+	MdPerson4,
+	MdQueueMusic,
+} from "react-icons/md";
+import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
 import Logo from "../../ui/Logo";
 import SideBarTab from "./SideBarTab";
 
 const Sidebar = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+
 	width: 16vw;
 	padding: 0.6rem;
 `;
@@ -16,8 +27,6 @@ const SidebarChild = styled.div`
 
 	padding: 1rem 0rem 1rem 1rem;
 	background-color: var(--color-bg-secondary);
-
-	border-top-left-radius: 1rem;
 `;
 
 const IconStyle = styled.div`
@@ -27,7 +36,7 @@ const IconStyle = styled.div`
 const SideBar = () => {
 	return (
 		<Sidebar>
-			<SidebarChild>
+			<SidebarChild style={{ borderTopLeftRadius: "1rem" }}>
 				<Logo />
 				<SideBarTab handleClick={() => console.log("go to home")}>
 					<IconStyle>
@@ -52,6 +61,26 @@ const SideBar = () => {
 						<MdQueueMusic />
 					</IconStyle>
 					Top Tracks
+				</SideBarTab>
+			</SidebarChild>
+			<SidebarChild>
+				<SideBarTab handleClick={() => console.log("go to tracks")}>
+					<IconStyle>
+						<TbMusicPlus />
+					</IconStyle>
+					Create Playlist
+				</SideBarTab>
+				<SideBarTab handleClick={() => console.log("go to tracks")}>
+					<IconStyle>
+						<MdLibraryMusic />
+					</IconStyle>
+					Your Songs
+				</SideBarTab>
+				<SideBarTab handleClick={() => console.log("go to tracks")}>
+					<IconStyle>
+						<TbMusicHeart />
+					</IconStyle>
+					Your Favorites
 				</SideBarTab>
 			</SidebarChild>
 		</Sidebar>
