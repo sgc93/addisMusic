@@ -6,8 +6,8 @@ const Name = styled.div`
 	padding: 5px 0px;
 	font-size: 20px;
 	font-weight: bold;
-	color: black;
-	border-bottom: 1px solid black;
+	color: var(--color-text-primary);
+	border-bottom: 2px solid var(--color-border-primary);
 `;
 
 const LogoBox = styled.div`
@@ -15,12 +15,13 @@ const LogoBox = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 1rem;
+	margin-bottom: 1rem;
 `;
 
 const Logo = () => {
 	return (
 		<LogoBox>
-			<img src="./logo.png" alt="addismusic" />
+			<img src="./logo.png" alt="addismusic" width={40} />
 			<Name>Addis Music</Name>
 		</LogoBox>
 	);
