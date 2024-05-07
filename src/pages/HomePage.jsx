@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Footer from "../features/footer/Footer";
 import SideBar from "../features/sidebar/SideBar";
 
 const HomeSection = styled.section`
@@ -11,6 +12,7 @@ const HomePage = () => {
 	return (
 		<HomeSection>
 			<SideBar />
+			<Footer />
 		</HomeSection>
 	);
 };
