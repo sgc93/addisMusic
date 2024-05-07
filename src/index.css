@@ -10,8 +10,8 @@ body {
 :root {
 	--color-text-primary: #fff;
 	--color-text-secondary: #ffffffcd;
+	--color-text-tertiary: #ffffffa2;
 	--color-border-primary: #ffffff50;
-	--color-border-secondary: #ffffff2a;
 
 	--color-tab-bg: #00000030;
 	--color-tab-hover-bg: #00000070;
@@ -22,6 +22,8 @@ body {
 
 	--color-rad-center: #f7cbfd;
 	--color-rad-outer: #7758d1;
+	--color-rad-center2: #9a8ac9;
+	--color-rad-outer2: #6750ad;
 
 	--color-gradient-1: #a73ee7;
 	--color-gradient-2: #00ebff;
