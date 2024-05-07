@@ -11,9 +11,10 @@ const HeaderBox = styled.div`
 	align-items: center;
 	justify-content: space-between;
 
+	width: 80.8%;
 	margin: 0.6rem;
 
-	width: 80.8%;
+	backdrop-filter: blur(4px);
 `;
 
 const Header = () => {
