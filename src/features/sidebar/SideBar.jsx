@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
 import Logo from "../../ui/Logo";
+import PlayedMusic from "./PlayedMusic";
 import SideBarTab from "./SideBarTab";
 
 const Sidebar = styled.div`
@@ -83,6 +84,7 @@ const SideBar = () => {
 					Your Favorites
 				</SideBarTab>
 			</SidebarChild>
+			<PlayedMusic />
 		</Sidebar>
 	);
 };
