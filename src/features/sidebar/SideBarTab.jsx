@@ -12,7 +12,7 @@ const Tab = styled.button`
 	outline: none;
 	margin-right: 1rem;
 	padding: 0.5rem 1rem;
-	font-size: 1.4rem;
+	font-size: 1.2rem;
 
 	cursor: pointer;
 	transition: all 0.3s;
