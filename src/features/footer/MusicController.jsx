@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import { FaVolumeLow } from "react-icons/fa6";
 import {
 	TbPlayerPause,
+	TbPlayerPlay,
 	TbPlayerTrackNext,
 	TbPlayerTrackPrev,
 } from "react-icons/tb";
@@ -25,6 +27,11 @@ const Flex = styled.div`
 `;
 
 const MusicController = () => {
+	const [isPaused, setIsPaused] = useState(false);
+
+	const pauseMusic = () => setIsPaused(false);
+	const playMusic = () => setIsPaused(true);
+
 	return (
 		<ControllerBox>
 			<IconButton>
@@ -34,10 +41,16 @@ const MusicController = () => {
 				<IconButton>
 					<TbPlayerTrackPrev />
 				</IconButton>
-				<IconButton>
-					<TbPlayerPause />
-				</IconButton>
-				{/* <TbPlayerPlay /> */}
+				{isPaused ? (
+					<IconButton handleClick={pauseMusic}>
+						<TbPlayerPause />
+					</IconButton>
+				) : (
+					<IconButton handleClick={playMusic}>
+						<TbPlayerPlay />
+					</IconButton>
+				)}
+
 				<IconButton>
 					<TbPlayerTrackNext />
 				</IconButton>
