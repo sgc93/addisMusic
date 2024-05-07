@@ -10,12 +10,15 @@ body {
 	--color-text-primary: #fff;
 	--color-text-secondary: #ffffffcd;
 	--color-border-primary: #ffffff50;
+	--color-border-secondary: #ffffff2a;
 
 	--color-tab-bg: #00000030;
 	--color-tab-hover-bg: #00000070;
 
 	--color-bg-primary: #1d203e;
 	--color-bg-secondary: #2c2f4860;
+	--color-bg-tertiary: #1d203e7b;
+
 	--color-rad-center: #f7cbfd;
 	--color-rad-outer: #7758d1;
 }
