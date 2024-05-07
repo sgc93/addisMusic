@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import MusicLine from "./MuicLine";
 import MusicController from "./MusicController";
 
 const FooterBox = styled.div`
@@ -8,6 +9,8 @@ const FooterBox = styled.div`
 	display: flex;
 	gap: 0.7rem;
 
+	width: 100dvw;
+
 	padding: 0rem 0.7rem 0.7rem;
 `;
 
@@ -15,7 +18,7 @@ const Footer = () => {
 	return (
 		<FooterBox>
 			<MusicController />
-			<span>footer 2</span>
+			<MusicLine />
 		</FooterBox>
 	);
 };
