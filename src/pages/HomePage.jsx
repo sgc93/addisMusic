@@ -31,11 +31,11 @@ const HomePage = () => {
 	return (
 		<HomeSection>
 			<SideBar />
-			<Header />
-			<Footer />
 			<OutletSection>
 				<Outlet />
 			</OutletSection>
+			<Header />
+			<Footer />
 			{isOpened && <SignUP />}
 		</HomeSection>
 	);
