@@ -15,15 +15,14 @@ const AccountBox = styled.div`
 	align-items: center;
 	gap: 0.5rem;
 	padding: 0.5rem 1rem;
-	// background-color: transparent;
-	background-color: var(--color-bg-secondary);
+	background-color: transparent;
 	border-radius: 1rem;
 
 	cursor: pointer;
 	transition: all 0.4s;
 
 	&:hover {
-		background-color: var(--color-bg-secondary);
+		background-color: var(--color-bg-tertiary);
 	}
 `;
 
@@ -39,7 +38,7 @@ const ProfileBox = styled.div`
 
 	padding: 1rem;
 
-	width: 10rem;
+	max-width: 15rem;
 	background-color: var(--color-bg-primary);
 	border-radius: 1rem;
 
@@ -48,6 +47,12 @@ const ProfileBox = styled.div`
 
 const Email = styled.span`
 	color: var(--color-text-tertiary);
+
+	width: 100%;
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 `;
 
 const PpImg = styled.img`
@@ -90,6 +95,7 @@ const iconUrl = "./logo.png";
 
 const Account = ({ user }) => {
 	const [isOpened, setIsOpened] = useState(false);
+	const { email, displayName, photoURL } = user;
 
 	const openProfile = () => setIsOpened(true);
 	const closeProfile = () => setIsOpened(false);
@@ -102,22 +108,14 @@ const Account = ({ user }) => {
 					<CloseBtn onClick={() => closeProfile()}>
 						<IoCloseCircle />
 					</CloseBtn>
-					<PpImg
-						src={user.photoURL ? user.photoURL : iconUrl}
-						alt="pp"
-						width={70}
-					/>
-					<Email>{user.displayName ? user.displayName : user.email}</Email>
+					<PpImg src={photoURL ? photoURL : iconUrl} width={70} />
+					<Email>{displayName ? displayName : email}</Email>
 					<LogOutBtn onClick={() => logOut()}>Log Out</LogOutBtn>
 				</ProfileBox>
 			) : (
 				<AccountBox onClick={() => openProfile()}>
-					<Email>{user.displayName ? user.displayName : user.email}</Email>
-					<PpImg
-						src={user.photoURL ? user.photoURL : iconUrl}
-						alt="pp"
-						width={30}
-					/>
+					<Email>{displayName ? displayName : email}</Email>
+					<PpImg src={photoURL ? photoURL : iconUrl} width={30} />
 				</AccountBox>
 			)}
 		</UserBox>
