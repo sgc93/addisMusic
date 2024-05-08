@@ -22,8 +22,12 @@ const Tab = styled.button`
 	}
 `;
 
-const SideBarTab = ({ handleClick, children }) => {
-	return <Tab onClick={handleClick}>{children}</Tab>;
+const SideBarTab = ({ handleClick, children, style }) => {
+	return (
+		<Tab style={style} onClick={handleClick}>
+			{children}
+		</Tab>
+	);
 };
 
 export default SideBarTab;
