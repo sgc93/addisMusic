@@ -5,7 +5,7 @@ import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSignedInUser } from "../../hooks/CheckAuth";
-import { checkSignUpOpen } from "../auth/authSlice";
+import { checkSignUpOpen } from "../auth/signUp/signUpSlice";
 import SideBarTab from "./SideBarTab";
 
 const Menu = styled.div`

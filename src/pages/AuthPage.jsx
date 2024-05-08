@@ -1,6 +1,6 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase_config";
-import SignUP from "../features/auth/SignUp";
+import SignUP from "../features/auth/signUp/SignUp";
 import { useSignedInUser } from "../hooks/CheckAuth";
 
 const AuthPage = () => {
