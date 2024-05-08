@@ -6,7 +6,9 @@ import styled from "@emotion/styled";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import { auth, googleProvider } from "../../../config/firebase_config";
+import Error from "../../../ui/Error";
 import IconButton from "../../../ui/IconButton";
+import LoaderNote from "../../../ui/LoaderNote";
 import { checkSignUp, checkSignUpOpen } from "./signUpSlice";
 
 const SignUpPage = styled.section`
@@ -179,36 +181,50 @@ const SignUP = () => {
 					</IconButton>
 				</SignUpHeader>
 
-				<Form>
-					<FormInput
-						type="text"
-						placeholder="Email"
-						name="email"
-						value={email}
-						onChange={(event) => setEmail(event.target.value)}
-						required
-					/>
-					<FormInput
-						type="password"
-						placeholder="Password"
-						name="password"
-						value={password}
-						onChange={(event) => setPassword(event.target.value)}
-						required
-					/>
-					<FormBtn
-						style={btnStyles}
-						type="submit"
-						onClick={(event) => signUp(event)}
-					>
-						Sign Up
-					</FormBtn>
-				</Form>
-				<H4>or</H4>
-				<GoogleBtn style={btnStyles} onClick={() => signUpWithGoogle()}>
-					<FcGoogle />
-					Sign up with with Google
-				</GoogleBtn>
+				{isLoading && !error && (
+					<LoaderNote loadingMessage={"Signing Up ..."} />
+				)}
+
+				{!isLoading && (
+					<>
+						{error && (
+							<Error
+								errorMessage={"Something went wrong, please try again!"}
+								shouldTryAgain={false}
+							/>
+						)}
+						<Form>
+							<FormInput
+								type="text"
+								placeholder="Email"
+								name="email"
+								value={email}
+								onChange={(event) => setEmail(event.target.value)}
+								required
+							/>
+							<FormInput
+								type="password"
+								placeholder="Password"
+								name="password"
+								value={password}
+								onChange={(event) => setPassword(event.target.value)}
+								required
+							/>
+							<FormBtn
+								style={btnStyles}
+								type="submit"
+								onClick={(event) => signUp(event)}
+							>
+								Sign Up
+							</FormBtn>
+						</Form>
+						<H4>or</H4>
+						<GoogleBtn style={btnStyles} onClick={() => signUpWithGoogle()}>
+							<FcGoogle />
+							Sign up with with Google
+						</GoogleBtn>
+					</>
+				)}
 			</SignUpBox>
 		</SignUpPage>
 	);
