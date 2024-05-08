@@ -11,6 +11,7 @@ body {
 	--color-text-primary: #fff;
 	--color-text-secondary: #ffffffcd;
 	--color-text-tertiary: #ffffffa2;
+	--color-text-error: rgb(144, 22, 22);
 	--color-border-primary: #ffffff50;
 
 	--color-tab-bg: #00000030;
