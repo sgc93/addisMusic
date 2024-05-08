@@ -12,17 +12,16 @@ export const signUpSlice = createSlice({
 	name: "signUpCheck",
 	initialState,
 	reducers: {
-		checkSingUp(state) {
+		checkSignUp(state) {
 			state.isLoading = true;
 			state.error = null;
 		},
-		checkSingUpSuccess(state) {
+		checkSignUpSuccess(state) {
 			state.isLoading = false;
-			state.isSignUpShown = false;
 		},
-		checkSingUpFailure(state, action) {
+		checkSignUpFailure(state, action) {
 			state.isLoading = false;
-			state.error = action;
+			state.error = action.payload;
 		},
 		checkSignUpOpen(state) {
 			state.isSignUpShown = !state.isSignUpShown;
