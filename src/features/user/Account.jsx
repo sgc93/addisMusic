@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
+import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
+import { auth } from "../../config/firebase_config";
 
 const UserBox = styled.div`
 	position: relative;
@@ -91,6 +93,7 @@ const Account = ({ user }) => {
 
 	const openProfile = () => setIsOpened(true);
 	const closeProfile = () => setIsOpened(false);
+	const logOut = () => signOut(auth);
 
 	return (
 		<UserBox>
@@ -105,7 +108,7 @@ const Account = ({ user }) => {
 						width={70}
 					/>
 					<Email>{user.displayName ? user.displayName : user.email}</Email>
-					<LogOutBtn onClick={() => console.log("log out")}>Log Out</LogOutBtn>
+					<LogOutBtn onClick={() => logOut()}>Log Out</LogOutBtn>
 				</ProfileBox>
 			) : (
 				<AccountBox onClick={() => openProfile()}>
