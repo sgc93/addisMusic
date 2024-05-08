@@ -4,6 +4,7 @@ const MusicLineBox = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: 0.5rem;
 
 	width: 84.4%;
 	padding: 1rem;
@@ -28,10 +29,16 @@ const Line = styled.span`
 	}
 `;
 
+const MusicTime = styled.span`
+	color: var(--color-text-secondary);
+`;
+
 const MusicLine = () => {
 	return (
 		<MusicLineBox>
+			<MusicTime>0:00</MusicTime>
 			<Line />
+			<MusicTime>5:34</MusicTime>
 		</MusicLineBox>
 	);
 };
