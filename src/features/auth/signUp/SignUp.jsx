@@ -142,15 +142,6 @@ const SignUP = () => {
 	const isLoading = useSelector((state) => state.signUpCheck.isLoading);
 	const error = useSelector((state) => state.signUpCheck.error);
 
-	// const signUp = async (event) => {
-	// 	event.preventDefault();
-	// 	try {
-	// 		await createUserWithEmailAndPassword(auth, email, password);
-	// 	} catch (error) {
-	// 		console.log(`error while signing up: ${error}`);
-	// 	}
-	// };
-
 	const signUp = (event) => {
 		event.preventDefault();
 		dispatch(checkSignUp({ email: email, password: password }));
@@ -187,15 +178,10 @@ const SignUP = () => {
 
 				{!isLoading && (
 					<>
-						{error && (
-							<Error
-								errorMessage={"Something went wrong, please try again!"}
-								shouldTryAgain={false}
-							/>
-						)}
+						{error && <Error errorMessage={error} shouldTryAgain={false} />}
 						<Form>
 							<FormInput
-								type="text"
+								type="email"
 								placeholder="Email"
 								name="email"
 								value={email}
