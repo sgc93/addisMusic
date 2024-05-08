@@ -26,7 +26,6 @@ const SignUpBox = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 2rem;
 
 	padding: 1rem;
 
@@ -45,6 +44,7 @@ const SignUpHeader = styled.div`
 	align-items: start;
 	justify-content: space-between;
 	padding: 2rem 2rem;
+	margin-bottom: 2rem;
 	width: 93%;
 `;
 const TitleBox = styled.div`
