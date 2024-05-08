@@ -1,8 +1,8 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { auth } from "../../config/firebase_config";
+import { auth } from "../config/firebase_config";
 
-const CheckAuth = () => {
+export const useSignedInUser = () => {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
@@ -14,5 +14,3 @@ const CheckAuth = () => {
 
 	return user;
 };
-
-export default CheckAuth;
