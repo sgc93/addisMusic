@@ -52,9 +52,7 @@ const SideBar = () => {
 				<SideBarTab
 					style={{
 						backgroundColor:
-							selectedTabIndex == 0
-								? "var(--color-bg-primary)"
-								: "var(--color-tab-bg)",
+							selectedTabIndex == 0 ? "var(--color-bg-primary)" : "",
 					}}
 					handleClick={() => selectTab("", 0)}
 				>
@@ -66,9 +64,7 @@ const SideBar = () => {
 				<SideBarTab
 					style={{
 						backgroundColor:
-							selectedTabIndex == 1
-								? "var(--color-bg-primary)"
-								: "var(--color-tab-bg)",
+							selectedTabIndex == 1 ? "var(--color-bg-primary)" : "",
 					}}
 					handleClick={() => selectTab("albums", 1)}
 				>
@@ -80,9 +76,7 @@ const SideBar = () => {
 				<SideBarTab
 					style={{
 						backgroundColor:
-							selectedTabIndex == 2
-								? "var(--color-bg-primary)"
-								: "var(--color-tab-bg)",
+							selectedTabIndex == 2 ? "var(--color-bg-primary)" : "",
 					}}
 					handleClick={() => selectTab("artists", 2)}
 				>
@@ -94,9 +88,7 @@ const SideBar = () => {
 				<SideBarTab
 					style={{
 						backgroundColor:
-							selectedTabIndex == 3
-								? "var(--color-bg-primary)"
-								: "var(--color-tab-bg)",
+							selectedTabIndex == 3 ? "var(--color-bg-primary)" : "",
 					}}
 					handleClick={() => selectTab("tracks", 3)}
 				>
