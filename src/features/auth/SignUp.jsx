@@ -3,7 +3,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "@emotion/styled";
+import { FcGoogle } from "react-icons/fc";
+import { MdClose } from "react-icons/md";
 import { auth, googleProvider } from "../../config/firebase_config";
+import IconButton from "../../ui/IconButton";
 import { checkSignIn } from "./authSlice";
 
 const SignUpPage = styled.section`
@@ -16,12 +19,16 @@ const SignUpPage = styled.section`
 
 	width: 100dvw;
 	height: 100dvh;
-	backdrop-filter: blur(4px);
+	backdrop-filter: blur(10px);
+	z-index: 2;
 `;
 const SignUpBox = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: 2rem;
+
+	padding: 1rem;
 
 	width: 70%;
 	height: 70%;
@@ -31,15 +38,19 @@ const SignUpBox = styled.div`
 	);
 	border: 3px solid var(--color-border-primary);
 	border-radius: 1rem;
-
-	z-index: 2;
 `;
-
+const SignUpHeader = styled.div`
+	align-self: flex-start;
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	padding: 2rem 2rem;
+	width: 93%;
+`;
 const TitleBox = styled.div`
 	align-self: flex-start;
 	display: flex;
 	flex-direction: column;
-	margin: 2rem 2rem;
 	padding: 0rem 0.5rem;
 
 	border-left: 2px solid var(--color-border-primary);
@@ -50,6 +61,7 @@ const Title = styled.span`
 	font-size: 1.6rem;
 	font-weight: bold;
 `;
+
 const SubTitle = styled.span`
 	color: var(--color-text-tertiary);
 	font-size: 1.2rem;
@@ -59,6 +71,66 @@ const Form = styled.form`
 	display: flex;
 	flex-direction: column;
 	gap: 0.6rem;
+`;
+
+const FormInput = styled.input`
+	background-color: var(--color-bg-secondary);
+	border: none;
+	outline: none;
+	border-radius: 0.4rem;
+	padding: 0.5rem 1rem;
+
+	width: 20rem;
+	font-size: 1.3rem;
+	color: var(--color-text-secondary);
+
+	transition: all 0.4s;
+	&:focus {
+		outline: 2px solid var(--color-border-primary);
+	}
+	&::placeholder {
+		color: var(--color-text-tertiary);
+		font-size: 1rem;
+	}
+`;
+
+const btnStyles = {
+	margin: "0.3rem 0rem",
+	padding: "0.5rem 2rem",
+	fontSize: "1.3rem",
+	borderRadius: "1rem",
+	outline: "none",
+	border: "none",
+	cursor: "pointer",
+	transition: "all 0.4s",
+};
+
+const FormBtn = styled.button`
+	color: var(--color-text-secondary);
+	background-color: var(--color-bg-primary);
+
+	&:hover {
+		color: var(--color-text-primary);
+	}
+`;
+const GoogleBtn = styled.button`
+	color: var(--color-bg-primary);
+	background-color: var(--color-text-secondary);
+	font-weight: 600;
+
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	&:hover {
+		transform: translateY(-2px);
+	}
+`;
+
+const H4 = styled.span`
+	padding: 0.5rem 1rem;
+	color: var(--color-text-secondary);
+	font-size: 1.2rem;
 `;
 
 const SignUP = () => {
@@ -99,39 +171,49 @@ const SignUP = () => {
 	return (
 		<SignUpPage>
 			<SignUpBox>
-				<TitleBox>
-					<Title>Have Account!</Title>
-					<SubTitle>
-						Be member, have more storage and handful services.
-					</SubTitle>
-				</TitleBox>
+				<SignUpHeader>
+					<TitleBox>
+						<Title>Have Account!</Title>
+						<SubTitle>
+							Be member, have more storage and handful services.
+						</SubTitle>
+					</TitleBox>
+					<IconButton>
+						<MdClose />
+					</IconButton>
+				</SignUpHeader>
 				{!isLoading && !error && (
 					<Form>
-						<input
+						<FormInput
 							type="text"
-							placeholder="email"
+							placeholder="Email"
 							name="email"
 							value={email}
 							onChange={(event) => setEmail(event.target.value)}
 							required
 						/>
-						<input
+						<FormInput
 							type="password"
-							placeholder="password"
+							placeholder="Password"
 							name="password"
 							value={password}
 							onChange={(event) => setPassword(event.target.value)}
 							required
 						/>
-						<button type="submit" onClick={(event) => signUp(event)}>
+						<FormBtn
+							style={btnStyles}
+							type="submit"
+							onClick={(event) => signUp(event)}
+						>
 							Sign Up
-						</button>
+						</FormBtn>
 					</Form>
 				)}
-				<h4>or</h4>
-				<button onClick={() => signUpWithGoogle()}>
-					sign up with with you google account
-				</button>
+				<H4>or</H4>
+				<GoogleBtn style={btnStyles} onClick={() => signUpWithGoogle()}>
+					<FcGoogle />
+					Sign up with with Google
+				</GoogleBtn>
 			</SignUpBox>
 		</SignUpPage>
 	);
