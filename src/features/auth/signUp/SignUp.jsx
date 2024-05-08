@@ -1,11 +1,9 @@
-import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "@emotion/styled";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
-import { auth, googleProvider } from "../../../config/firebase_config";
 import Error from "../../../ui/Error";
 import IconButton from "../../../ui/IconButton";
 import LoaderNote from "../../../ui/LoaderNote";
@@ -144,15 +142,13 @@ const SignUP = () => {
 
 	const signUp = (event) => {
 		event.preventDefault();
-		dispatch(checkSignUp({ email: email, password: password }));
+		dispatch(
+			checkSignUp({ email: email, password: password, isWithGoogle: false })
+		);
 	};
 
 	const signUpWithGoogle = async () => {
-		try {
-			await signInWithPopup(auth, googleProvider);
-		} catch (error) {
-			console.log(`error while signing up with google: ${error}`);
-		}
+		dispatch(checkSignUp({ email: "", password: "", isWithGoogle: true }));
 	};
 
 	const closeSignUp = () => dispatch(checkSignUpOpen());
