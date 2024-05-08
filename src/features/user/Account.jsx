@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
-import { IoCloseCircle } from "react-icons/io5";
+import { MdClose } from "react-icons/md";
 import { auth } from "../../config/firebase_config";
+import IconButton from "../../ui/IconButton";
 
 const UserBox = styled.div`
 	position: relative;
@@ -61,15 +62,6 @@ const PpImg = styled.img`
 
 const CloseBtn = styled.span`
 	align-self: flex-end;
-	font-size: 1.3rem;
-	color: var(--color-text-secondary);
-
-	cursor: pointer;
-	transition: 0.3s;
-
-	&:hover {
-		color: var(--color-text-primary);
-	}
 `;
 
 const LogOutBtn = styled.button`
@@ -105,8 +97,10 @@ const Account = ({ user }) => {
 		<UserBox>
 			{isOpened ? (
 				<ProfileBox>
-					<CloseBtn onClick={() => closeProfile()}>
-						<IoCloseCircle />
+					<CloseBtn>
+						<IconButton handleClick={() => closeProfile()}>
+							<MdClose />
+						</IconButton>
 					</CloseBtn>
 					<PpImg src={photoURL ? photoURL : iconUrl} width={70} />
 					<Email>{displayName ? displayName : email}</Email>
