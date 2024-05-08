@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
+import SignUP from "../features/auth/SignUp";
 import Footer from "../features/footer/Footer";
 import Header from "../features/header/Header";
 import SideBar from "../features/sidebar/SideBar";
@@ -24,6 +26,8 @@ const OutletSection = styled.section`
 `;
 
 const HomePage = () => {
+	const isOpened = useSelector((state) => state.authCheck.isSignUpShown);
+
 	return (
 		<HomeSection>
 			<SideBar />
@@ -32,6 +36,7 @@ const HomePage = () => {
 			<OutletSection>
 				<Outlet />
 			</OutletSection>
+			{isOpened && <SignUP />}
 		</HomeSection>
 	);
 };

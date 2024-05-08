@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { checkSignUpOpen } from "../auth/authSlice";
 
 const AccBox = styled.div`
 	display: flex;
@@ -45,11 +46,13 @@ const LogInBtn = styled.button`
 `;
 
 const SignInUp = () => {
-	const navigateTo = useNavigate();
+	const dispatch = useDispatch();
+
+	const openSignUp = () => dispatch(checkSignUpOpen());
 
 	return (
 		<AccBox>
-			<SignUpBtn onClick={() => navigateTo("/sign-up")}>Sign Up</SignUpBtn>
+			<SignUpBtn onClick={() => openSignUp()}>Sign Up</SignUpBtn>
 			<LogInBtn>Log In</LogInBtn>
 		</AccBox>
 	);

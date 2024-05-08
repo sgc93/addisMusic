@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import { auth, googleProvider } from "../../config/firebase_config";
 import IconButton from "../../ui/IconButton";
-import { checkSignIn } from "./authSlice";
+import { checkSignIn, checkSignUpOpen } from "./authSlice";
 
 const SignUpPage = styled.section`
 	position: absolute;
@@ -168,6 +168,8 @@ const SignUP = () => {
 		}
 	};
 
+	const closeSignUp = () => dispatch(checkSignUpOpen());
+
 	return (
 		<SignUpPage>
 			<SignUpBox>
@@ -178,7 +180,7 @@ const SignUP = () => {
 							Be member, have more storage and handful services.
 						</SubTitle>
 					</TitleBox>
-					<IconButton>
+					<IconButton handleClick={() => closeSignUp()}>
 						<MdClose />
 					</IconButton>
 				</SignUpHeader>
