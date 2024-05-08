@@ -39,9 +39,13 @@ function* workCheckSignUP(action) {
 			} else if (error.code == "auth/invalid-email") {
 				customizedError = "Invalid email format, please try with valid one!";
 			} else if (error.code == "auth/popup-closed-by-user") {
-				customizedError = "You have close the popup, please try again!";
+				customizedError = "You have closed the popup, please try again!";
+			} else if (error.code == "auth/network-request-failed") {
+				customizedError = "Unable to connect, check your network please.";
 			} else if (isWithGoogle) {
 				customizedError = "Unable to Sign in with Google, please try again!";
+			} else if (!isWithGoogle) {
+				customizedError = "Unable to Sign Up, please try again!";
 			}
 			yield put({
 				type: "signUpCheck/checkSignUpFailure",
