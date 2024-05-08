@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import {
 	MdAlbum,
 	MdHome,
@@ -7,6 +8,7 @@ import {
 	MdQueueMusic,
 } from "react-icons/md";
 import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
 import PlayedMusic from "./PlayedMusic";
 import SideBarTab from "./SideBarTab";
@@ -35,29 +37,69 @@ const IconStyle = styled.div`
 `;
 
 const SideBar = () => {
+	const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+	const navigateTo = useNavigate();
+
+	const selectTab = (route, index) => {
+		setSelectedTabIndex(index);
+		navigateTo(`/${route}`);
+	};
+
 	return (
 		<Sidebar>
 			<SidebarChild style={{ borderTopLeftRadius: "1rem" }}>
 				<Logo />
-				<SideBarTab handleClick={() => console.log("go to home")}>
+				<SideBarTab
+					style={{
+						backgroundColor:
+							selectedTabIndex == 0
+								? "var(--color-bg-primary)"
+								: "var(--color-tab-bg)",
+					}}
+					handleClick={() => selectTab("", 0)}
+				>
 					<IconStyle>
 						<MdHome />
 					</IconStyle>
 					Home
 				</SideBarTab>
-				<SideBarTab handleClick={() => console.log("go to albums")}>
+				<SideBarTab
+					style={{
+						backgroundColor:
+							selectedTabIndex == 1
+								? "var(--color-bg-primary)"
+								: "var(--color-tab-bg)",
+					}}
+					handleClick={() => selectTab("albums", 1)}
+				>
 					<IconStyle>
 						<MdAlbum />
 					</IconStyle>
 					Top Albums
 				</SideBarTab>
-				<SideBarTab handleClick={() => console.log("go to artists")}>
+				<SideBarTab
+					style={{
+						backgroundColor:
+							selectedTabIndex == 2
+								? "var(--color-bg-primary)"
+								: "var(--color-tab-bg)",
+					}}
+					handleClick={() => selectTab("artists", 2)}
+				>
 					<IconStyle>
 						<MdPerson4 />
 					</IconStyle>
 					Top Artists
 				</SideBarTab>
-				<SideBarTab handleClick={() => console.log("go to tracks")}>
+				<SideBarTab
+					style={{
+						backgroundColor:
+							selectedTabIndex == 3
+								? "var(--color-bg-primary)"
+								: "var(--color-tab-bg)",
+					}}
+					handleClick={() => selectTab("tracks", 3)}
+				>
 					<IconStyle>
 						<MdQueueMusic />
 					</IconStyle>
