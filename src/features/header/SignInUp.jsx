@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { useSignedInUser } from "../../hooks/CheckAuth";
-import { checkSignUpOpen } from "../auth/authSlice";
+import { checkSignUpOpen } from "../auth/signUp/signUpSlice";
 import Account from "../user/Account";
 
 const AccBox = styled.div`

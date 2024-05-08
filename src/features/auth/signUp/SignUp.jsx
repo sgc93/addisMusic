@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "@emotion/styled";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
-import { auth, googleProvider } from "../../config/firebase_config";
-import IconButton from "../../ui/IconButton";
-import { checkSignIn, checkSignUpOpen } from "./authSlice";
+import { auth, googleProvider } from "../../../config/firebase_config";
+import IconButton from "../../../ui/IconButton";
+import { checkSignUp, checkSignUpOpen } from "./signUpSlice";
 
 const SignUpPage = styled.section`
 	position: absolute;
@@ -137,8 +137,8 @@ const SignUP = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
-	const isLoading = useSelector((state) => state.authCheck.isLoading);
-	const error = useSelector((state) => state.authCheck.error);
+	const isLoading = useSelector((state) => state.signUpCheck.isLoading);
+	const error = useSelector((state) => state.signUpCheck.error);
 
 	// const signUp = async (event) => {
 	// 	event.preventDefault();
@@ -151,13 +151,7 @@ const SignUP = () => {
 
 	const signUp = (event) => {
 		event.preventDefault();
-
-		dispatch(
-			checkSignIn({ email: email, password: password, isWithGoogle: false })
-		);
-		console.log(
-			`isloading after dispatching: ${isLoading} and error: ${error}`
-		);
+		dispatch(checkSignUp({ email: email, password: password }));
 	};
 
 	const signUpWithGoogle = async () => {
@@ -184,33 +178,32 @@ const SignUP = () => {
 						<MdClose />
 					</IconButton>
 				</SignUpHeader>
-				{!isLoading && !error && (
-					<Form>
-						<FormInput
-							type="text"
-							placeholder="Email"
-							name="email"
-							value={email}
-							onChange={(event) => setEmail(event.target.value)}
-							required
-						/>
-						<FormInput
-							type="password"
-							placeholder="Password"
-							name="password"
-							value={password}
-							onChange={(event) => setPassword(event.target.value)}
-							required
-						/>
-						<FormBtn
-							style={btnStyles}
-							type="submit"
-							onClick={(event) => signUp(event)}
-						>
-							Sign Up
-						</FormBtn>
-					</Form>
-				)}
+
+				<Form>
+					<FormInput
+						type="text"
+						placeholder="Email"
+						name="email"
+						value={email}
+						onChange={(event) => setEmail(event.target.value)}
+						required
+					/>
+					<FormInput
+						type="password"
+						placeholder="Password"
+						name="password"
+						value={password}
+						onChange={(event) => setPassword(event.target.value)}
+						required
+					/>
+					<FormBtn
+						style={btnStyles}
+						type="submit"
+						onClick={(event) => signUp(event)}
+					>
+						Sign Up
+					</FormBtn>
+				</Form>
 				<H4>or</H4>
 				<GoogleBtn style={btnStyles} onClick={() => signUpWithGoogle()}>
 					<FcGoogle />

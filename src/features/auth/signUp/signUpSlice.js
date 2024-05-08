@@ -8,18 +8,19 @@ const initialState = {
 };
 
 // define slice with name, initial state and list of reducers
-export const authSlice = createSlice({
-	name: "authCheck",
+export const signUpSlice = createSlice({
+	name: "signUpCheck",
 	initialState,
 	reducers: {
-		checkSignIn(state, action) {
+		checkSingUp(state) {
 			state.isLoading = true;
 			state.error = null;
 		},
-		checkSignInSuccess(state) {
+		checkSingUpSuccess(state) {
 			state.isLoading = false;
+			state.isSignUpShown = false;
 		},
-		checkSignInFailure(state, action) {
+		checkSingUpFailure(state, action) {
 			state.isLoading = false;
 			state.error = action;
 		},
@@ -31,11 +32,11 @@ export const authSlice = createSlice({
 
 // export slice actions
 export const {
-	checkSignIn,
-	checkSignInSuccess,
-	checkSignInFailure,
+	checkSignUp,
+	checkSignUpSuccess,
+	checkSignUpFailure,
 	checkSignUpOpen,
-} = authSlice.actions;
+} = signUpSlice.actions;
 
 // export slice reducer
-export default authSlice.reducer;
+export default signUpSlice.reducer;
