@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 const AccBox = styled.div`
 	display: flex;
@@ -44,9 +45,11 @@ const LogInBtn = styled.button`
 `;
 
 const SignInUp = () => {
+	const navigateTo = useNavigate();
+
 	return (
 		<AccBox>
-			<SignUpBtn onClick={() => print("Sign up")}>Sign Up</SignUpBtn>
+			<SignUpBtn onClick={() => navigateTo("/sign-up")}>Sign Up</SignUpBtn>
 			<LogInBtn>Log In</LogInBtn>
 		</AccBox>
 	);
