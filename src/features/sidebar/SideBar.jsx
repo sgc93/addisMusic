@@ -1,16 +1,10 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import {
-	MdAlbum,
-	MdHome,
-	MdLibraryMusic,
-	MdPerson4,
-	MdQueueMusic,
-} from "react-icons/md";
-import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
+import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
 import PlayedMusic from "./PlayedMusic";
+import SideBarMenu from "./SideBarMenu";
 import SideBarTab from "./SideBarTab";
 
 const Sidebar = styled.div`
@@ -99,24 +93,7 @@ const SideBar = () => {
 				</SideBarTab>
 			</SidebarChild>
 			<SidebarChild>
-				<SideBarTab handleClick={() => console.log("go to tracks")}>
-					<IconStyle>
-						<TbMusicPlus />
-					</IconStyle>
-					Create Playlist
-				</SideBarTab>
-				<SideBarTab handleClick={() => console.log("go to tracks")}>
-					<IconStyle>
-						<MdLibraryMusic />
-					</IconStyle>
-					Your Songs
-				</SideBarTab>
-				<SideBarTab handleClick={() => console.log("go to tracks")}>
-					<IconStyle>
-						<TbMusicHeart />
-					</IconStyle>
-					Your Favorites
-				</SideBarTab>
+				<SideBarMenu />
 			</SidebarChild>
 			<PlayedMusic />
 		</Sidebar>
