@@ -23,6 +23,20 @@ const OutletSection = styled.section`
 	margin: 0rem 0.8rem;
 	background-color: var(--color-bg-secondary);
 	border-radius: 1rem;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		width: 1rem;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: var(--color-bg-secondary);
+
+		border-radius: 40%;
+	}
 `;
 
 const HomePage = () => {
