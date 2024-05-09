@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase_config";
 import IconButton from "../../ui/IconButton";
 
@@ -41,6 +41,7 @@ const ProfileBox = styled.div`
 	padding: 1rem;
 
 	max-width: 15rem;
+	min-width: 7rem;
 	background-color: var(--color-bg-primary);
 	border-radius: 1rem;
 
@@ -90,11 +91,19 @@ const Account = ({ user }) => {
 	const [isOpened, setIsOpened] = useState(false);
 	const { email, displayName, photoURL } = user;
 	const navigateTo = useNavigate();
+	const location = useLocation();
+	const pathName = location.pathname;
 
 	const openProfile = () => setIsOpened(true);
 	const closeProfile = () => setIsOpened(false);
 	const logOut = () => {
-		navigateTo("/");
+		if (
+			pathName == "/playlists" ||
+			pathName == "/favorites" ||
+			pathName == "/songs"
+		) {
+			navigateTo("/");
+		}
 		signOut(auth);
 	};
 
