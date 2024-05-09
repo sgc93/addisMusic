@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaVolumeMute } from "react-icons/fa";
 import { FaVolumeHigh, FaVolumeLow } from "react-icons/fa6";
 import {
@@ -57,10 +57,17 @@ const VolValue = styled.span`
 	padding-left: 0.2rem;
 `;
 
-const MusicController = ({ music }) => {
+const MusicController = ({ music, resetMusicTime, isMusicFinished }) => {
 	const [isPaused, setIsPaused] = useState(false);
 	const [volume, setVolume] = useState(50);
 	const [isOpened, setIsOpened] = useState(false);
+
+	useEffect(() => {
+		if (music && isMusicFinished) {
+			handlePlayingMusic(true);
+			resetMusicTime();
+		}
+	}, [isMusicFinished]);
 
 	const handlePlayingMusic = (pause) => {
 		if (pause) {

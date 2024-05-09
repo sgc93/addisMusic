@@ -42,8 +42,11 @@ const MusicLine = ({ currTime, totalTime, handleChangingCurrTime }) => {
 				max={totalTime}
 				value={currTime}
 				onChange={(e) => handleChangingCurrTime(Number(e.target.value))}
+				disabled={currTime == totalTime}
 			/>
-			<MusicTime>{timeFormatter(totalTime - currTime)}</MusicTime>
+			<MusicTime>
+				{timeFormatter(currTime == totalTime ? 0 : totalTime - currTime)}
+			</MusicTime>
 		</MusicLineBox>
 	);
 };

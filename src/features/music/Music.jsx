@@ -34,6 +34,11 @@ const Music = () => {
 		setCurrTime(time);
 	};
 
+	const resetMusicTime = () => {
+		setCurrTime(0);
+		setDuration(musicRef.current.duration);
+	};
+
 	return (
 		<MusicBox>
 			<audio
@@ -43,7 +48,11 @@ const Music = () => {
 				onLoadStart={handleLoadStart}
 				onTimeUpdate={handleTimeUpdate}
 			/>
-			<MusicController music={musicRef.current} />
+			<MusicController
+				music={musicRef.current}
+				isMusicFinished={currTime == duration}
+				resetMusicTime={resetMusicTime}
+			/>
 			<MusicLine
 				currTime={currTime}
 				totalTime={duration}
