@@ -30,6 +30,7 @@ const ArtistName = styled.span`
 const MusicName = styled.span`
 	width: 100%;
 	height: 2rem;
+	width: 14rem;
 	font-weight: 100;
 	font-size: 1rem;
 	color: var(--color-text-secondary);
@@ -65,17 +66,26 @@ const PlayBtn = styled.button`
 	}
 `;
 
-const MusicCard = () => {
+const MusicCard = ({ song }) => {
+	const handlePlay = () => {
+		window.open(song.uri);
+	};
+
 	return (
 		<Card>
 			<ImgBox>
-				<PlayBtn>
+				<PlayBtn onClick={() => handlePlay()}>
 					<BiPlay />
 				</PlayBtn>
-				<img src="./light1.jpg" alt="artist" width={"100%"} height={"100%"} />
+				<img
+					src={song.coverArt}
+					alt="cover-art"
+					width={"100%"}
+					height={"100%"}
+				/>
 			</ImgBox>
-			<ArtistName>Al Rophinan 9.</ArtistName>
-			<MusicName>የኔ ትውልድ</MusicName>
+			<ArtistName>{song.artist}</ArtistName>
+			<MusicName>{song.name}</MusicName>
 		</Card>
 	);
 };
