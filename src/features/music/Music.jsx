@@ -33,7 +33,7 @@ const Music = () => {
 				ref={musicRef}
 				onLoadStart={handleLoadStart}
 			/>
-			<MusicController />
+			<MusicController music={musicRef.current} />
 			<MusicLine currTime={"00:00"} totalTime={timeFormatter(duration)} />
 		</MusicBox>
 	);

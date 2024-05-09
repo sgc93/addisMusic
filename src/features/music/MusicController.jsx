@@ -26,11 +26,18 @@ const Flex = styled.div`
 	align-items: center;
 `;
 
-const MusicController = () => {
+const MusicController = ({ music }) => {
 	const [isPaused, setIsPaused] = useState(false);
 
-	const pauseMusic = () => setIsPaused(false);
-	const playMusic = () => setIsPaused(true);
+	const handlePlayingMusic = (pause) => {
+		if (pause) {
+			setIsPaused(!pause);
+			music.pause();
+		} else {
+			setIsPaused(!pause);
+			music.play();
+		}
+	};
 
 	return (
 		<ControllerBox>
@@ -42,11 +49,11 @@ const MusicController = () => {
 					<TbPlayerTrackPrev />
 				</IconButton>
 				{isPaused ? (
-					<IconButton handleClick={pauseMusic}>
+					<IconButton handleClick={() => handlePlayingMusic(true)}>
 						<TbPlayerPause />
 					</IconButton>
 				) : (
-					<IconButton handleClick={playMusic}>
+					<IconButton handleClick={() => handlePlayingMusic(false)}>
 						<TbPlayerPlay />
 					</IconButton>
 				)}
