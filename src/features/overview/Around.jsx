@@ -28,9 +28,10 @@ const AroundTitle = styled.span`
 	align-self: flex-start;
 	font-size: 1.3rem;
 	font-weight: bold;
-	color: var(--color-rad-center);
-	padding: 0.1rem 0rem;
-	border-bottom: 1px solid var(--color-border-primary);
+	color: var(--color-text-primary);
+	padding-bottom: 0.2rem;
+	margin-bottom: 1rem;
+	border-bottom: 2px solid var(--color-border-primary);
 `;
 const AroundSubtitle = styled.span`
 	font-size: 1.1rem;
@@ -62,11 +63,11 @@ const IconStyle = styled.span`
 const Around = () => {
 	return (
 		<AroundBox>
+			<AroundTitle>Top Tracks In Your Country</AroundTitle>
 			<AroundText>
 				<IconStyle>
 					<TbMusicPin />
 				</IconStyle>
-				<AroundTitle>Top Tracks In Your Country</AroundTitle>
 				<AroundSubtitle>
 					Unveil the rhythmic heartbeat of your homeland with our curated
 					selection of top tracks from your country.
