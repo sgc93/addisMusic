@@ -1,9 +1,6 @@
 import styled from "@emotion/styled";
 
 const BilBoardBox = styled.div`
-	width: calc(100 - 2rem);
-	height: calc(50% - 2rem);
-
 	border: 2px solid var(--color-border-primary);
 	border-radius: 0.6rem;
 `;
