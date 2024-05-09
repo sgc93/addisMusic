@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useRef, useState } from "react";
-import { timeFormatter } from "../../utils/time_formater";
 import MusicLine from "./MuicLine";
 import MusicController from "./MusicController";
 
@@ -30,6 +29,11 @@ const Music = () => {
 		setCurrTime(musicRef.current.currentTime);
 	};
 
+	const handleChangingCurrTime = (time) => {
+		musicRef.current.currentTime = time;
+		setCurrTime(time);
+	};
+
 	return (
 		<MusicBox>
 			<audio
@@ -41,8 +45,9 @@ const Music = () => {
 			/>
 			<MusicController music={musicRef.current} />
 			<MusicLine
-				currTime={timeFormatter(currTime)}
-				totalTime={timeFormatter(duration - currTime)}
+				currTime={currTime}
+				totalTime={duration}
+				handleChangingCurrTime={handleChangingCurrTime}
 			/>
 		</MusicBox>
 	);

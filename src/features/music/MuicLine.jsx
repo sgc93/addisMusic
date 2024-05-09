@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { timeFormatter } from "../../utils/time_formater";
 
 const MusicLineBox = styled.div`
 	display: flex;
@@ -33,14 +34,21 @@ const Line = styled.input`
 
 const MusicTime = styled.span`
 	color: var(--color-text-secondary);
+	width: 2.5rem;
 `;
 
-const MusicLine = ({ currTime, totalTime }) => {
+const MusicLine = ({ currTime, totalTime, handleChangingCurrTime }) => {
 	return (
 		<MusicLineBox>
-			<MusicTime>{currTime}</MusicTime>
-			<Line type="range" min={0} max={100} />
-			<MusicTime>{totalTime}</MusicTime>
+			<MusicTime>{timeFormatter(currTime)}</MusicTime>
+			<Line
+				type="range"
+				min={0}
+				max={totalTime}
+				value={currTime}
+				onChange={(e) => handleChangingCurrTime(Number(e.target.value))}
+			/>
+			<MusicTime>{timeFormatter(totalTime - currTime)}</MusicTime>
 		</MusicLineBox>
 	);
 };
