@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { BiPlay } from "react-icons/bi";
 
 const Card = styled.div`
 	display: flex;
@@ -6,17 +7,16 @@ const Card = styled.div`
 	align-items: center;
 	gap: 0.6rem;
 
-	width: 15rem;
-
-	padding: 1rem;
+	width: 16rem;
 	border-radius: 1rem;
 	background: linear-gradient(to top, var(--color-bg-primary), #0001);
 `;
 
 const ImgBox = styled.div`
+	position: relative;
 	display: flex;
 	align-items: center;
-	border-radius: 1rem;
+	border-radius: 1rem 1rem 0rem 0rem;
 	overflow: hidden;
 `;
 
@@ -39,10 +39,39 @@ const MusicName = styled.span`
 	text-overflow: ellipsis;
 `;
 
+const PlayBtn = styled.button`
+	position: absolute;
+	right: 0;
+	bottom: 0;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.1rem;
+	height: 2.1rem;
+
+	font-size: 1.5rem;
+	border: none;
+	border-radius: 50%;
+	margin: 0.7rem;
+	padding: 0.3rem;
+	background-color: var(--color-bg-tertiary);
+	color: var(--color-text-primary);
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		background-color: var(--color-bg-primary);
+	}
+`;
+
 const MusicCard = () => {
 	return (
 		<Card>
 			<ImgBox>
+				<PlayBtn>
+					<BiPlay />
+				</PlayBtn>
 				<img src="./light1.jpg" alt="artist" width={"100%"} height={"100%"} />
 			</ImgBox>
 			<ArtistName>Al Rophinan 9.</ArtistName>
