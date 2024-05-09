@@ -22,6 +22,7 @@ const SidebarChild = styled.div`
 	width: 100%;
 
 	padding: 1rem 0rem 1rem 1rem;
+	border-radius: 0.6rem;
 	background-color: var(--color-bg-secondary);
 `;
 
@@ -38,7 +39,7 @@ const SideBar = () => {
 
 	return (
 		<Sidebar>
-			<SidebarChild style={{ borderTopLeftRadius: "1rem" }}>
+			<SidebarChild>
 				<Logo />
 				<SideBarTab
 					style={{
