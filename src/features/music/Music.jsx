@@ -13,6 +13,7 @@ const MusicBox = styled.div`
 
 const Music = () => {
 	const [duration, setDuration] = useState(0);
+	const [currTime, setCurrTime] = useState(0);
 	const musicRef = useRef();
 
 	const handleLoadStart = (e) => {
@@ -25,6 +26,10 @@ const Music = () => {
 		};
 	};
 
+	const handleTimeUpdate = () => {
+		setCurrTime(musicRef.current.currentTime);
+	};
+
 	return (
 		<MusicBox>
 			<audio
@@ -32,9 +37,13 @@ const Music = () => {
 				hidden
 				ref={musicRef}
 				onLoadStart={handleLoadStart}
+				onTimeUpdate={handleTimeUpdate}
 			/>
 			<MusicController music={musicRef.current} />
-			<MusicLine currTime={"00:00"} totalTime={timeFormatter(duration)} />
+			<MusicLine
+				currTime={timeFormatter(currTime)}
+				totalTime={timeFormatter(duration - currTime)}
+			/>
 		</MusicBox>
 	);
 };
