@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase_config";
 import IconButton from "../../ui/IconButton";
 
@@ -88,10 +89,14 @@ const iconUrl = "./logo.png";
 const Account = ({ user }) => {
 	const [isOpened, setIsOpened] = useState(false);
 	const { email, displayName, photoURL } = user;
+	const navigateTo = useNavigate();
 
 	const openProfile = () => setIsOpened(true);
 	const closeProfile = () => setIsOpened(false);
-	const logOut = () => signOut(auth);
+	const logOut = () => {
+		navigateTo("/");
+		signOut(auth);
+	};
 
 	return (
 		<UserBox>
