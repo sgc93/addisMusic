@@ -25,11 +25,6 @@ const Line = styled.input`
 	outline: none;
 
 	cursor: pointer;
-	transition: all 0.8s;
-	&:hover {
-		height: 0.3rem;
-		background-color: var(--color-text-primary);
-	}
 `;
 
 const MusicTime = styled.span`

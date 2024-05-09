@@ -32,6 +32,7 @@ const VolumeBox = styled.div`
 	top: -3rem;
 	left: 0.7rem;
 	display: flex;
+	align-items: center;
 	gap: 0.2rem;
 
 	padding: 0.5rem 1rem;
@@ -41,6 +42,13 @@ const VolumeBox = styled.div`
 
 const VolumeInput = styled.input`
 	width: 4.8rem;
+
+	background-color: var(--color-text-secondary);
+	border-radius: 1rem;
+	border: none;
+	outline: none;
+
+	cursor: pointer;
 `;
 const VolValue = styled.span`
 	color: var(--color-text-tertiary);
@@ -66,6 +74,7 @@ const MusicController = ({ music }) => {
 
 	const handleChangingVolume = (vol) => {
 		setVolume(vol);
+		music.volume = vol / 100;
 	};
 
 	const toggleSound = () => {
