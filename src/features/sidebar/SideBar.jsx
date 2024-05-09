@@ -3,7 +3,7 @@ import { useState } from "react";
 import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
-import PlayedMusic from "./PlayedMusic";
+import PlayedMusic from "../music/PlayedMusic";
 import SideBarMenu from "./SideBarMenu";
 import SideBarTab from "./SideBarTab";
 
