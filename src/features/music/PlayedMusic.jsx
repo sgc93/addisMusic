@@ -9,6 +9,7 @@ const MusicBox = styled.div`
 	width: calc(100% - 1rem);
 
 	padding: 0.5rem 1rem;
+	border-radius: 0.6rem;
 	background: linear-gradient(to top, var(--color-bg-secondary), #0001);
 `;
 
