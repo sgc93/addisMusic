@@ -28,7 +28,7 @@ const Title = styled.div`
 const MenuItemList = styled.div`
 	overflow-x: hidden;
 	overflow-y: scroll;
-	height: 6.3rem;
+	height: 10.3rem;
 
 	&::-webkit-scrollbar {
 		background-color: transparent;
@@ -47,10 +47,14 @@ const MenuItem = styled.div`
 	align-items: start;
 	gap: 0.2rem;
 
-	padding-right: 0.5rem;
+	margin: 0rem 0.5rem 1rem 0rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid var(--color-border-primary);
 `;
 
-const MenuTitle = styled.div``;
+const MenuTitle = styled.div`
+	color: var(--color-bg-primary);
+`;
 
 const SideBarMenu = ({ handleClick, children, style }) => {
 	const user = useSignedInUser();
