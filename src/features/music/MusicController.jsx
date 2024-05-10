@@ -58,8 +58,14 @@ const VolValue = styled.span`
 	padding-left: 0.2rem;
 `;
 
-const MusicController = ({ music, resetMusicTime, isMusicFinished }) => {
-	const [isPaused, setIsPaused] = useState(false);
+const MusicController = ({
+	music,
+	resetMusicTime,
+	isMusicFinished,
+	playNextPrev,
+	isPaused,
+	setIsPaused,
+}) => {
 	const [volume, setVolume] = useState(50);
 	const [isOpened, setIsOpened] = useState(false);
 
@@ -122,7 +128,7 @@ const MusicController = ({ music, resetMusicTime, isMusicFinished }) => {
 				</VolumeBox>
 			)}
 			<Flex>
-				<IconButton>
+				<IconButton handleClick={() => playNextPrev(-1)}>
 					<TbPlayerTrackPrev />
 				</IconButton>
 				{isPaused ? (
@@ -135,7 +141,7 @@ const MusicController = ({ music, resetMusicTime, isMusicFinished }) => {
 					</IconButton>
 				)}
 
-				<IconButton>
+				<IconButton handleClick={() => playNextPrev(1)}>
 					<TbPlayerTrackNext />
 				</IconButton>
 			</Flex>
