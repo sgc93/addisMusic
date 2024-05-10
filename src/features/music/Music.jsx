@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { musicList } from "../../assets/music_list";
+import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MusicLine from "./MuicLine";
 import MusicController from "./MusicController";
 import PlayedMusic from "./PlayedMusic";
@@ -20,9 +19,9 @@ const MusicBox = styled.div`
 `;
 
 const Music = () => {
-	const musics = musicList;
-	const [currMusicIndex, setCurrMusicIndex] = useState(0);
-	const [isPaused, setIsPaused] = useState(false);
+	const { isPaused, musicList, currMusicIndex } = useSelector(
+		(state) => state.currMusic
+	);
 	const dispatch = useDispatch();
 	const musicRef = useRef();
 
@@ -48,42 +47,17 @@ const Music = () => {
 		dispatch(currentMusicCurrTime(musicRef.current.currentTime));
 	};
 
-	const playNext = () => {
-		if (currMusicIndex == musics.length - 1) {
-			setCurrMusicIndex(0);
-		} else {
-			setCurrMusicIndex((currMusicIndex) => Number(currMusicIndex + 1));
-		}
-	};
-
-	const PlayPrevious = () => {
-		if (currMusicIndex == 0) {
-			setCurrMusicIndex(musics.length - 1);
-		} else {
-			setCurrMusicIndex((currMusicIndex) => Number(currMusicIndex - 1));
-		}
-	};
-
-	const playNextPrev = (direction) => {
-		direction > 0 ? playNext() : PlayPrevious();
-		console.log(musics[currMusicIndex], currMusicIndex, direction);
-	};
-
 	return (
 		<MusicBox>
 			<audio
-				src={musics[currMusicIndex]?.url}
+				src={musicList[currMusicIndex]?.url}
 				hidden
 				ref={musicRef}
 				onLoadStart={handleLoadStart}
 				onTimeUpdate={handleTimeUpdate}
 			/>
-			<PlayedMusic playedMusic={musics[currMusicIndex]} isPaused={isPaused} />
-			<MusicController
-				playNextPrev={playNextPrev}
-				isPaused={isPaused}
-				setIsPaused={setIsPaused}
-			/>
+			<PlayedMusic playedMusic={musicList[currMusicIndex]} />
+			<MusicController />
 			<MusicLine />
 		</MusicBox>
 	);

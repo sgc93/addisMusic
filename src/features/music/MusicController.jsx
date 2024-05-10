@@ -10,7 +10,12 @@ import {
 } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "../../ui/IconButton";
-import { currentMusicCurrTime, currentMusicDuration } from "./musicSlice";
+import {
+	currentMusicCurrTime,
+	currentMusicDuration,
+	currentMusicIndex,
+	currentMusicPausePlay,
+} from "./musicSlice";
 
 const ControllerBox = styled.div`
 	position: relative;
@@ -60,8 +65,9 @@ const VolValue = styled.span`
 	padding-left: 0.2rem;
 `;
 
-const MusicController = ({ playNextPrev, isPaused, setIsPaused }) => {
-	const { currTime, duration, music } = useSelector((state) => state.currMusic);
+const MusicController = () => {
+	const { currTime, duration, music, isPaused, currMusicIndex, musicList } =
+		useSelector((state) => state.currMusic);
 	const isMusicFinished = currTime == duration;
 	const dispatch = useDispatch();
 
@@ -77,10 +83,10 @@ const MusicController = ({ playNextPrev, isPaused, setIsPaused }) => {
 
 	const handlePlayingMusic = (pause) => {
 		if (pause) {
-			setIsPaused(!pause);
+			dispatch(currentMusicPausePlay(!pause));
 			music.pause();
 		} else {
-			setIsPaused(!pause);
+			dispatch(currentMusicPausePlay(!pause));
 			music.play();
 		}
 	};
@@ -100,6 +106,26 @@ const MusicController = ({ playNextPrev, isPaused, setIsPaused }) => {
 	};
 
 	const toggleVolumeBox = () => setIsOpened((isOpened) => !isOpened);
+
+	const playNext = () => {
+		if (currMusicIndex == musicList.length - 1) {
+			dispatch(currentMusicIndex(0));
+		} else {
+			dispatch(currentMusicIndex(currMusicIndex + 1));
+		}
+	};
+
+	const PlayPrevious = () => {
+		if (currMusicIndex == 0) {
+			dispatch(currentMusicIndex(musicList.length - 1));
+		} else {
+			dispatch(currentMusicIndex(currMusicIndex - 1));
+		}
+	};
+
+	const playNextPrev = (direction) => {
+		direction > 0 ? playNext() : PlayPrevious();
+	};
 
 	return (
 		<ControllerBox>
