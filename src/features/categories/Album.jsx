@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
 import AlbumCard from "../../ui/AlbumCard";
-import Error from "../../ui/Error";
+import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
 
@@ -33,6 +33,8 @@ const ListSubTitle = styled.span`
 
 const List = styled.div`
 	display: flex;
+	align-items: center;
+	justify-content: center;
 	flex-wrap: wrap;
 	gap: 2rem;
 	padding: 1rem;
@@ -54,7 +56,14 @@ const Album = () => {
 							<LoaderNote loadingMessage={"fetching ..."} />
 						</LoaderBox>
 					))}
-				{error && <Error errorMessage={error} />}
+				{error && (
+					<FetchError
+						error={error}
+						detail={
+							"Unable to fetch list of Top 10 Albums due to some kind of technical issue, check your network connection and refresh this page."
+						}
+					/>
+				)}
 				{albums &&
 					!isLoading &&
 					!error &&

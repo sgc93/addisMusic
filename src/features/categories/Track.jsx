@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
-import Error from "../../ui/Error";
+import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
 import MusicCard from "../../ui/MusicCard";
@@ -33,6 +33,8 @@ const ListSubTitle = styled.span`
 
 const List = styled.div`
 	display: flex;
+	align-items: center;
+	justify-content: center;
 	flex-wrap: wrap;
 	gap: 2rem;
 	padding: 1rem;
@@ -55,7 +57,14 @@ const Track = () => {
 							<LoaderNote loadingMessage={"fetching ..."} />
 						</LoaderBox>
 					))}
-				{error && <Error errorMessage={error} />}
+				{error && (
+					<FetchError
+						error={error}
+						detail={
+							"Unable to fetch list of Top 10 Tracks due to some kind of technical issue, check your network connection and refresh this page."
+						}
+					/>
+				)}
 				{tracks &&
 					!isLoading &&
 					!error &&
