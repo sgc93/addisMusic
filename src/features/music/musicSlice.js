@@ -13,9 +13,11 @@ const musicSlice = createSlice({
 	reducers: {
 		currentMusic(state, action) {
 			console.log(action.payload);
+			console.log(`updated duration: ${action.payload.duration}`);
+
 			state.music = action.payload.music;
 			state.currTime = action.payload.currTime;
-			state.duration = state.payload.duration;
+			state.duration = Number(action.payload.duration);
 		},
 		currentMusicPausePlay(state, action) {
 			state.isPaused = action.payload;
