@@ -9,6 +9,7 @@ const Card = styled.div`
 	width: 16rem;
 	border-radius: 1rem;
 	background: linear-gradient(to top, var(--color-bg-primary), #0001 30%);
+	box-shadow: -1px 1px 7px 5px var(--color-bg-tertiary);
 `;
 
 const ImgBox = styled.div`
