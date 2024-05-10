@@ -1,5 +1,6 @@
 import { keyframes } from "@emotion/css";
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
 
 const MusicBox = styled.div`
 	display: flex;
@@ -62,7 +63,8 @@ const MusicImg = styled.img`
 	animation: ${(props) => (props.isPaused ? rotate : "")} 2s linear infinite;
 `;
 
-const PlayedMusic = ({ playedMusic, isPaused }) => {
+const PlayedMusic = ({ playedMusic }) => {
+	const isPaused = useSelector((state) => state.currMusic.isPaused);
 	return (
 		<MusicBox>
 			<MusicImg
