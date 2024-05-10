@@ -4,8 +4,11 @@ import { BiPause, BiPlay } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { GoHeart } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
+import {
+	currentMusicIndex,
+	currentMusicPausePlay,
+} from "../../features/music/musicSlice";
 import { timeFormatter } from "../../utils/time_formater";
-import { currentMusicIndex } from "../music/musicSlice";
 
 const Card = styled.div`
 	position: relative;
@@ -139,13 +142,28 @@ const TrackNo = styled.span`
 
 const TrackCard = ({ song, index }) => {
 	const dispatch = useDispatch();
-	const selectedIndex = useSelector((state) => state.currMusic.currMusicIndex);
-	const isSelected = selectedIndex == index;
-
+	const { music, isPaused, currMusicIndex } = useSelector(
+		(state) => state.currMusic
+	);
+	const isSelected = currMusicIndex == index;
 	const [hint, setHint] = useState("");
 
 	const handlePlay = (index) => {
-		dispatch(currentMusicIndex(index));
+		if (currMusicIndex != index) {
+			dispatch(currentMusicIndex(index));
+			if (!isPaused) {
+				music.play();
+				dispatch(currentMusicPausePlay(true));
+			}
+		} else {
+			if (isPaused) {
+				music.pause();
+				dispatch(currentMusicPausePlay(false));
+			} else {
+				music.play();
+				dispatch(currentMusicPausePlay(true));
+			}
+		}
 	};
 
 	const addToFavorite = () => {
@@ -192,7 +210,7 @@ const TrackCard = ({ song, index }) => {
 						onMouseEnter={() => setHint("play")}
 						onMouseLeave={() => setHint("")}
 					>
-						{selectedIndex == index ? <BiPause /> : <BiPlay />}
+						{isSelected && isPaused ? <BiPause /> : <BiPlay />}
 					</Btn>
 				</BtnList>
 			</BtnBox>
