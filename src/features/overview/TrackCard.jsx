@@ -3,7 +3,9 @@ import { useState } from "react";
 import { BiPause, BiPlay } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { GoHeart } from "react-icons/go";
+import { useDispatch, useSelector } from "react-redux";
 import { timeFormatter } from "../../utils/time_formater";
+import { currentMusicIndex } from "../music/musicSlice";
 
 const Card = styled.div`
 	position: relative;
@@ -135,13 +137,15 @@ const TrackNo = styled.span`
 	font-weight: 600;
 `;
 
-const TrackCard = ({ song, index, selectedIndex, setSelectedIndex }) => {
+const TrackCard = ({ song, index }) => {
+	const dispatch = useDispatch();
+	const selectedIndex = useSelector((state) => state.currMusic.currMusicIndex);
 	const isSelected = selectedIndex == index;
+
 	const [hint, setHint] = useState("");
 
 	const handlePlay = (index) => {
-		setSelectedIndex(index);
-		console.log(`is selected: ${isSelected}`);
+		dispatch(currentMusicIndex(index));
 	};
 
 	const addToFavorite = () => {
