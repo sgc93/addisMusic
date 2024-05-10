@@ -43,11 +43,28 @@ const Card = styled.div`
 	}
 `;
 
+const ImgBox = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 4rem;
+	width: 4rem;
+	overflow: hidden;
+	border-radius: 100%;
+`;
+
+const PlayingImg = styled.div`
+	position: absolute;
+	border-radius: 100%;
+	background-color: var(--color-border-primary);
+`;
+
 const TrackImg = styled.img`
 	display: flex;
 	align-items: center;
-	height: 4rem;
-	width: 4rem;
+	height: 100%;
+	width: 100%;
 	border-radius: 100%;
 `;
 
@@ -123,8 +140,14 @@ const Btn = styled.button`
 	border: none;
 	border-radius: 50%;
 	padding: 0.3rem;
-	background-color: var(--color-border-primary);
-	color: var(--color-bg-tertiary);
+	background-color: ${(props) =>
+		props.bg == "colored"
+			? "var(--color-text-primary)"
+			: "var(--color-border-primary)"};
+	color: ${(props) =>
+		props.bg == "colored"
+			? "var(--color-bg-primary)"
+			: "var(--color-bg-tertiary)"};
 	cursor: pointer;
 	transition: all 0.4s;
 
@@ -147,6 +170,7 @@ const TrackCard = ({ song, index }) => {
 	);
 	const isSelected = currMusicIndex == index;
 	const [hint, setHint] = useState("");
+	const [isPlayerHover, setIsPlayerHover] = useState(false);
 
 	const handlePlay = (index) => {
 		if (currMusicIndex != index) {
@@ -177,12 +201,19 @@ const TrackCard = ({ song, index }) => {
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
 
-			<TrackImg
-				src={song.coverArt}
-				alt="cover-art"
-				width={"100%"}
-				height={"100%"}
-			/>
+			<ImgBox>
+				<TrackImg
+					src={song.coverArt}
+					alt="cover-art"
+					width={"100%"}
+					height={"100%"}
+				/>
+				{isSelected && isPaused && (
+					<PlayingImg>
+						<img src="./playing.gif" width={200} />
+					</PlayingImg>
+				)}
+			</ImgBox>
 			<DataBox>
 				<ArtistName isSelected={isSelected}>{song.artist}</ArtistName>
 				<MusicName>{song.name}</MusicName>
@@ -207,8 +238,13 @@ const TrackCard = ({ song, index }) => {
 					</Btn>
 					<Btn
 						onClick={() => handlePlay(index)}
-						onMouseEnter={() => setHint("play")}
-						onMouseLeave={() => setHint("")}
+						onMouseEnter={() => {
+							setHint(isPaused && isSelected ? "pause" : "play");
+						}}
+						onMouseLeave={() => {
+							setHint("");
+						}}
+						bg={isSelected ? "colored" : ""}
 					>
 						{isSelected && isPaused ? <BiPause /> : <BiPlay />}
 					</Btn>
