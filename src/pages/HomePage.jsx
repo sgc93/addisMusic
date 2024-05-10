@@ -20,7 +20,7 @@ const OutletSection = styled.section`
 	right: 0;
 
 	width: 80.5%;
-	height: 81%;
+	height: 79%;
 
 	margin: 0rem 0.8rem;
 	background-color: var(--color-bg-secondary);
