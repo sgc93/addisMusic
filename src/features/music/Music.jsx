@@ -2,12 +2,18 @@ import styled from "@emotion/styled";
 import { useRef, useState } from "react";
 import MusicLine from "./MuicLine";
 import MusicController from "./MusicController";
+import PlayedMusic from "./PlayedMusic";
 
 const MusicBox = styled.div`
 	display: flex;
-	gap: 0.7rem;
+	align-items: center;
 
 	width: 100%;
+	height: 5rem;
+
+	background-color: var(--color-bg-tertiary);
+	border-top: 1px solid var(--color-border-primary);
+	backdrop-filter: blur(5rem);
 `;
 
 const Music = () => {
@@ -48,6 +54,7 @@ const Music = () => {
 				onLoadStart={handleLoadStart}
 				onTimeUpdate={handleTimeUpdate}
 			/>
+			<PlayedMusic />
 			<MusicController
 				music={musicRef.current}
 				isMusicFinished={currTime == duration}
