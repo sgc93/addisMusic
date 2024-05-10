@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+	musicList: [],
 	music: null,
 	isPaused: false,
 	volume: 50,
 	currTime: 0,
 	duration: 0,
+	currMusicIndex: 0,
 };
 const musicSlice = createSlice({
 	name: "music",
@@ -28,6 +30,13 @@ const musicSlice = createSlice({
 		currentMusicDuration(state, action) {
 			state.duration = action.payload;
 		},
+		currentMusicList(state, action) {
+			console.log(action.payload);
+			state.musicList = action.payload;
+		},
+		currentMusicIndex(state, action) {
+			state.currMusicIndex = action.payload;
+		},
 	},
 });
 
@@ -37,6 +46,8 @@ export const {
 	currentMusicVolume,
 	currentMusicCurrTime,
 	currentMusicDuration,
+	currentMusicList,
+	currentMusicIndex,
 } = musicSlice.actions;
 
 export default musicSlice.reducer;
