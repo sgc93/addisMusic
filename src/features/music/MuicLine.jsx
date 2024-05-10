@@ -8,12 +8,9 @@ const MusicLineBox = styled.div`
 	gap: 0.5rem;
 
 	width: 84.4%;
+	height: 4rem;
 	padding: 1rem;
 	margin-right: 0.6rem;
-
-	background-color: var(--color-bg-tertiary);
-	border: 1px solid var(--color-border-secondary);
-	border-radius: 0.6rem;
 `;
 
 const Line = styled.input`
