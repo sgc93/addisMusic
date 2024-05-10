@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { useDispatch, useSelector } from "react-redux";
 import { timeFormatter } from "../../utils/time_formater";
+import { currentMusicCurrTime } from "./musicSlice";
 
 const MusicLineBox = styled.div`
 	display: flex;
@@ -29,20 +31,28 @@ const MusicTime = styled.span`
 	width: 2.5rem;
 `;
 
-const MusicLine = ({ currTime, totalTime, handleChangingCurrTime }) => {
+const MusicLine = () => {
+	const dispatch = useDispatch();
+	const { currTime, duration, music } = useSelector((state) => state.currMusic);
+
+	const handleChangingCurrTime = (time) => {
+		music.currentTime = time;
+		dispatch(currentMusicCurrTime(time));
+	};
+
 	return (
 		<MusicLineBox>
 			<MusicTime>{timeFormatter(currTime)}</MusicTime>
 			<Line
 				type="range"
 				min={0}
-				max={totalTime}
+				max={duration}
 				value={currTime}
 				onChange={(e) => handleChangingCurrTime(Number(e.target.value))}
-				disabled={currTime == totalTime}
+				disabled={currTime == duration}
 			/>
 			<MusicTime>
-				{timeFormatter(currTime == totalTime ? 0 : totalTime - currTime)}
+				{timeFormatter(currTime == duration ? 0 : duration - currTime)}
 			</MusicTime>
 		</MusicLineBox>
 	);
