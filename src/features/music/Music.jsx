@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { musicList } from "../../assets/music_list";
 import MusicLine from "./MuicLine";
 import MusicController from "./MusicController";
 import PlayedMusic from "./PlayedMusic";
+import { currentMusic } from "./musicSlice";
 
 const MusicBox = styled.div`
 	display: flex;
@@ -24,6 +26,7 @@ const Music = () => {
 	const [duration, setDuration] = useState(0);
 	const [currTime, setCurrTime] = useState(0);
 	const musicRef = useRef();
+	const dispatch = useDispatch();
 
 	const handleLoadStart = (e) => {
 		const src = e.nativeEvent.srcElement.src;
@@ -31,6 +34,13 @@ const Music = () => {
 		audio.onloadedmetadata = function () {
 			if (audio.readyState > 0) {
 				setDuration(audio.duration);
+				dispatch(
+					currentMusic({
+						music: musicRef.current,
+						currTime: currTime,
+						duration: audio.duration,
+					})
+				);
 			}
 		};
 
@@ -39,11 +49,6 @@ const Music = () => {
 
 	const handleTimeUpdate = () => {
 		setCurrTime(musicRef.current.currentTime);
-	};
-
-	const handleChangingCurrTime = (time) => {
-		musicRef.current.currentTime = time;
-		setCurrTime(time);
 	};
 
 	const resetMusicTime = () => {
@@ -90,11 +95,7 @@ const Music = () => {
 				isPaused={isPaused}
 				setIsPaused={setIsPaused}
 			/>
-			<MusicLine
-				currTime={currTime}
-				totalTime={duration}
-				handleChangingCurrTime={handleChangingCurrTime}
-			/>
+			<MusicLine currTime={currTime} totalTime={duration} />
 		</MusicBox>
 	);
 };
