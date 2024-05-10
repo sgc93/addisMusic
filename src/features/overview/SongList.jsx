@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { musicList } from "../../assets/music_list";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
+import { currentMusicList } from "../music/musicSlice";
 import TrackCard from "./TrackCard";
 
 const ListBox = styled.div`
@@ -48,11 +49,15 @@ const List = styled.div`
 `;
 
 const SongList = () => {
-	const [selectedIndex, setSelectedIndex] = useState(1);
+	const dispatch = useDispatch();
 
 	const tracks = musicList;
 	const isLoading = false;
 	const error = "";
+
+	if (tracks) {
+		dispatch(currentMusicList(tracks));
+	}
 
 	return (
 		<ListBox>
@@ -81,8 +86,6 @@ const SongList = () => {
 							songs={tracks}
 							song={song}
 							index={index}
-							selectedIndex={selectedIndex}
-							setSelectedIndex={setSelectedIndex}
 						/>
 					))}
 			</List>
