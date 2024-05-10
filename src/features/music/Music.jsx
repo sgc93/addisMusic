@@ -5,7 +5,7 @@ import { musicList } from "../../assets/music_list";
 import MusicLine from "./MuicLine";
 import MusicController from "./MusicController";
 import PlayedMusic from "./PlayedMusic";
-import { currentMusic } from "./musicSlice";
+import { currentMusic, currentMusicCurrTime } from "./musicSlice";
 
 const MusicBox = styled.div`
 	display: flex;
@@ -24,9 +24,8 @@ const Music = () => {
 	const [currMusicIndex, setCurrMusicIndex] = useState(0);
 	const [isPaused, setIsPaused] = useState(false);
 	const [duration, setDuration] = useState(0);
-	const [currTime, setCurrTime] = useState(0);
-	const musicRef = useRef();
 	const dispatch = useDispatch();
+	const musicRef = useRef();
 
 	const handleLoadStart = (e) => {
 		const src = e.nativeEvent.srcElement.src;
@@ -37,7 +36,7 @@ const Music = () => {
 				dispatch(
 					currentMusic({
 						music: musicRef.current,
-						currTime: currTime,
+						currTime: 0,
 						duration: audio.duration,
 					})
 				);
@@ -48,11 +47,11 @@ const Music = () => {
 	};
 
 	const handleTimeUpdate = () => {
-		setCurrTime(musicRef.current.currentTime);
+		dispatch(currentMusicCurrTime(musicRef.current.currentTime));
 	};
 
 	const resetMusicTime = () => {
-		setCurrTime(0);
+		dispatch(currentMusicCurrTime(0));
 		setDuration(musicRef.current.duration);
 	};
 
@@ -89,13 +88,13 @@ const Music = () => {
 			<PlayedMusic playedMusic={musics[currMusicIndex]} isPaused={isPaused} />
 			<MusicController
 				music={musicRef.current}
-				isMusicFinished={currTime == duration}
+				isMusicFinished={0 == duration}
 				resetMusicTime={resetMusicTime}
 				playNextPrev={playNextPrev}
 				isPaused={isPaused}
 				setIsPaused={setIsPaused}
 			/>
-			<MusicLine currTime={currTime} totalTime={duration} />
+			<MusicLine />
 		</MusicBox>
 	);
 };
