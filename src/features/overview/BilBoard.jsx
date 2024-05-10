@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 
 const BilBoardBox = styled.div`
+	height: 20rem;
 	border: 2px solid var(--color-border-primary);
 	border-radius: 0.6rem;
+	box-shadow: -2px 2px 1rem 2px var(--color-bg-primary);
 `;
 
 const HeroText = styled.div`
