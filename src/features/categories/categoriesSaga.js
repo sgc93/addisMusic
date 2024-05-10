@@ -25,7 +25,21 @@ function* loadCategoriesWork() {
 			const tracks = [];
 
 			for (var i = 0; i < result.tracks.items.length; i++) {
+				const album = result.albums.items[i];
+				const artist = result.artists.items[i];
 				const track = result.tracks.items[i];
+				albums.push({
+					name: album?.data?.name,
+					artist: album?.data?.artists?.items[0]?.profile?.name,
+					year: album?.data?.date?.year,
+					coverArt: album?.data?.coverArt?.sources[0]?.url,
+					uri: album?.data?.uri,
+				});
+				artists.push({
+					name: artist?.data?.profile?.name,
+					avatar: artist?.data?.visuals?.avatarImage?.sources[0]?.url,
+					uri: artist?.data?.uri,
+				});
 				tracks.push({
 					id: track?.data?.id,
 					name: track?.data?.name,
