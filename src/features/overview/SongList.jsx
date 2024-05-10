@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import { musicList } from "../../assets/music_list";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
@@ -42,11 +43,13 @@ const List = styled.div`
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-	gap: 2rem;
+	gap: 1rem;
 	padding: 1rem;
 `;
 
 const SongList = () => {
+	const [selectedIndex, setSelectedIndex] = useState(1);
+
 	const tracks = musicList;
 	const isLoading = false;
 	const error = "";
@@ -78,6 +81,8 @@ const SongList = () => {
 							songs={tracks}
 							song={song}
 							index={index}
+							selectedIndex={selectedIndex}
+							setSelectedIndex={setSelectedIndex}
 						/>
 					))}
 			</List>
