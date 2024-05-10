@@ -25,6 +25,7 @@ const AroundBox = styled.div`
 		border-radius: 1rem;
 	}
 `;
+
 const AroundText = styled.div`
 	align-self: flex-start;
 	display: flex;
@@ -33,12 +34,9 @@ const AroundText = styled.div`
 	gap: 1rem;
 
 	padding: 1rem 1.4rem;
+	margin: 0rem 1rem;
 	border-radius: 0.6rem;
 	background-color: var(--color-text-primary);
-	// background: radial-gradient(
-	// 	var(--color-bg-secondary),
-	// 	var(--color-rad-outer)
-	// );
 `;
 
 const AroundTitle = styled.span`
@@ -46,9 +44,7 @@ const AroundTitle = styled.span`
 	font-size: 1.3rem;
 	font-weight: bold;
 	color: var(--color-bg-primary);
-	padding-bottom: 0.2rem;
 	margin-bottom: 1rem;
-	border-bottom: 2px solid var(--color-border-primary);
 `;
 const AroundSubtitle = styled.span`
 	font-size: 1.1rem;
@@ -82,10 +78,7 @@ const Around = () => {
 		<AroundBox>
 			<AroundTitle>Top Tracks In Your Country</AroundTitle>
 			<AroundText>
-				{/* <IconStyle>
-					<TbMusicPin />
-				</IconStyle> */}
-				<img src="./music.gif" alt="" width={100} height={100} />
+				<img src="./location.gif" alt="" width={100} height={100} />
 				<AroundSubtitle>
 					Unveil the rhythmic heartbeat of your homeland with our curated
 					selection of top tracks from your country.
