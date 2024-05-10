@@ -1,10 +1,7 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
 import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
-import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
-import { loadCategories } from "../categories/categoriesSlice";
 import PlayedMusic from "../music/PlayedMusic";
 import SideBarMenu from "./SideBarMenu";
 import SideBarTab from "./SideBarTab";
@@ -34,18 +31,12 @@ const IconStyle = styled.div`
 `;
 
 const SideBar = () => {
-	const dispatch = useDispatch();
 	const navigateTo = useNavigate();
 	const location = useLocation();
 	const pathName = location.pathname;
 
-	useEffect(() => {
-		dispatch(loadCategories());
-	}, []);
-
 	const selectTab = (route) => {
 		navigateTo(`/${route}`);
-		dispatch(loadCategories());
 	};
 
 	return (
