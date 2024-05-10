@@ -5,7 +5,7 @@ export const musicList = [
 		artist: "Natty Man",
 		duration: 374.904,
 		url: "./qimemun.mp3",
-		coverArt: "./bg1.jpg",
+		coverArt: "./light1.jpg",
 	},
 	{
 		id: "qwerzxcvtyui32567v",
@@ -13,7 +13,7 @@ export const musicList = [
 		artist: "Wondy Mak",
 		duration: 272.117551,
 		url: "./tanadar.mp3",
-		coverArt: "./note1.jpg",
+		coverArt: "./note4.jpg",
 	},
 	{
 		id: "ldjfsd7876poiuy",
@@ -21,6 +21,6 @@ export const musicList = [
 		artist: "Zerubabel Molla",
 		duration: 175.36,
 		url: "./wona.mp3",
-		coverArt: "./note5.jpg",
+		coverArt: "./note1.jpg",
 	},
 ];
