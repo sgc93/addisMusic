@@ -13,20 +13,28 @@ const Card = styled.div`
 
 	height: 5rem;
 	padding: 0rem 1rem;
-	border-radius: 0.5rem;
+	border-radius: 0.4rem;
 	color: ${(props) =>
 		props.isSelected
-			? "var(--color-gradient-3)"
-			: "var(--color-text-secondary)"};
+			? "var(--color-bg-primary)"
+			: "var(--color-text-tertiary)"};
 
 	background-color: ${(props) =>
-		props.isSelected ? "var(--color-border-primary)" : ""};
+		props.isSelected
+			? "var(--color-border-primary)"
+			: "var(--color-rad-outer2)"};
 
-	box-shadow: -0.5px 0.5px 5px 1px var(--color-bg-tertiary);
 	transition: all 0.4s;
 	&:hover {
 		background-color: var(--color-border-primary);
-		color: var(--color-gradient-3);
+		color: var(--color-bg-primary);
+	}
+
+	&.span {
+		color: ${(props) =>
+			props.isSelected
+				? "var(--color-gradient-1)"
+				: "var(--color-text-secondary)"};
 	}
 `;
 
@@ -45,29 +53,29 @@ const DataBox = styled.div`
 	gap: 0.5rem;
 
 	padding: 0rem 1rem 0.5rem;
-	min-width: 10rem;
+	width: 30%;
 `;
 
 const ArtistName = styled.span`
-	font-family: "Caveat", cursive;
 	font-weight: 600;
-	font-size: 1.4rem;
+	font-size: 1.3rem;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	color: ${(props) => (props.isSelected ? "var(--color-gradient-1)" : "")};
 `;
 
 const MusicName = styled.span`
-	font-weight: 100;
-	font-size: 1rem;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	font-size: 1.1rem;
 `;
 
 const MusicTime = styled.span`
 	display: flex;
 	align-items: center;
+	font-size: 1.2rem;
 `;
 
 const BtnBox = styled.div`
@@ -122,15 +130,21 @@ const Btn = styled.button`
 	}
 `;
 
-const TrackCard = ({ songs, song, index }) => {
-	const [selectedIndex, setSelectedIndex] = useState();
+const TrackNo = styled.span`
+	padding-right: 1rem;
+	font-size: 1.2rem;
+	font-weight: 600;
+`;
+
+const TrackCard = ({ song, index, selectedIndex, setSelectedIndex }) => {
+	const isSelected = selectedIndex == index;
 	const [hint, setHint] = useState("");
 
 	const handlePlay = (index) => {
 		setSelectedIndex(index);
-		console.log(`is selected: ${index == selectedIndex}`);
-		console.log(`selected music: ${songs[selectedIndex]}`);
+		console.log(`is selected: ${isSelected}`);
 	};
+
 	const addToFavorite = () => {
 		// add to favorite
 	};
@@ -139,7 +153,8 @@ const TrackCard = ({ songs, song, index }) => {
 	};
 
 	return (
-		<Card isSelected={index === selectedIndex}>
+		<Card isSelected={isSelected}>
+			<TrackNo>{index + 1}</TrackNo>
 			<ImgBox>
 				<img
 					src={song.coverArt}
@@ -149,7 +164,7 @@ const TrackCard = ({ songs, song, index }) => {
 				/>
 			</ImgBox>
 			<DataBox>
-				<ArtistName>{song.artist}</ArtistName>
+				<ArtistName isSelected={isSelected}>{song.artist}</ArtistName>
 				<MusicName>{song.name}</MusicName>
 			</DataBox>
 			<MusicTime>{timeFormatter(song.duration)}</MusicTime>
