@@ -1,3 +1,4 @@
+import { keyframes } from "@emotion/css";
 import styled from "@emotion/styled";
 
 const MusicBox = styled.div`
@@ -10,19 +11,13 @@ const MusicBox = styled.div`
 	border-right: 1px solid var(--color-border-primary);
 `;
 
-const MusicImg = styled.img`
-	display: flex;
-	align-items: center;
-	height: 3.5rem;
-	width: 3.5rem;
-	padding: 3px;
-	background: linear-gradient(
-		45deg,
-		var(--color-gradient-1),
-		var(--color-gradient-2),
-		var(--color-gradient-3)
-	);
-	border-radius: 100%;
+const rotate = keyframes`
+	0% {
+		transform: rotate(0deg)
+	}
+	100% {
+		transform: rotate(360deg)
+	}
 `;
 
 const MusicData = styled.div`
@@ -50,13 +45,34 @@ const MusicName = styled.span`
 	text-overflow: ellipsis;
 `;
 
-const PlayedMusic = () => {
+const MusicImg = styled.img`
+	display: flex;
+	align-items: center;
+	height: 3.5rem;
+	width: 3.5rem;
+	padding: 3px;
+	background: linear-gradient(
+		45deg,
+		var(--color-gradient-1),
+		var(--color-gradient-2),
+		var(--color-gradient-3)
+	);
+	border-radius: 100%;
+
+	animation: ${(props) => (props.isPaused ? rotate : "")} 2s linear infinite;
+`;
+
+const PlayedMusic = ({ playedMusic, isPaused }) => {
 	return (
 		<MusicBox>
-			<MusicImg src="./logo.png" alt="artist" />
+			<MusicImg
+				src={playedMusic.coverArt}
+				alt="playing-music"
+				isPaused={isPaused}
+			/>
 			<MusicData>
-				<ArtistName>Sew Sealiw S.</ArtistName>
-				<MusicName>I have a meeting with God</MusicName>
+				<ArtistName>{playedMusic.artist}</ArtistName>
+				<MusicName>{playedMusic.name}</MusicName>
 			</MusicData>
 		</MusicBox>
 	);
