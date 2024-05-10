@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
 import Error from "../../ui/Error";
+import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
 import MusicCard from "../../ui/MusicCard";
 
@@ -24,18 +25,6 @@ const List = styled.div`
 	flex-wrap: wrap;
 	gap: 2rem;
 	padding: 1rem;
-`;
-
-const LoaderBox = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.6rem;
-
-	height: 20rem;
-	width: 16rem;
-	border-radius: 1rem;
-	background: linear-gradient(to top, var(--color-bg-primary), #0001);
 `;
 
 const SongList = () => {
