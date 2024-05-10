@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { useSelector } from "react-redux";
-import Error from "../../ui/Error";
+import { musicList } from "../../assets/music_list";
+import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
-import MusicCard from "../../ui/MusicCard";
+import TrackCard from "./TrackCard";
 
 const ListBox = styled.div`
 	width: 100%;
@@ -22,13 +22,16 @@ const ListTitle = styled.span`
 `;
 const List = styled.div`
 	display: flex;
+	flex-direction: column;
 	flex-wrap: wrap;
 	gap: 2rem;
 	padding: 1rem;
 `;
 
 const SongList = () => {
-	const { isLoading, error, tracks } = useSelector((state) => state.categories);
+	const tracks = musicList;
+	const isLoading = false;
+	const error = "";
 
 	return (
 		<ListBox>
@@ -40,11 +43,25 @@ const SongList = () => {
 							<LoaderNote loadingMessage={"fetching ..."} />
 						</LoaderBox>
 					))}
-				{error && <Error errorMessage={error} />}
+				{error && (
+					<FetchError
+						error={error}
+						detail={
+							"Unable to fetch list of recommended musics due to some kind of technical issue, check your network connection and refresh this page."
+						}
+					/>
+				)}
 				{tracks &&
 					!isLoading &&
 					!error &&
-					tracks.map((song) => <MusicCard key={song?.id} song={song} />)}
+					tracks.map((song, index) => (
+						<TrackCard
+							key={song?.id}
+							songs={tracks}
+							song={song}
+							index={index}
+						/>
+					))}
 			</List>
 		</ListBox>
 	);
