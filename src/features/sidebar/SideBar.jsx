@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
-import PlayedMusic from "../music/PlayedMusic";
+import About from "./About";
 import SideBarMenu from "./SideBarMenu";
 import SideBarTab from "./SideBarTab";
 
@@ -94,7 +94,9 @@ const SideBar = () => {
 			<SidebarChild>
 				<SideBarMenu />
 			</SidebarChild>
-			<PlayedMusic />
+			<SidebarChild>
+				<About />
+			</SidebarChild>
 		</Sidebar>
 	);
 };
