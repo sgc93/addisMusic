@@ -23,7 +23,6 @@ const Music = () => {
 	const musics = musicList;
 	const [currMusicIndex, setCurrMusicIndex] = useState(0);
 	const [isPaused, setIsPaused] = useState(false);
-	const [duration, setDuration] = useState(0);
 	const dispatch = useDispatch();
 	const musicRef = useRef();
 
@@ -32,7 +31,6 @@ const Music = () => {
 		const audio = new Audio(src);
 		audio.onloadedmetadata = function () {
 			if (audio.readyState > 0) {
-				setDuration(audio.duration);
 				dispatch(
 					currentMusic({
 						music: musicRef.current,
@@ -48,11 +46,6 @@ const Music = () => {
 
 	const handleTimeUpdate = () => {
 		dispatch(currentMusicCurrTime(musicRef.current.currentTime));
-	};
-
-	const resetMusicTime = () => {
-		dispatch(currentMusicCurrTime(0));
-		setDuration(musicRef.current.duration);
 	};
 
 	const playNext = () => {
@@ -87,9 +80,6 @@ const Music = () => {
 			/>
 			<PlayedMusic playedMusic={musics[currMusicIndex]} isPaused={isPaused} />
 			<MusicController
-				music={musicRef.current}
-				isMusicFinished={0 == duration}
-				resetMusicTime={resetMusicTime}
 				playNextPrev={playNextPrev}
 				isPaused={isPaused}
 				setIsPaused={setIsPaused}
