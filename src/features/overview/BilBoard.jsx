@@ -2,9 +2,7 @@ import styled from "@emotion/styled";
 
 const BilBoardBox = styled.div`
 	height: 14rem;
-	// border: 2px solid var(--color-border-primary);
-	border-radius: 0.6rem;
-	// box-shadow: -2px 2px 1rem 2px var(--color-bg-primary);
+	border-radius: 0.6rem 0.6rem 0rem 0rem;
 	backdrop-filter: blur(4px);
 `;
 
@@ -26,8 +24,8 @@ const HeroSubtitle = styled.span`
 `;
 
 const style = {
-	// backgroundColor: "var(--color-text-tertiary)",
-	// backgroundImage: 'url("./note2.jpg")',
+	backgroundColor: "var(--color-bg-tertiary)",
+	backgroundImage: 'url("./light2.jpg")',
 	backgroundPosition: "center",
 	backgroundSize: "cover",
 };

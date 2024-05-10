@@ -7,10 +7,11 @@ import TrackCard from "./TrackCard";
 
 const ListBox = styled.div`
 	width: 100%;
-	height: 63%;
+	height: 61%;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem 1rem;
+	margin-top: 1rem;
 
 	overflow-x: hidden;
 	overflow-y: scroll;
