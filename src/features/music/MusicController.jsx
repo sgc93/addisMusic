@@ -11,15 +11,15 @@ import {
 import IconButton from "../../ui/IconButton";
 
 const ControllerBox = styled.div`
+	position: relative;
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
 
 	font-size: 20px;
-	padding: 0.5rem 1rem;
-
-	border-radius: 0.6rem;
-	background-color: var(--color-bg-primary);
+	padding: 0rem 2rem 0rem 1rem;
+	height: 4rem;
+	border-right: 1px solid var(--color-border-primary);
 `;
 
 const Flex = styled.div`
@@ -29,15 +29,16 @@ const Flex = styled.div`
 
 const VolumeBox = styled.div`
 	position: absolute;
-	top: -3rem;
-	left: 0.7rem;
+	top: -2rem;
+	left: 0.2rem;
 	display: flex;
 	align-items: center;
-	gap: 0.2rem;
+	gap: 0.4rem;
 
 	padding: 0.5rem 1rem;
-	background-color: var(--color-bg-primary);
 	border-radius: 3rem;
+
+	background-color: var(--color-bg-primary);
 `;
 
 const VolumeInput = styled.input`
