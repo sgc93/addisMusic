@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import SignUP from "../features/auth/signUp/SignUp";
+import { loadCategories } from "../features/categories/categoriesSlice";
 import Footer from "../features/footer/Footer";
 import Header from "../features/header/Header";
 import SideBar from "../features/sidebar/SideBar";
@@ -41,6 +43,10 @@ const OutletSection = styled.section`
 
 const HomePage = () => {
 	const isOpened = useSelector((state) => state.signUpCheck.isSignUpShown);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(loadCategories());
+	}, []);
 
 	return (
 		<HomeSection>
