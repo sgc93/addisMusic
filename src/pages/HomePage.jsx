@@ -23,7 +23,6 @@ const OutletSection = styled.section`
 	height: 79%;
 
 	margin: 0rem 0.8rem;
-	background-color: var(--color-bg-secondary);
 	border-radius: 1rem;
 
 	overflow-x: hidden;
@@ -31,13 +30,13 @@ const OutletSection = styled.section`
 
 	&::-webkit-scrollbar {
 		background-color: transparent;
-		width: 1rem;
+		width: 12px;
 	}
 
 	&::-webkit-scrollbar-thumb {
 		background-color: var(--color-bg-secondary);
 
-		border-radius: 40%;
+		border-radius: 1rem;
 	}
 `;
 
