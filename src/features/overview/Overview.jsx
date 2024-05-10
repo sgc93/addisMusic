@@ -6,8 +6,8 @@ import SongList from "./SongList";
 const OverviewBox = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 0.6rem;
 
+	gap: 0.6rem;
 	padding: 1rem;
 `;
 
