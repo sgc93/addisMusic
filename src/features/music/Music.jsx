@@ -52,7 +52,7 @@ const Music = () => {
 	};
 
 	const playNext = () => {
-		if (currMusicIndex == musics.length) {
+		if (currMusicIndex == musics.length - 1) {
 			setCurrMusicIndex(0);
 		} else {
 			setCurrMusicIndex((currMusicIndex) => Number(currMusicIndex + 1));
@@ -81,7 +81,7 @@ const Music = () => {
 				onLoadStart={handleLoadStart}
 				onTimeUpdate={handleTimeUpdate}
 			/>
-			<PlayedMusic />
+			<PlayedMusic playedMusic={musics[currMusicIndex]} isPaused={isPaused} />
 			<MusicController
 				music={musicRef.current}
 				isMusicFinished={currTime == duration}
