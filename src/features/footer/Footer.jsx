@@ -7,8 +7,6 @@ const FooterBox = styled.div`
 	left: 0;
 
 	width: 100dvw;
-
-	padding: 0rem 0.7rem 0.7rem;
 `;
 
 const Footer = () => {
