@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { TbMusicPin } from "react-icons/tb";
 
 const AroundBox = styled.div`
 	display: flex;
@@ -35,24 +34,25 @@ const AroundText = styled.div`
 
 	padding: 1rem 1.4rem;
 	border-radius: 0.6rem;
-	background: radial-gradient(
-		var(--color-bg-secondary),
-		var(--color-rad-outer)
-	);
+	background-color: var(--color-text-primary);
+	// background: radial-gradient(
+	// 	var(--color-bg-secondary),
+	// 	var(--color-rad-outer)
+	// );
 `;
 
 const AroundTitle = styled.span`
 	align-self: flex-start;
 	font-size: 1.3rem;
 	font-weight: bold;
-	color: var(--color-text-primary);
+	color: var(--color-bg-primary);
 	padding-bottom: 0.2rem;
 	margin-bottom: 1rem;
 	border-bottom: 2px solid var(--color-border-primary);
 `;
 const AroundSubtitle = styled.span`
 	font-size: 1.1rem;
-	color: var(--color-text-tertiary);
+	color: var(--color-bg-primary);
 `;
 const AroundBtn = styled.button`
 	align-self: flex-end;
@@ -82,9 +82,10 @@ const Around = () => {
 		<AroundBox>
 			<AroundTitle>Top Tracks In Your Country</AroundTitle>
 			<AroundText>
-				<IconStyle>
+				{/* <IconStyle>
 					<TbMusicPin />
-				</IconStyle>
+				</IconStyle> */}
+				<img src="./music.gif" alt="" width={100} height={100} />
 				<AroundSubtitle>
 					Unveil the rhythmic heartbeat of your homeland with our curated
 					selection of top tracks from your country.
