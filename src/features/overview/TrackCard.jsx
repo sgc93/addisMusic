@@ -38,13 +38,12 @@ const Card = styled.div`
 	}
 `;
 
-const ImgBox = styled.div`
+const TrackImg = styled.img`
 	display: flex;
 	align-items: center;
-	width: 4rem;
 	height: 4rem;
-	border-radius: 50%;
-	overflow: hidden;
+	width: 4rem;
+	border-radius: 100%;
 `;
 
 const DataBox = styled.div`
@@ -155,14 +154,13 @@ const TrackCard = ({ song, index, selectedIndex, setSelectedIndex }) => {
 	return (
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
-			<ImgBox>
-				<img
-					src={song.coverArt}
-					alt="cover-art"
-					width={"100%"}
-					height={"100%"}
-				/>
-			</ImgBox>
+
+			<TrackImg
+				src={song.coverArt}
+				alt="cover-art"
+				width={"100%"}
+				height={"100%"}
+			/>
 			<DataBox>
 				<ArtistName isSelected={isSelected}>{song.artist}</ArtistName>
 				<MusicName>{song.name}</MusicName>
