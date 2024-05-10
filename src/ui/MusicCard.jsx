@@ -26,11 +26,18 @@ const ArtistName = styled.span`
 	font-family: "Caveat", cursive;
 	font-weight: 600;
 	font-size: 1.6rem;
-	padding: 0.5rem;
+	padding: 0.5rem 1rem;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	color: var(--color-text-secondary);
+`;
+
+const DataBox = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0rem 1rem 0.5rem;
 `;
 
 const MusicName = styled.span`
@@ -39,11 +46,14 @@ const MusicName = styled.span`
 	width: 14rem;
 	font-weight: 100;
 	font-size: 1rem;
-	padding: 0rem 0.5rem 0.5rem;
 	color: var(--color-text-tertiary);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+`;
+
+const MusicTime = styled.span`
+	color: var(--color-text-tertiary);
 `;
 
 const BtnBox = styled.div`
@@ -146,7 +156,10 @@ const MusicCard = ({ song }) => {
 				/>
 			</ImgBox>
 			<ArtistName>{song.artist}</ArtistName>
-			<MusicName>{song.name}</MusicName>
+			<DataBox>
+				<MusicName>{song.name}</MusicName>
+				<MusicTime>{song.duration}</MusicTime>
+			</DataBox>
 		</Card>
 	);
 };
