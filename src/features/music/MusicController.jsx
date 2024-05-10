@@ -86,7 +86,7 @@ const MusicController = ({ music, resetMusicTime, isMusicFinished }) => {
 	};
 
 	const toggleSound = () => {
-		volume > 0 ? setVolume(0) : setVolume(50);
+		volume > 0 ? handleChangingVolume(0) : handleChangingVolume(50);
 	};
 
 	const toggleVolumeBox = () => setIsOpened((isOpened) => !isOpened);
