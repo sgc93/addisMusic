@@ -8,7 +8,9 @@ import {
 	TbPlayerTrackNext,
 	TbPlayerTrackPrev,
 } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
 import IconButton from "../../ui/IconButton";
+import { currentMusicCurrTime, currentMusicDuration } from "./musicSlice";
 
 const ControllerBox = styled.div`
 	position: relative;
@@ -58,14 +60,11 @@ const VolValue = styled.span`
 	padding-left: 0.2rem;
 `;
 
-const MusicController = ({
-	music,
-	resetMusicTime,
-	isMusicFinished,
-	playNextPrev,
-	isPaused,
-	setIsPaused,
-}) => {
+const MusicController = ({ playNextPrev, isPaused, setIsPaused }) => {
+	const { currTime, duration, music } = useSelector((state) => state.currMusic);
+	const isMusicFinished = currTime == duration;
+	const dispatch = useDispatch();
+
 	const [volume, setVolume] = useState(50);
 	const [isOpened, setIsOpened] = useState(false);
 
@@ -84,6 +83,11 @@ const MusicController = ({
 			setIsPaused(!pause);
 			music.play();
 		}
+	};
+
+	const resetMusicTime = () => {
+		dispatch(currentMusicCurrTime(0));
+		dispatch(currentMusicDuration(music.duration));
 	};
 
 	const handleChangingVolume = (vol) => {
