@@ -7,9 +7,26 @@ import TrackCard from "./TrackCard";
 
 const ListBox = styled.div`
 	width: 100%;
+	height: 63%;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem 1rem;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+	border-radius: 0.6rem;
+
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		width: 12px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: var(--color-bg-secondary);
+
+		border-radius: 1rem;
+	}
 `;
 const ListTitle = styled.span`
 	align-self: flex-start;

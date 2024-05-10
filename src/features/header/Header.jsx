@@ -11,7 +11,7 @@ const HeaderBox = styled.div`
 	align-items: center;
 	justify-content: space-between;
 
-	width: 80.8%;
+	width: 80.6%;
 	margin: 0.6rem;
 
 	backdrop-filter: blur(4px);

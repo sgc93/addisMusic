@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 
 const BilBoardBox = styled.div`
-	height: 20rem;
-	border: 2px solid var(--color-border-primary);
+	height: 14rem;
+	// border: 2px solid var(--color-border-primary);
 	border-radius: 0.6rem;
-	box-shadow: -2px 2px 1rem 2px var(--color-bg-primary);
+	// box-shadow: -2px 2px 1rem 2px var(--color-bg-primary);
+	backdrop-filter: blur(4px);
 `;
 
 const HeroText = styled.div`
@@ -16,17 +17,17 @@ const HeroText = styled.div`
 const HeroTitle = styled.span`
 	font-size: 2.7rem;
 	font-weight: bold;
-	color: var(--color-bg-primary);
+	color: var(--color-text-primary);
 `;
 const HeroSubtitle = styled.span`
 	font-size: 1.4rem;
 	font-weight: bold;
-	color: #0009;
+	color: var(--color-text-tertiary);
 `;
 
 const style = {
-	backgroundColor: "var(--color-text-tertiary)",
-	backgroundImage: 'url("./note2.jpg")',
+	// backgroundColor: "var(--color-text-tertiary)",
+	// backgroundImage: 'url("./note2.jpg")',
 	backgroundPosition: "center",
 	backgroundSize: "cover",
 };

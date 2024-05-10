@@ -5,17 +5,26 @@ import SongList from "./SongList";
 
 const OverviewBox = styled.div`
 	display: flex;
-	flex-direction: column;
+	align-items: start;
+	gap: 1rem;
+	// flex-direction: column;
 
-	gap: 0.6rem;
-	padding: 1rem;
+	height: 94%;
+`;
+
+const LeftBox = styled.div`
+	height: calc(103% + 0.2rem);
+	border-radius: 0.6rem;
+	background-color: var(--color-bg-secondary);
 `;
 
 const Overview = () => {
 	return (
 		<OverviewBox>
-			<BillBoard />
-			<SongList />
+			<LeftBox>
+				<BillBoard />
+				<SongList />
+			</LeftBox>
 			<Around />
 		</OverviewBox>
 	);

@@ -7,7 +7,24 @@ const AroundBox = styled.div`
 	gap: 0.6rem;
 
 	width: 40%;
+	height: 98%;
 	padding: 1rem;
+	border-radius: 0.6rem;
+
+	background-color: var(--color-border-primary);
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		width: 12px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: var(--color-bg-tertiary);
+
+		border-radius: 1rem;
+	}
 `;
 const AroundText = styled.div`
 	align-self: flex-start;

@@ -9,6 +9,7 @@ import Header from "../features/header/Header";
 import SideBar from "../features/sidebar/SideBar";
 
 const HomeSection = styled.section`
+	position: relative;
 	width: 100vw;
 	height: 100vh;
 	background: radial-gradient(var(--color-rad-center), var(--color-rad-outer));
@@ -19,10 +20,9 @@ const OutletSection = styled.section`
 	top: 9%;
 	right: 0;
 
-	width: 80.5%;
-	height: 79%;
+	width: 81.2%;
+	height: 81%;
 
-	margin: 0rem 0.8rem;
 	border-radius: 1rem;
 
 	overflow-x: hidden;
