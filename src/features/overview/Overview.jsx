@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Around from "../around/Around";
+import RightSideBar from "../right_sidebar/RightSideBar";
 import BillBoard from "./BilBoard";
 import SongList from "./SongList";
 
@@ -25,7 +25,7 @@ const Overview = () => {
 				<BillBoard />
 				<SongList />
 			</LeftBox>
-			<Around />
+			<RightSideBar />
 		</OverviewBox>
 	);
 };
