@@ -1,5 +1,5 @@
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { put, takeEvery } from "redux-saga/effects";
 import { auth, googleProvider } from "../../../config/firebase_config";
@@ -14,7 +14,7 @@ function* workCheckSignIn(action) {
 			yield put({ type: "signInCheck/checkSignInOpen" });
 		} else {
 			if (!isEmailValid(email) && !isPasswordValid(password)) {
-				yield createUserWithEmailAndPassword(auth, email, password);
+				yield signInWithEmailAndPassword(auth, email, password);
 				yield { type: "signInCheck/checkSignInSuccess" };
 				yield put({ type: "signInCheck/checkSignInOpen" });
 			} else {
@@ -32,10 +32,13 @@ function* workCheckSignIn(action) {
 		}
 	} catch (error) {
 		if (error instanceof FirebaseError) {
-			console.log(error.log);
+			console.log(error.code);
 			let customizedError = error.message.toString();
-			if (error.code == "auth/email-already-in-use") {
-				customizedError = "This email is already in use, login instead!";
+			if (error.code == "auth/invalid-credential") {
+				customizedError =
+					"Invalid credential, try again with correct one please!";
+			} else if (error.code == "auth/user-not-found") {
+				customizedError = "No user is found with this email, Sign up instead!";
 			} else if (error.code == "auth/invalid-email") {
 				customizedError = "Invalid email format, please try with valid one!";
 			} else if (error.code == "auth/popIn-closed-by-user") {

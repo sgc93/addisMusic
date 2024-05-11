@@ -41,7 +41,8 @@ function* workCheckSignUP(action) {
 			} else if (error.code == "auth/popup-closed-by-user") {
 				customizedError = "You have closed the popup, please try again!";
 			} else if (error.code == "auth/network-request-failed") {
-				customizedError = "Unable to connect, check your network please.";
+				customizedError =
+					"Unable to connect with server, check your network please.";
 			} else if (isWithGoogle) {
 				customizedError = "Unable to Sign in with Google, please try again!";
 			} else if (!isWithGoogle) {
