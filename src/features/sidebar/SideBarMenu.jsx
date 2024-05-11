@@ -5,7 +5,7 @@ import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSignedInUser } from "../../hooks/CheckAuth";
-import { checkSignUpOpen } from "../auth/signUp/signUpSlice";
+import { checkSignInOpen } from "../auth/singIn/signInSlice";
 import SideBarTab from "./SideBarTab";
 
 const Menu = styled.div`
@@ -73,7 +73,7 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 		if (isUserSignedIn()) {
 			navigateTo(`/${route}`);
 		} else {
-			dispatch(checkSignUpOpen());
+			dispatch(checkSignInOpen());
 			if (isUserSignedIn()) {
 				navigateTo(`/${route}`);
 			}
