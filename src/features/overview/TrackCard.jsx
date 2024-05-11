@@ -181,7 +181,7 @@ const DotBtnDetail = styled.div`
 	background-color: var(--color-bg-tertiary);
 	backdrop-filter: blur(7rem);
 
-	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.5s linear;
+	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.5s;
 
 	z-index: 1;
 `;
