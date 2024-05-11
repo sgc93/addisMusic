@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
+import AroundWindow from "./AroundWindow";
 
 const AroundBox = styled.div`
 	display: flex;
@@ -44,8 +46,8 @@ const AroundTitle = styled.span`
 	font-size: 1.3rem;
 	font-weight: bold;
 	color: var(--color-bg-primary);
-	margin-bottom: 1rem;
 `;
+
 const AroundSubtitle = styled.span`
 	font-size: 1.1rem;
 	color: var(--color-bg-primary);
@@ -56,7 +58,7 @@ const AroundBtn = styled.button`
 	font-size: 1rem;
 	font-weight: 600;
 	color: var(--color-bg-primary);
-	background-color: var(--color-text-tertiary);
+	background-color: var(--color-bg-secondary);
 	border: none;
 	border-radius: 0.6rem;
 	outline: none;
@@ -64,27 +66,28 @@ const AroundBtn = styled.button`
 	transition: all 0.4s;
 	&:hover {
 		color: var(--color-text-primary);
-		background-color: var(--color-bg-secondary);
+		background-color: var(--color-bg-primary);
 	}
 `;
 
-const IconStyle = styled.span`
-	font-size: 4rem;
-	color: var(--color-text-tertiary);
-`;
-
 const Around = () => {
+	const [isOpened, setIsOpened] = useState(false);
+
 	return (
 		<AroundBox>
 			<AroundTitle>Top Tracks In Your Country</AroundTitle>
-			<AroundText>
-				<img src="./location.gif" alt="" width={100} height={100} />
-				<AroundSubtitle>
-					Unveil the rhythmic heartbeat of your homeland with our curated
-					selection of top tracks from your country.
-				</AroundSubtitle>
-				<AroundBtn>Explore </AroundBtn>
-			</AroundText>
+			{isOpened ? (
+				<AroundWindow />
+			) : (
+				<AroundText>
+					<img src="./location.gif" alt="" width={100} height={100} />
+					<AroundSubtitle>
+						Unveil the rhythmic heartbeat of your homeland with our curated
+						selection of top tracks from your country.
+					</AroundSubtitle>
+					<AroundBtn onClick={() => setIsOpened(true)}>Explore </AroundBtn>
+				</AroundText>
+			)}
 		</AroundBox>
 	);
 };
