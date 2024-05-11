@@ -23,6 +23,7 @@ import {
 	TogglerText,
 	btnStyles,
 } from "../Components";
+import { checkSignUpOpen } from "../signUp/signUpSlice";
 import { checkSignIn, checkSignInOpen } from "./signInSlice";
 
 const SignIn = () => {
@@ -44,6 +45,11 @@ const SignIn = () => {
 	};
 
 	const closeSignIn = () => dispatch(checkSignInOpen());
+
+	const toggleToSignUp = () => {
+		dispatch(checkSignUpOpen());
+		dispatch(checkSignInOpen());
+	};
 
 	return (
 		<>
@@ -101,7 +107,7 @@ const SignIn = () => {
 					</GoogleBtn>
 					<AuthPageToggler>
 						<TogglerText>Have no account?</TogglerText>
-						<TogglerBtn>Create one</TogglerBtn>
+						<TogglerBtn onClick={() => toggleToSignUp()}>Create one</TogglerBtn>
 					</AuthPageToggler>
 				</>
 			)}
