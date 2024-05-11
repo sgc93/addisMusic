@@ -24,6 +24,7 @@ export const signUpSlice = createSlice({
 			state.error = action.payload;
 		},
 		checkSignUpOpen(state) {
+			state.error = "";
 			state.isSignUpShown = !state.isSignUpShown;
 		},
 	},
