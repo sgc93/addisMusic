@@ -3,6 +3,7 @@ import { useState } from "react";
 import { BiPause, BiPlay } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { GoHeart } from "react-icons/go";
+import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	currentMusicIndex,
@@ -122,6 +123,7 @@ const BtnList = styled.div`
 `;
 
 const BtnText = styled.span`
+	align-self: flex-end;
 	padding: 0.4rem 0.7rem;
 	border-radius: 1rem;
 	color: var(--color-text-primary);
@@ -157,6 +159,20 @@ const Btn = styled.button`
 	}
 `;
 
+const DotBtnBox = styled.div`
+	position: relative;
+	display: flex;
+`;
+const DotBtnDetail = styled.div`
+	position: absolute;
+	bottom: 2.2rem;
+	display: flex;
+
+	padding: 1rem;
+	border-radius: 0.4rem;
+	background-color: var(--color-bg-primary);
+`;
+
 const TrackNo = styled.span`
 	padding-right: 1rem;
 	font-size: 1.2rem;
@@ -170,7 +186,7 @@ const TrackCard = ({ song, index }) => {
 	);
 	const isSelected = currMusicIndex == index;
 	const [hint, setHint] = useState("");
-	const [isPlayerHover, setIsPlayerHover] = useState(false);
+	const [isOpened, setIsOpened] = useState(false);
 
 	const handlePlay = (index) => {
 		if (currMusicIndex != index) {
@@ -222,19 +238,40 @@ const TrackCard = ({ song, index }) => {
 			<BtnBox>
 				{hint && <BtnText>{hint}</BtnText>}
 				<BtnList>
+					<DotBtnBox>
+						{isOpened && (
+							<DotBtnDetail>
+								<Btn
+									onClick={() => addToFavorite()}
+									onMouseEnter={() => setHint("add to favorites")}
+									onMouseLeave={() => setHint("")}
+								>
+									<GoHeart color="red" />
+								</Btn>
+								<Btn
+									onClick={() => addToSongs()}
+									onMouseEnter={() => setHint("add to you songs")}
+									onMouseLeave={() => setHint("")}
+								>
+									<CgAdd />
+								</Btn>
+							</DotBtnDetail>
+						)}
+
+						<Btn
+							onClick={() => setIsOpened((isOpened) => !isOpened)}
+							onMouseEnter={() => setHint(isOpened ? "" : "add to your things")}
+							onMouseLeave={() => setHint("")}
+						>
+							{isOpened ? <MdClose /> : <CgAdd />}
+						</Btn>
+					</DotBtnBox>
 					<Btn
 						onClick={() => addToFavorite()}
 						onMouseEnter={() => setHint("add to favorites")}
 						onMouseLeave={() => setHint("")}
 					>
 						<GoHeart color="red" />
-					</Btn>
-					<Btn
-						onClick={() => addToSongs()}
-						onMouseEnter={() => setHint("add to you songs")}
-						onMouseLeave={() => setHint("")}
-					>
-						<CgAdd />
 					</Btn>
 					<Btn
 						onClick={() => handlePlay(index)}
