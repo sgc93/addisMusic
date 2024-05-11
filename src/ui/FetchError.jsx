@@ -3,13 +3,12 @@ import { BiRefresh } from "react-icons/bi";
 import Error from "./Error";
 
 const ErrorBox = styled.div`
-	position: relative;
 	display: flex;
 	align-items: center;
 
 	flex-direction: column;
 	padding: 1rem;
-	width: 50%;
+	width: ${(props) => (props.width ? props.width : "50%")};
 	text-align: center;
 	border-radius: 1rem;
 
@@ -21,6 +20,7 @@ const ErrorImg = styled.img`
 	padding-bottom: 1rem;
 `;
 const ErrorDetail = styled.span`
+	text-align: center;
 	color: var(--color-bg-primary);
 `;
 
@@ -48,9 +48,9 @@ const IconStyle = styled.span`
 	font-size: 20px;
 `;
 
-const FetchError = ({ error, detail }) => {
+const FetchError = ({ error, detail, width }) => {
 	return (
-		<ErrorBox>
+		<ErrorBox width={width}>
 			<ErrorImg src="./loader.svg" />
 			<Error errorMessage={error} />
 			<ErrorDetail>{detail}</ErrorDetail>

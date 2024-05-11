@@ -8,7 +8,7 @@ const LoaderNoteBox = styled.div`
 `;
 
 const LoadingSvg = styled.img`
-	width: 10rem;
+	// width: ${(props) => (props.width ? props.width : "10rem")};
 `;
 
 const LoadingMessage = styled.span`
@@ -17,10 +17,10 @@ const LoadingMessage = styled.span`
 	font-size: 1rem;
 `;
 
-const LoaderNote = ({ loadingMessage }) => {
+const LoaderNote = ({ loadingMessage, width }) => {
 	return (
 		<LoaderNoteBox>
-			<LoadingSvg src="./loader.svg" />
+			<LoadingSvg src="./loader.svg" width={width ? width : 100} />
 			<LoadingMessage>{loadingMessage}</LoadingMessage>
 		</LoaderNoteBox>
 	);
