@@ -48,17 +48,17 @@ const IconStyle = styled.span`
 	font-size: 20px;
 `;
 
-const FetchError = ({ error, detail, width }) => {
+const FetchError = ({ error, detail, width, tryAgain }) => {
 	return (
 		<ErrorBox width={width}>
 			<ErrorImg src="./loader.svg" />
 			<Error errorMessage={error} />
 			<ErrorDetail>{detail}</ErrorDetail>
-			<RefreshBtn>
+			<RefreshBtn onClick={tryAgain}>
 				<IconStyle>
 					<BiRefresh />
 				</IconStyle>
-				<span>refresh</span>
+				<span>try again</span>
 			</RefreshBtn>
 		</ErrorBox>
 	);
