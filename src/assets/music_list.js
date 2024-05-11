@@ -6,6 +6,7 @@ export const musicList = [
 		duration: 374.904,
 		url: "./qimemun.mp3",
 		coverArt: "./light1.jpg",
+		isFavorite: false,
 	},
 	{
 		id: "qwerzxcvtyui32567v",
@@ -14,6 +15,7 @@ export const musicList = [
 		duration: 272.117551,
 		url: "./tanadar.mp3",
 		coverArt: "./note4.jpg",
+		isFavorite: true,
 	},
 	{
 		id: "ldjfsd7876poiuy",
@@ -22,5 +24,6 @@ export const musicList = [
 		duration: 175.36,
 		url: "./wona.mp3",
 		coverArt: "./note1.jpg",
+		isFavorite: false,
 	},
 ];
