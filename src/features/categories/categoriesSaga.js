@@ -18,7 +18,6 @@ function* loadCategoriesWork() {
 
 		if (response.ok) {
 			const result = yield response.json();
-			console.log(result);
 
 			const albums = [];
 			const artists = [];

@@ -31,7 +31,6 @@ const musicSlice = createSlice({
 			state.duration = action.payload;
 		},
 		currentMusicList(state, action) {
-			console.log(action.payload);
 			state.musicList = action.payload;
 		},
 		currentMusicIndex(state, action) {
