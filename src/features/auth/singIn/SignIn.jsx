@@ -57,8 +57,8 @@ const SignIn = () => {
 				<TitleBox>
 					<Title>Get In, Please!</Title>
 					<SubTitle>
-						All you Data and Status is available and as you last put. Feel free
-						own more!.
+						All you Data and Status is available as you last put, and feel free
+						to own more!.
 					</SubTitle>
 				</TitleBox>
 				<IconButton handleClick={() => closeSignIn()}>
