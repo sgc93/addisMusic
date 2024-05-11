@@ -187,9 +187,8 @@ const DotBtnDetail = styled.div`
 `;
 
 const DetailTitle = styled.div`
-	color: var(--color-text-tertiary);
+	color: var(--color-text-primary);
 	border-bottom: 1px solid var(--color-border-primary);
-	opacity: 0.8;
 `;
 
 const DetailChoice = styled.div`
