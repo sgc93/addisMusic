@@ -74,7 +74,9 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 			navigateTo(`/${route}`);
 		} else {
 			dispatch(checkSignUpOpen());
-			navigateTo(`/${route}`);
+			if (isUserSignedIn()) {
+				navigateTo(`/${route}`);
+			}
 		}
 	};
 
