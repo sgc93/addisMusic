@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { BiPause, BiPlay } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
-import { GoHeart } from "react-icons/go";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -58,7 +58,7 @@ const ImgBox = styled.div`
 const PlayingImg = styled.div`
 	position: absolute;
 	border-radius: 100%;
-	background-color: var(--color-border-primary);
+	background-color: var(--color-text-secondary);
 `;
 
 const TrackImg = styled.img`
@@ -107,7 +107,7 @@ const BtnBox = styled.div`
 
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: end;
 	justify-content: end;
 
 	height: 5.5rem;
@@ -312,16 +312,26 @@ const TrackCard = ({ song, index }) => {
 							onClick={() => setIsOpened((isOpened) => !isOpened)}
 							onMouseEnter={() => setHint(isOpened ? "" : "add to your things")}
 							onMouseLeave={() => setHint("")}
+							bg={isOpened ? "colored" : ""}
 						>
 							{isOpened ? <MdClose /> : <CgAdd />}
 						</Btn>
 					</DotBtnBox>
 					<Btn
 						onClick={() => addToFavorite()}
-						onMouseEnter={() => setHint("add to favorites")}
+						onMouseEnter={() =>
+							setHint(
+								song.isFavorite ? "remove from favorites" : "add to favorites"
+							)
+						}
 						onMouseLeave={() => setHint("")}
+						bg={song.isFavorite ? "colored" : ""}
 					>
-						<GoHeart color="red" />
+						{song.isFavorite ? (
+							<GoHeartFill color="red" />
+						) : (
+							<GoHeart color="red" />
+						)}
 					</Btn>
 					<Btn
 						onClick={() => handlePlay(index)}
