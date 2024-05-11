@@ -7,12 +7,24 @@ export const getUserLoc = () => {
 					var longitude = position.coords.longitude;
 					resolve({ lat: latitude, lng: longitude });
 				},
-				() => {
-					reject("Unable to fine you location, please try again!");
+				(error) => {
+					// reject(error.message);
+					reject({
+						message: error.message,
+						detail:
+							"Unable to locate user because of location access denial, please permit the access and try again!",
+						statusIndex: 0,
+						nextStatus: "finding your country",
+					});
 				}
 			);
 		} else {
-			reject("You browser doesn'nt support geoloacation, sorry!");
+			reject("You browser doesn't support geoloacation, sorry!");
+			// reject({
+			// 	message: "You browser doesn't support geoloacation, sorry!",
+			// 	statusIndex: 0,
+			// 	nextStatus: "finding your country",
+			// });
 		}
 	});
 };
@@ -24,7 +36,11 @@ export const reverseGeoCode = async (coords) => {
 		const data = await response.json();
 		return data.country;
 	} catch (error) {
-		console.log(error);
+		return {
+			message: "unable to decode you location, try again!",
+			statusIndex: 1,
+			nextStatus: "fetching top tracks in --",
+		};
 	}
 };
 
@@ -43,6 +59,10 @@ export const getTracks = async (country_code) => {
 		const result = await response.json();
 		console.log(result);
 	} catch (error) {
-		console.error(error);
+		return {
+			message: "Unable to fetch tracks, try again!",
+			statusIndex: 1,
+			nextStatus: "fetching top tracks in --",
+		};
 	}
 };
