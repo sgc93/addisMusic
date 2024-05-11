@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import { checkSignUpOpen } from "../auth/signUp/signUpSlice";
+import { checkSignInOpen } from "../auth/singIn/signInSlice";
 import Account from "../user/Account";
 
 const AccBox = styled.div`
@@ -52,6 +53,7 @@ const SignInUp = () => {
 	const user = useSignedInUser();
 
 	const openSignUp = () => dispatch(checkSignUpOpen());
+	const openSignIn = () => dispatch(checkSignInOpen());
 
 	return (
 		<AccBox>
@@ -60,7 +62,7 @@ const SignInUp = () => {
 			) : (
 				<>
 					<SignUpBtn onClick={() => openSignUp()}>Sign Up</SignUpBtn>
-					<LogInBtn>Log In</LogInBtn>
+					<LogInBtn onClick={() => openSignIn()}>Log In</LogInBtn>
 				</>
 			)}
 		</AccBox>
