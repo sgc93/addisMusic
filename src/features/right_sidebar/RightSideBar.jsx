@@ -3,6 +3,9 @@ import Around from "../around/Around";
 import Lyrics from "../lyrics/Lyrics";
 
 const RightSidebarBox = styled.aside`
+	display: flex;
+	flex-direction: column;
+
 	width: 40%;
 	height: calc(103% + 0.2rem);
 	background-color: var(--color-border-primary);
