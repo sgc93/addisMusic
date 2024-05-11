@@ -36,13 +36,6 @@ const Card = styled.div`
 		background-color: var(--color-border-primary);
 		color: var(--color-bg-primary);
 	}
-
-	&.span {
-		color: ${(props) =>
-			props.isSelected
-				? "var(--color-gradient-1)"
-				: "var(--color-text-secondary)"};
-	}
 `;
 
 const ImgBox = styled.div`
@@ -60,6 +53,7 @@ const PlayingImg = styled.div`
 	position: absolute;
 	border-radius: 100%;
 	background-color: var(--color-text-secondary);
+	animation: ${(props) => (props.isPlaying ? fadeOpen : fadeClose)} 0.6s;
 `;
 
 const TrackImg = styled.img`
@@ -277,7 +271,7 @@ const TrackCard = ({ song, index }) => {
 					height={"100%"}
 				/>
 				{isSelected && isPaused && (
-					<PlayingImg>
+					<PlayingImg isPlaying={isPaused}>
 						<img src="./playing.gif" width={200} />
 					</PlayingImg>
 				)}
