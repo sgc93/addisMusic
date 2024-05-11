@@ -27,10 +27,8 @@ const SignUpBox = styled.div`
 	flex-direction: column;
 	align-items: center;
 
-	padding: 1rem;
+	padding: 1rem 1rem 3rem 1rem;
 
-	width: 70%;
-	height: 70%;
 	background: radial-gradient(
 		var(--color-rad-center2),
 		var(--color-rad-outer2)
@@ -70,6 +68,7 @@ const SubTitle = styled.span`
 const Form = styled.form`
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: 0.6rem;
 `;
 
@@ -80,7 +79,7 @@ const FormInput = styled.input`
 	border-radius: 0.4rem;
 	padding: 0.5rem 1rem;
 
-	width: 20rem;
+	width: 18rem;
 	font-size: 1.3rem;
 	color: var(--color-text-secondary);
 
@@ -98,11 +97,12 @@ const btnStyles = {
 	margin: "0.3rem 0rem",
 	padding: "0.5rem 2rem",
 	fontSize: "1.3rem",
-	borderRadius: "1rem",
+	borderRadius: "0.4rem",
 	outline: "none",
 	border: "none",
 	cursor: "pointer",
 	transition: "all 0.4s",
+	width: "20rem",
 };
 
 const FormBtn = styled.button`
@@ -113,6 +113,7 @@ const FormBtn = styled.button`
 		color: var(--color-text-primary);
 	}
 `;
+
 const GoogleBtn = styled.button`
 	color: var(--color-bg-primary);
 	background-color: var(--color-text-secondary);
@@ -120,17 +121,30 @@ const GoogleBtn = styled.button`
 
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 0.9rem;
 
 	&:hover {
 		transform: translateY(-2px);
 	}
 `;
-
+const OrDiv = styled.div`
+	width: 20rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
 const H4 = styled.span`
+	width: 10%;
 	padding: 0.5rem 1rem;
 	color: var(--color-text-secondary);
 	font-size: 1.2rem;
+`;
+
+const Line = styled.span`
+	height: 2px;
+	width: calc(45% - 0.5rem);
+	border-radius: 1rem;
+	background-color: var(--color-bg-secondary);
 `;
 
 const SignUP = () => {
@@ -200,10 +214,14 @@ const SignUP = () => {
 								Sign Up
 							</FormBtn>
 						</Form>
-						<H4>or</H4>
+						<OrDiv>
+							<Line />
+							<H4>or</H4>
+							<Line />
+						</OrDiv>
 						<GoogleBtn style={btnStyles} onClick={() => signUpWithGoogle()}>
 							<FcGoogle />
-							Sign up with with Google
+							Sign in with Google
 						</GoogleBtn>
 					</>
 				)}
