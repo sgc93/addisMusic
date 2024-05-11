@@ -75,6 +75,15 @@ const MusicController = () => {
 	const [isOpened, setIsOpened] = useState(false);
 
 	useEffect(() => {
+		let timeoutId;
+		if (isOpened) {
+			timeoutId = setTimeout(() => {
+				setIsOpened(false);
+			}, 3000);
+		}
+	}, [isOpened]);
+
+	useEffect(() => {
 		if (music && isMusicFinished) {
 			handlePlayingMusic(true);
 			resetMusicTime();
