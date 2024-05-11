@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import styled from "@emotion/styled";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import Error from "../../../ui/Error";
@@ -26,6 +27,36 @@ import {
 import { checkSignUpOpen } from "../signUp/signUpSlice";
 import { checkSignIn, checkSignInOpen } from "./signInSlice";
 
+const ResetBox = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.7rem;
+
+	width: 20rem;
+`;
+
+const ResetBtn = styled.button`
+	padding: 0.4rem 1rem;
+	background-color: var(--color-text-error);
+	color: var(--color-text-primary);
+	font-weight: bold;
+	font-size: 1rem;
+	border: none;
+	border-radius: 0.4rem;
+
+	cursor: pointer;
+	transition: 0.4s;
+	opacity: 0.6;
+
+	&:hover {
+		opacity: 1;
+	}
+	&:active {
+		opacity: 0.4;
+	}
+`;
+
 const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -50,6 +81,8 @@ const SignIn = () => {
 		dispatch(checkSignUpOpen());
 		dispatch(checkSignInOpen());
 	};
+
+	const resetPassword = () => {};
 
 	return (
 		<>
@@ -109,6 +142,10 @@ const SignIn = () => {
 						<TogglerText>Have no account?</TogglerText>
 						<TogglerBtn onClick={() => toggleToSignUp()}>Create one</TogglerBtn>
 					</AuthPageToggler>
+					<ResetBox>
+						<TogglerText>Forgot your password?</TogglerText>
+						<ResetBtn onClick={() => resetPassword()}>Reset</ResetBtn>
+					</ResetBox>
 				</>
 			)}
 		</>
