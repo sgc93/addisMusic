@@ -67,21 +67,23 @@ const Around = () => {
 
 	return (
 		<AroundBox>
-			<AroundTitle>
-				<TbMusicPin opacity={0.8} />
-				Top Tracks In Your Country
-			</AroundTitle>
 			{isOpened ? (
 				<AroundWindow />
 			) : (
-				<AroundText>
-					<img src="./location.gif" alt="" width={100} height={100} />
-					<AroundSubtitle>
-						Unveil the rhythmic heartbeat of your homeland with our curated
-						selection of top tracks from your country.
-					</AroundSubtitle>
-					<AroundBtn onClick={() => setIsOpened(true)}>Explore </AroundBtn>
-				</AroundText>
+				<>
+					<AroundTitle>
+						<TbMusicPin opacity={0.8} />
+						Top Tracks In Your Country
+					</AroundTitle>
+					<AroundText>
+						<img src="./location.gif" alt="" width={100} height={100} />
+						<AroundSubtitle>
+							Unveil the rhythmic heartbeat of your homeland with our curated
+							selection of top tracks from your country.
+						</AroundSubtitle>
+						<AroundBtn onClick={() => setIsOpened(true)}>Explore </AroundBtn>
+					</AroundText>
+				</>
 			)}
 		</AroundBox>
 	);
