@@ -162,15 +162,64 @@ const Btn = styled.button`
 const DotBtnBox = styled.div`
 	position: relative;
 	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
+
 const DotBtnDetail = styled.div`
 	position: absolute;
-	bottom: 2.2rem;
+	right: 100%;
 	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
 
-	padding: 1rem;
+	width: 13rem;
+	padding: 0.7rem;
+	margin: 0.5rem;
 	border-radius: 0.4rem;
-	background-color: var(--color-bg-primary);
+	background-color: var(--color-bg-tertiary);
+	backdrop-filter: blur(7rem);
+
+	z-index: 1;
+`;
+
+const DetailTitle = styled.div`
+	color: var(--color-text-tertiary);
+	border-bottom: 1px solid var(--color-border-primary);
+	opacity: 0.8;
+`;
+
+const DetailChoice = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+
+	padding: 0.4rem;
+`;
+const Choice = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: end;
+	gap: 0.5rem;
+`;
+const ChoiceTitle = styled.span`
+	color: var(--color-bg-primary);
+	font-weight: thin;
+`;
+const ChoiceBtn = styled.button`
+	padding: 0.2rem 0.5rem;
+	background-color: var(--color-bg-secondary);
+	color: var(--color-text-primary);
+	font-weight: bold;
+	border-radius: 0.4rem;
+	border: none;
+	outline: none;
+
+	cursor: pointer;
+	transition: all 0.4s;
+	&:hover {
+		background-color: var(--color-bg-primary);
+	}
 `;
 
 const TrackNo = styled.span`
@@ -241,20 +290,21 @@ const TrackCard = ({ song, index }) => {
 					<DotBtnBox>
 						{isOpened && (
 							<DotBtnDetail>
-								<Btn
-									onClick={() => addToFavorite()}
-									onMouseEnter={() => setHint("add to favorites")}
-									onMouseLeave={() => setHint("")}
-								>
-									<GoHeart color="red" />
-								</Btn>
-								<Btn
-									onClick={() => addToSongs()}
-									onMouseEnter={() => setHint("add to you songs")}
-									onMouseLeave={() => setHint("")}
-								>
-									<CgAdd />
-								</Btn>
+								<DetailTitle> {song.name}</DetailTitle>
+								<DetailChoice>
+									<Choice>
+										<ChoiceTitle>
+											Build thicker one of your playlist with this track
+										</ChoiceTitle>
+										<ChoiceBtn onClick={() => {}}>Add to playlist</ChoiceBtn>
+									</Choice>
+									<Choice>
+										<ChoiceTitle>
+											Enrich your song list by one more track
+										</ChoiceTitle>
+										<ChoiceBtn onClick={() => {}}>Add to playlist</ChoiceBtn>
+									</Choice>
+								</DetailChoice>
 							</DotBtnDetail>
 						)}
 
