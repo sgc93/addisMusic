@@ -14,6 +14,7 @@ const ErrorMessage = styled.span`
 	color: var(--color-text-error);
 	font-weight: 600;
 	font-size: 1.3rem;
+	text-align: center;
 `;
 
 const TryAgainBtn = styled.button`
