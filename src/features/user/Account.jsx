@@ -36,16 +36,27 @@ const ProfileBox = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 1rem;
 
 	padding: 1rem;
 
-	max-width: 15rem;
-	min-width: 7rem;
+	max-width: 20rem;
+	min-width: 15rem;
 	background-color: var(--color-bg-primary);
 	border-radius: 1rem;
 
 	z-index: 1;
+`;
+
+const Part = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+
+	width: 100%;
+	padding-bottom: 0.2rem;
+	border-bottom: 1px solid var(--color-border-primary);
 `;
 
 const Email = styled.span`
@@ -66,22 +77,53 @@ const CloseBtn = styled.span`
 	align-self: flex-end;
 `;
 
+const ActionBox = styled.div`
+	display: flex;
+	// flex-direction: column;
+	align-items: center;
+	gap: 0.7rem;
+`;
+
+const Title = styled.span`
+	font-size: small;
+	color: var(--color-text-tertiary);
+`;
+
+const style = {
+	fontWeight: "bold",
+	fontSize: "1rem",
+	border: "none",
+	borderRadius: "0.4rem",
+
+	cursor: "pointer",
+	transition: "0.4s",
+	width: "8rem",
+	padding: "0.4rem 0.5rem",
+};
+
 const LogOutBtn = styled.button`
 	background-color: var(--color-text-secondary);
 	color: var(--color-bg-primary);
-	border: none;
-	border-radius: 0.6rem;
-
-	padding: 0.5rem 1rem;
-	margin-top: 0.5rem;
-	font-size: 1rem;
-	font-weight: 600;
-
-	cursor: pointer;
-	transition: 0.4s;
+	opacity: 0.6;
 
 	&:hover {
-		background-color: var(--color-text-primary);
+		opacity: 1;
+	}
+	&:active {
+		opacity: 0.4;
+	}
+`;
+
+const ResetBtn = styled.button`
+	background-color: var(--color-text-error);
+	color: var(--color-text-primary);
+	opacity: 0.6;
+
+	&:hover {
+		opacity: 1;
+	}
+	&:active {
+		opacity: 0.4;
 	}
 `;
 
@@ -107,6 +149,8 @@ const Account = ({ user }) => {
 		signOut(auth);
 	};
 
+	const resetPassword = () => {};
+
 	return (
 		<UserBox>
 			{isOpened ? (
@@ -116,9 +160,23 @@ const Account = ({ user }) => {
 							<MdClose />
 						</IconButton>
 					</CloseBtn>
-					<PpImg src={photoURL ? photoURL : iconUrl} width={70} />
-					<Email>{displayName ? displayName : email}</Email>
-					<LogOutBtn onClick={() => logOut()}>Log Out</LogOutBtn>
+					<Part>
+						<PpImg src={photoURL ? photoURL : iconUrl} width={70} />
+						<Email>{displayName ? displayName : email}</Email>
+					</Part>
+
+					<ActionBox>
+						<Title>Do you want to sign out temporarily?</Title>
+						<LogOutBtn style={style} onClick={() => logOut()}>
+							Log Out
+						</LogOutBtn>
+					</ActionBox>
+					<ActionBox>
+						<Title>Do you want to reset your password?</Title>
+						<ResetBtn style={style} onClick={() => resetPassword()}>
+							Reset
+						</ResetBtn>
+					</ActionBox>
 				</ProfileBox>
 			) : (
 				<AccountBox onClick={() => openProfile()}>
