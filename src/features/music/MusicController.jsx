@@ -9,6 +9,7 @@ import {
 	TbPlayerTrackPrev,
 } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
+import { fadeClose, fadeOpen } from "../../styles/animation";
 import IconButton from "../../ui/IconButton";
 import {
 	currentMusicCurrTime,
@@ -46,6 +47,8 @@ const VolumeBox = styled.div`
 	border-radius: 3rem;
 
 	background-color: var(--color-bg-primary);
+
+	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.5s;
 `;
 
 const VolumeInput = styled.input`
@@ -73,6 +76,7 @@ const MusicController = () => {
 
 	const [volume, setVolume] = useState(50);
 	const [isOpened, setIsOpened] = useState(false);
+	const [isHovered, setIsHovered] = useState(false);
 
 	useEffect(() => {
 		let timeoutId;
@@ -81,7 +85,12 @@ const MusicController = () => {
 				setIsOpened(false);
 			}, 3000);
 		}
-	}, [isOpened]);
+		if (isHovered) {
+			clearTimeout(timeoutId);
+		}
+		console.log(timeoutId);
+		return () => clearTimeout(timeoutId);
+	}, [isOpened, isHovered]);
 
 	useEffect(() => {
 		if (music && isMusicFinished) {
@@ -148,7 +157,11 @@ const MusicController = () => {
 				)}
 			</IconButton>
 			{isOpened && (
-				<VolumeBox>
+				<VolumeBox
+					isOpened={isOpened}
+					onMouseEnter={() => setIsHovered(true)}
+					onMouseLeave={() => setIsHovered(false)}
+				>
 					<IconButton handleClick={() => toggleSound()}>
 						{volume == 0 ? (
 							<FaVolumeMute color="var(--color-text-error)" />
