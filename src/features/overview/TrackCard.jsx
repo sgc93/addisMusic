@@ -130,6 +130,7 @@ const BtnText = styled.span`
 	color: var(--color-text-primary);
 	background-color: var(--color-bg-tertiary);
 	backdrop-filter: blur(5rem);
+	animation: ${(props) => (props.hint ? fadeOpen : fadeClose)} 0.5s;
 `;
 
 const Btn = styled.button`
@@ -287,7 +288,7 @@ const TrackCard = ({ song, index }) => {
 			</DataBox>
 			<MusicTime>{timeFormatter(song.duration)}</MusicTime>
 			<BtnBox>
-				{hint && <BtnText>{hint}</BtnText>}
+				{hint && <BtnText hint={hint}>{hint}</BtnText>}
 				<BtnList>
 					<DotBtnBox>
 						{isOpened && (
