@@ -9,6 +9,7 @@ import {
 	currentMusicIndex,
 	currentMusicPausePlay,
 } from "../../features/music/musicSlice";
+import { fadeClose, fadeOpen } from "../../styles/animation";
 import { timeFormatter } from "../../utils/time_formater";
 
 const Card = styled.div`
@@ -180,6 +181,8 @@ const DotBtnDetail = styled.div`
 	background-color: var(--color-bg-tertiary);
 	backdrop-filter: blur(7rem);
 
+	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.5s linear;
+
 	z-index: 1;
 `;
 
@@ -289,7 +292,7 @@ const TrackCard = ({ song, index }) => {
 				<BtnList>
 					<DotBtnBox>
 						{isOpened && (
-							<DotBtnDetail>
+							<DotBtnDetail isOpened={isOpened}>
 								<DetailTitle> {song.name}</DetailTitle>
 								<DetailChoice>
 									<Choice>
