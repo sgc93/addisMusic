@@ -1,16 +1,16 @@
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { put, takeEvery } from "redux-saga/effects";
-import { auth } from "../../../config/firebase_config";
+import { auth, googleProvider } from "../../../config/firebase_config";
 import { isEmailValid, isPasswordValid } from "../../../utils/validators";
 
 function* workCheckSignIn(action) {
 	const { email, password, isWithGoogle } = action.payload;
 	try {
 		if (isWithGoogle) {
-			// yield signInWithPopIn(auth, googleProvider);
-			yield { type: "signInCheck/checkSignInSuccess" };
+			yield signInWithPopup(auth, googleProvider);
+			yield put({ type: "signInCheck/checkSignInSuccess" });
 			yield put({ type: "signInCheck/checkSignInOpen" });
 		} else {
 			if (!isEmailValid(email) && !isPasswordValid(password)) {

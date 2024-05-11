@@ -10,7 +10,7 @@ function* workCheckSignUP(action) {
 	try {
 		if (isWithGoogle) {
 			yield signInWithPopup(auth, googleProvider);
-			yield { type: "signUpCheck/checkSignUpSuccess" };
+			yield put({ type: "signUpCheck/checkSignUpSuccess" });
 			yield put({ type: "signUpCheck/checkSignUpOpen" });
 		} else {
 			if (!isEmailValid(email) && !isPasswordValid(password)) {
