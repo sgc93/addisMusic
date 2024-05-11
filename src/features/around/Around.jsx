@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { TbMusicPin } from "react-icons/tb";
 import AroundWindow from "./AroundWindow";
 
 const AroundBox = styled.div`
@@ -7,22 +8,8 @@ const AroundBox = styled.div`
 	flex-direction: column;
 	gap: 0.6rem;
 
-	width: 40%;
-	height: 98%;
 	padding: 1rem;
 	border-radius: 0.6rem;
-
-	background-color: var(--color-border-primary);
-	overflow-x: hidden;
-	overflow-y: scroll;
-
-	&::-webkit-scrollbar {
-		background-color: transparent;
-		width: 12px;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background-color: var(--color-bg-tertiary);
 
 		border-radius: 1rem;
 	}
@@ -43,12 +30,17 @@ const AroundText = styled.div`
 
 const AroundTitle = styled.span`
 	align-self: flex-start;
-	font-size: 1.3rem;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: 1.2rem;
 	font-weight: bold;
 	color: var(--color-bg-primary);
+	opacity: 0.9;
 `;
 
 const AroundSubtitle = styled.span`
+	text-align: center;
 	font-size: 1.1rem;
 	color: var(--color-bg-primary);
 `;
@@ -75,7 +67,10 @@ const Around = () => {
 
 	return (
 		<AroundBox>
-			<AroundTitle>Top Tracks In Your Country</AroundTitle>
+			<AroundTitle>
+				<TbMusicPin opacity={0.8} />
+				Top Tracks In Your Country
+			</AroundTitle>
 			{isOpened ? (
 				<AroundWindow />
 			) : (
