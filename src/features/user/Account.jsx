@@ -1,10 +1,18 @@
 import styled from "@emotion/styled";
 import { signOut } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { BiCheck } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase_config";
+import FetchError from "../../ui/FetchError";
 import IconButton from "../../ui/IconButton";
+import LoaderNote from "../../ui/LoaderNote";
+import {
+	checkSignInReset,
+	checkSignInResetSuccess,
+} from "../auth/singIn/signInSlice";
 
 const UserBox = styled.div`
 	position: relative;
@@ -38,10 +46,11 @@ const ProfileBox = styled.div`
 	align-items: center;
 	gap: 1rem;
 
-	padding: 1rem;
+	padding: 0.7rem 1.5rem 2rem;
 
 	max-width: 20rem;
 	min-width: 15rem;
+	min-height: 16rem;
 	background-color: var(--color-bg-primary);
 	border-radius: 1rem;
 
@@ -127,14 +136,42 @@ const ResetBtn = styled.button`
 	}
 `;
 
+const SuccessMessage = styled.span`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+
+	background-color: var(--color-bg-secondary);
+	color: var(--color-text-success);
+	padding: 0.3rem 0.5rem;
+	text-align: center;
+	border-radius: 0.6rem;
+`;
+
 const iconUrl = "./logo.png";
 
 const Account = ({ user }) => {
 	const [isOpened, setIsOpened] = useState(false);
 	const { email, displayName, photoURL } = user;
+	const { isLoading, error, isResetSuccess } = useSelector(
+		(state) => state.signInCheck
+	);
 	const navigateTo = useNavigate();
 	const location = useLocation();
 	const pathName = location.pathname;
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		let timeoutId;
+		if (error || isResetSuccess) {
+			timeoutId = setTimeout(() => {
+				dispatch(checkSignInResetSuccess(false));
+			}, 4000);
+		}
+
+		return () => clearTimeout(timeoutId);
+	}, [error, isResetSuccess]);
 
 	const openProfile = () => setIsOpened(true);
 	const closeProfile = () => setIsOpened(false);
@@ -149,7 +186,9 @@ const Account = ({ user }) => {
 		signOut(auth);
 	};
 
-	const resetPassword = () => {};
+	const resetPassword = () => {
+		dispatch(checkSignInReset(email));
+	};
 
 	return (
 		<UserBox>
@@ -165,18 +204,42 @@ const Account = ({ user }) => {
 						<Email>{displayName ? displayName : email}</Email>
 					</Part>
 
-					<ActionBox>
-						<Title>Do you want to sign out temporarily?</Title>
-						<LogOutBtn style={style} onClick={() => logOut()}>
-							Log Out
-						</LogOutBtn>
-					</ActionBox>
-					<ActionBox>
-						<Title>Do you want to reset your password?</Title>
-						<ResetBtn style={style} onClick={() => resetPassword()}>
-							Reset
-						</ResetBtn>
-					</ActionBox>
+					{isLoading && (
+						<LoaderNote loadingMessage={"sending reset email ..."} />
+					)}
+					{error && (
+						<FetchError
+							error={error}
+							width={"10rem"}
+							ImgHeight={"3rem"}
+							tryAgain={() => resetPassword()}
+						/>
+					)}
+					{!isLoading && !error && (
+						<>
+							<ActionBox>
+								<Title>Do you want to sign out temporarily?</Title>
+								<LogOutBtn style={style} onClick={() => logOut()}>
+									Log Out
+								</LogOutBtn>
+							</ActionBox>
+							{isResetSuccess ? (
+								<SuccessMessage>
+									<BiCheck color="var(--color-text-success)" size={30} />
+									<span>
+										Reset email is sent successfully!, please check your inbox!
+									</span>
+								</SuccessMessage>
+							) : (
+								<ActionBox>
+									<Title>Do you want to reset your password?</Title>
+									<ResetBtn style={style} onClick={() => resetPassword()}>
+										Reset
+									</ResetBtn>
+								</ActionBox>
+							)}
+						</>
+					)}
 				</ProfileBox>
 			) : (
 				<AccountBox onClick={() => openProfile()}>
