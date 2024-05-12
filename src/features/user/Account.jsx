@@ -114,7 +114,7 @@ const style = {
 const LogOutBtn = styled.button`
 	background-color: var(--color-text-secondary);
 	color: var(--color-bg-primary);
-	opacity: 0.6;
+	opacity: 0.8;
 
 	&:hover {
 		opacity: 1;
@@ -127,7 +127,7 @@ const LogOutBtn = styled.button`
 const ResetBtn = styled.button`
 	background-color: var(--color-text-error);
 	color: var(--color-text-primary);
-	opacity: 0.6;
+	opacity: 0.8;
 
 	&:hover {
 		opacity: 1;
