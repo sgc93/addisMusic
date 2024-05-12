@@ -1,5 +1,9 @@
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import {
+	sendPasswordResetEmail,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+} from "firebase/auth";
 
 import { put, takeEvery } from "redux-saga/effects";
 import { auth, googleProvider } from "../../../config/firebase_config";
@@ -67,6 +71,47 @@ function* workCheckSignIn(action) {
 
 function* singInSaga() {
 	yield takeEvery("signInCheck/checkSignIn", workCheckSignIn);
+}
+
+// handle resetting password
+
+function* workCheckSignInReset(action) {
+	const { email } = action.payload;
+	console.log(email);
+	try {
+		yield sendPasswordResetEmail(auth, "smachewgedefamail.com");
+		yield put({ type: "signInCheck/checkSignInSuccess" });
+		yield put({ type: "signInCheck/checkSignInResetSuccess", payload: true });
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			console.log(error.code);
+			let customizedError = error.message.toString();
+			if (error.code == "auth/missing-email") {
+				customizedError = "receiver email not found";
+			} else if (error.code == "auth/invalid-email") {
+				customizedError = "Invalid email format, please try with valid one!";
+			} else if (error.code == "auth/network-request-failed") {
+				customizedError = "Unable to connect, check your network please.";
+			} else {
+				customizedError = "Unable to send reset email, please try again!";
+			}
+			yield put({
+				type: "signInCheck/checkSignInFailure",
+				payload: customizedError,
+			});
+		} else {
+			yield put({
+				type: "signInCheck/checkSignInFailure",
+				payload: "Something went wrong, please try again!",
+			});
+		}
+	} finally {
+		yield put({ type: "signInCheck/checkSignInSuccess" });
+	}
+}
+
+export function* resetSaga() {
+	yield takeEvery("signInCheck/checkSignInReset", workCheckSignInReset);
 }
 
 export default singInSaga;
