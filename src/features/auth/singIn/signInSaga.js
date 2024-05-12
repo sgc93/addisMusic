@@ -77,9 +77,8 @@ function* singInSaga() {
 
 function* workCheckSignInReset(action) {
 	const { email } = action.payload;
-	console.log(email);
 	try {
-		yield sendPasswordResetEmail(auth, "smachewgedefamail.com");
+		yield sendPasswordResetEmail(auth, email);
 		yield put({ type: "signInCheck/checkSignInSuccess" });
 		yield put({ type: "signInCheck/checkSignInResetSuccess", payload: true });
 	} catch (error) {

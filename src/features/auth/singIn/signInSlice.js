@@ -17,7 +17,7 @@ export const signInSlice = createSlice({
 			state.isLoading = true;
 			state.error = null;
 		},
-		checkSignInReset(state) {
+		checkSignInReset(state, action) {
 			state.isLoading = true;
 			state.error = null;
 		},
