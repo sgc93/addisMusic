@@ -6,6 +6,7 @@ import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase_config";
+import Error from "../../ui/Error";
 import FetchError from "../../ui/FetchError";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
@@ -151,10 +152,55 @@ const SuccessMessage = styled.span`
 
 const iconUrl = "./logo.png";
 
+const PassResetBox = styled.div`
+	position: absolute;
+	top: -1.2rem;
+	right: 0;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+
+	padding: 0.7rem 1.5rem 2rem;
+
+	max-width: 20rem;
+	min-width: 15rem;
+	background-color: var(--color-bg-primary);
+	border-radius: 1rem;
+
+	z-index: 1;
+`;
+
+const ResetPart = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+
+	width: 100%;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid var(--color-border-primary);
+`;
+const ResetEmail = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	font-size: small;
+	color: var(--color-text-tertiary);
+`;
+
+const ErrorBox = styled.div`
+	display: flex;
+	align-items: center;
+	background-color: var(--color-text-secondary);
+	padding: 1rem;
+	border-radius: 0.5rem;
+`;
+
 const Account = ({ user }) => {
 	const [isOpened, setIsOpened] = useState(false);
 	const { email, displayName, photoURL } = user;
-	const { isLoading, error, isResetSuccess } = useSelector(
+	const { isLoading, error, isResetSuccess, isResetting } = useSelector(
 		(state) => state.signInCheck
 	);
 	const navigateTo = useNavigate();
@@ -167,7 +213,7 @@ const Account = ({ user }) => {
 		if (error || isResetSuccess) {
 			timeoutId = setTimeout(() => {
 				dispatch(checkSignInResetSuccess(false));
-			}, 4000);
+			}, 6000);
 		}
 
 		return () => clearTimeout(timeoutId);
@@ -187,12 +233,53 @@ const Account = ({ user }) => {
 	};
 
 	const resetPassword = () => {
-		dispatch(checkSignInReset(user));
+		dispatch(checkSignInReset(email));
+	};
+
+	const closeResetBox = () => {
+		dispatch(checkSignInResetSuccess(false));
 	};
 
 	return (
 		<UserBox>
-			{isOpened ? (
+			{isResetting && (
+				<PassResetBox>
+					<CloseBtn>
+						<IconButton handleClick={() => closeResetBox()}>
+							<MdClose />
+						</IconButton>
+					</CloseBtn>
+					<ResetPart>
+						<PpImg src={photoURL ? photoURL : iconUrl} width={40} />
+						<ResetEmail>
+							<span>resetting password of email</span>
+							<span style={{ color: "var(--color-text-primary)" }}>
+								{email}
+							</span>
+						</ResetEmail>
+					</ResetPart>
+
+					{isLoading && (
+						<LoaderNote loadingMessage={"sending reset email ..."} width={70} />
+					)}
+					{error && (
+						<ErrorBox>
+							<Error
+								errorMessage={error}
+								shouldTryAgain={true}
+								handleClick={() => resetPassword()}
+							/>
+						</ErrorBox>
+					)}
+					{isResetSuccess && (
+						<SuccessMessage>
+							<BiCheck color="var(--color-text-success)" size={30} />
+							<span>Reset email is sent to {email}, check your inbox!</span>
+						</SuccessMessage>
+					)}
+				</PassResetBox>
+			)}
+			{isOpened && !isResetting && (
 				<ProfileBox>
 					<CloseBtn>
 						<IconButton handleClick={() => closeProfile()}>
@@ -223,25 +310,18 @@ const Account = ({ user }) => {
 									Log Out
 								</LogOutBtn>
 							</ActionBox>
-							{isResetSuccess ? (
-								<SuccessMessage>
-									<BiCheck color="var(--color-text-success)" size={30} />
-									<span>
-										Reset email is sent successfully to {email}, your inbox!
-									</span>
-								</SuccessMessage>
-							) : (
-								<ActionBox>
-									<Title>Do you want to reset your password?</Title>
-									<ResetBtn style={style} onClick={() => resetPassword()}>
-										Reset
-									</ResetBtn>
-								</ActionBox>
-							)}
+							<ActionBox>
+								<Title>Do you want to reset your password?</Title>
+								<ResetBtn style={style} onClick={() => resetPassword()}>
+									Reset
+								</ResetBtn>
+							</ActionBox>
 						</>
 					)}
 				</ProfileBox>
-			) : (
+			)}
+
+			{!isResetting && !isOpened && (
 				<AccountBox onClick={() => openProfile()}>
 					<Email>{displayName ? displayName : email}</Email>
 					<PpImg src={photoURL ? photoURL : iconUrl} width={30} />
