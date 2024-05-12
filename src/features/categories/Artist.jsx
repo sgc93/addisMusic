@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ArtistCard from "../../ui/ArtistCard";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
+import { loadCategories } from "./categoriesSlice";
 
 const ArtistBox = styled.div`
 	display: flex;
@@ -43,6 +44,9 @@ const Artist = () => {
 	const { isLoading, error, artists } = useSelector(
 		(state) => state.categories
 	);
+	const dispatch = useDispatch();
+
+	const tryAgain = () => dispatch(loadCategories());
 
 	return (
 		<ArtistBox>
@@ -64,6 +68,7 @@ const Artist = () => {
 						detail={
 							"Unable to fetch list of Top 10 Artists due to some kind of technical issue, check your network connection and refresh this page."
 						}
+						tryAgain={() => tryAgain()}
 					/>
 				)}
 				{artists &&

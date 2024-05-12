@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
 import MusicCard from "../../ui/MusicCard";
+import loadCategories from "../categories/categoriesSlice";
 
 const TrackBox = styled.div`
 	display: flex;
@@ -42,6 +43,9 @@ const List = styled.div`
 
 const Track = () => {
 	const { isLoading, error, tracks } = useSelector((state) => state.categories);
+	const dispatch = useDispatch();
+
+	const tryAgain = () => dispatch(loadCategories());
 
 	return (
 		<TrackBox>
@@ -63,6 +67,7 @@ const Track = () => {
 						detail={
 							"Unable to fetch list of Top 10 Tracks due to some kind of technical issue, check your network connection and refresh this page."
 						}
+						tryAgain={() => tryAgain()}
 					/>
 				)}
 				{tracks &&

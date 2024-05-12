@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AlbumCard from "../../ui/AlbumCard";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
+import { loadCategories } from "./categoriesSlice";
 
 const AlbumBox = styled.div`
 	display: flex;
@@ -41,6 +42,9 @@ const List = styled.div`
 `;
 const Album = () => {
 	const { isLoading, error, albums } = useSelector((state) => state.categories);
+	const dispatch = useDispatch();
+
+	const tryAgain = () => dispatch(loadCategories());
 
 	return (
 		<AlbumBox>
@@ -62,6 +66,7 @@ const Album = () => {
 						detail={
 							"Unable to fetch list of Top 10 Albums due to some kind of technical issue, check your network connection and refresh this page."
 						}
+						tryAgain={() => tryAgain()}
 					/>
 				)}
 				{albums &&
