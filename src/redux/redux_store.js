@@ -4,6 +4,7 @@ import signUpReducer from "../features/auth/signUp/signUpSlice";
 import signInReducer from "../features/auth/singIn/signInSlice";
 import categoriesReducer from "../features/categories/categoriesSlice";
 import currMusicReducer from "../features/music/musicSlice";
+import playlistReducer from "../features/playlists/playlistSlice";
 
 export const saga = createSagaMiddleware();
 
@@ -13,6 +14,7 @@ export const store = configureStore({
 		signInCheck: signInReducer,
 		currMusic: currMusicReducer,
 		categories: categoriesReducer,
+		playlist: playlistReducer,
 	},
 	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saga),
 });
