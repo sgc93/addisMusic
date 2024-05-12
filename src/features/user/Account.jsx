@@ -187,7 +187,7 @@ const Account = ({ user }) => {
 	};
 
 	const resetPassword = () => {
-		dispatch(checkSignInReset(email));
+		dispatch(checkSignInReset(user));
 	};
 
 	return (
@@ -227,7 +227,7 @@ const Account = ({ user }) => {
 								<SuccessMessage>
 									<BiCheck color="var(--color-text-success)" size={30} />
 									<span>
-										Reset email is sent successfully!, please check your inbox!
+										Reset email is sent successfully to {email}, your inbox!
 									</span>
 								</SuccessMessage>
 							) : (
