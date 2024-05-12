@@ -6,6 +6,7 @@ const initialState = {
 	error: null,
 	isSignInShown: false,
 	isResetSuccess: null,
+	isResetting: null,
 };
 
 // define slice with name, initial state and list of reducers
@@ -18,6 +19,7 @@ export const signInSlice = createSlice({
 			state.error = null;
 		},
 		checkSignInReset(state, action) {
+			state.isResetting = true;
 			state.isLoading = true;
 			state.error = null;
 		},
@@ -25,6 +27,7 @@ export const signInSlice = createSlice({
 			state.isLoading = false;
 		},
 		checkSignInResetSuccess(state, action) {
+			state.isResetting = action.payload;
 			state.isResetSuccess = action.payload;
 			state.error = null;
 		},
