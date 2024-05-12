@@ -76,14 +76,13 @@ function* singInSaga() {
 // handle resetting password
 
 function* workCheckSignInReset(action) {
-	const { email } = action.payload;
+	const email = action.payload;
 	try {
 		yield sendPasswordResetEmail(auth, email);
 		yield put({ type: "signInCheck/checkSignInSuccess" });
 		yield put({ type: "signInCheck/checkSignInResetSuccess", payload: true });
 	} catch (error) {
 		if (error instanceof FirebaseError) {
-			console.log(error.code);
 			let customizedError = error.message.toString();
 			if (error.code == "auth/missing-email") {
 				customizedError = "receiver email not found";
