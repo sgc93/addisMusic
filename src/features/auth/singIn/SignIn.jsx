@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "@emotion/styled";
+import { BiCheck } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { MdClose } from "react-icons/md";
 import Error from "../../../ui/Error";
@@ -25,7 +26,13 @@ import {
 	btnStyles,
 } from "../Components";
 import { checkSignUpOpen } from "../signUp/signUpSlice";
-import { checkSignIn, checkSignInOpen } from "./signInSlice";
+import {
+	checkSignIn,
+	checkSignInFailure,
+	checkSignInOpen,
+	checkSignInReset,
+	checkSignInResetSuccess,
+} from "./signInSlice";
 
 const ResetBox = styled.div`
 	display: flex;
@@ -57,12 +64,38 @@ const ResetBtn = styled.button`
 	}
 `;
 
+const SuccessMessage = styled.span`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+
+	background-color: var(--color-bg-primary);
+	color: var(--color-text-success);
+	padding: 1rem 2rem;
+	text-align: center;
+	border-radius: 0.6rem;
+	width: 20rem;
+`;
+
 const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
-	const isLoading = useSelector((state) => state.signInCheck.isLoading);
-	const error = useSelector((state) => state.signInCheck.error);
+	const { isLoading, error, isResetting, isResetSuccess } = useSelector(
+		(state) => state.signInCheck
+	);
+
+	useEffect(() => {
+		let timeoutId;
+		if (error || isResetSuccess) {
+			timeoutId = setTimeout(() => {
+				dispatch(checkSignInResetSuccess(false));
+			}, 6000);
+		}
+
+		return () => clearTimeout(timeoutId);
+	}, [error, isResetSuccess]);
 
 	const signIn = (event) => {
 		event.preventDefault();
@@ -75,33 +108,71 @@ const SignIn = () => {
 		dispatch(checkSignIn({ email: "", password: "", isWithGoogle: true }));
 	};
 
-	const closeSignIn = () => dispatch(checkSignInOpen());
+	const closeSignIn = () => {
+		dispatch(checkSignInResetSuccess());
+		dispatch(checkSignInOpen());
+	};
 
 	const toggleToSignUp = () => {
 		dispatch(checkSignUpOpen());
 		dispatch(checkSignInOpen());
 	};
 
-	const resetPassword = () => {};
+	const resetPassword = () => {
+		if (email.length == 0) {
+			dispatch(checkSignInFailure("Please enter reset link receiver email!"));
+		} else {
+			dispatch(checkSignInReset(email));
+			console.log("passed email is:" + email);
+		}
+	};
+
+	const backToLogin = () => dispatch(checkSignInResetSuccess(false));
 
 	return (
 		<>
 			<AuthHeader>
 				<TitleBox>
-					<Title>Get In, Please!</Title>
-					<SubTitle>
-						All you Data and Status is available as you last put, and feel free
-						to own more!.
-					</SubTitle>
+					<Title>
+						{isResetting
+							? `Resetting password of email ${email} ...`
+							: "Get In, Please!"}
+					</Title>
+					{!isResetting && (
+						<SubTitle>
+							All you Data and Status is available as you last put, and feel
+							free to own more!.
+						</SubTitle>
+					)}
 				</TitleBox>
 				<IconButton handleClick={() => closeSignIn()}>
 					<MdClose />
 				</IconButton>
 			</AuthHeader>
-
-			{isLoading && !error && <LoaderNote loadingMessage={"Signing In ..."} />}
-
-			{!isLoading && (
+			{error && isResetting && (
+				<>
+					<Error
+						errorMessage={error}
+						shouldTryAgain={true}
+						handleClick={() => resetPassword()}
+					/>
+					<ResetBtn onClick={() => backToLogin()}>back to login</ResetBtn>
+				</>
+			)}
+			{isLoading && !error && !isResetting && (
+				<LoaderNote loadingMessage={"Signing In ..."} />
+			)}
+			{isLoading && !error && isResetting && (
+				<LoaderNote loadingMessage={"Sending reset email ..."} />
+			)}
+			{isResetSuccess && (
+				<SuccessMessage>
+					<BiCheck color="var(--color-text-success)" size={30} />
+					<span>Reset email is sent to {email}, check your inbox!</span>
+					<ResetBtn onClick={() => backToLogin()}>back to login</ResetBtn>
+				</SuccessMessage>
+			)}
+			{!isLoading && !isResetting && (
 				<>
 					{error && <Error errorMessage={error} shouldTryAgain={false} />}
 					<Form>
