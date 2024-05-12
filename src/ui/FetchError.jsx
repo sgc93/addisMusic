@@ -8,6 +8,7 @@ const ErrorBox = styled.div`
 
 	flex-direction: column;
 	padding: 1rem;
+
 	width: ${(props) => (props.width ? props.width : "50%")};
 	text-align: center;
 	border-radius: 1rem;
@@ -15,8 +16,7 @@ const ErrorBox = styled.div`
 	background-color: var(--color-text-tertiary);
 `;
 const ErrorImg = styled.img`
-	width: 5rem;
-	height: 5rem;
+	height: ${(props) => (props.height ? props.height : "5rem")};
 	padding-bottom: 1rem;
 `;
 const ErrorDetail = styled.span`
@@ -48,10 +48,10 @@ const IconStyle = styled.span`
 	font-size: 20px;
 `;
 
-const FetchError = ({ error, detail, width, tryAgain }) => {
+const FetchError = ({ error, detail, width, ImgHeight, tryAgain }) => {
 	return (
 		<ErrorBox width={width}>
-			<ErrorImg src="./loader.svg" />
+			<ErrorImg src="./loader.svg" height={ImgHeight} />
 			<Error errorMessage={error} />
 			<ErrorDetail>{detail}</ErrorDetail>
 			<RefreshBtn onClick={tryAgain}>
