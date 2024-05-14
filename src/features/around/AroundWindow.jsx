@@ -16,10 +16,8 @@ const AroundWindowBox = styled.section`
 	align-items: center;
 
 	padding: 0.5rem 1rem;
-	height: 15rem;
     border: radius
 	background-color: var(--color-text-primary);
-	backdrop-filter: blur(4rem);
 `;
 
 const Title = styled.span`
@@ -27,6 +25,7 @@ const Title = styled.span`
 	font-weight: bold;
 	opacity: 0.5;
 `;
+
 const Status = styled.div`
 	display: flex;
 	align-items: center;

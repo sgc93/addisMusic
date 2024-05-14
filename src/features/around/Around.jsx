@@ -10,9 +10,7 @@ const AroundBox = styled.div`
 
 	padding: 1rem;
 	border-radius: 0.6rem;
-
-		border-radius: 1rem;
-	}
+	border-radius: 1rem;
 `;
 
 const AroundText = styled.div`
