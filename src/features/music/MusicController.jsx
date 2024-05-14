@@ -44,9 +44,9 @@ const VolumeBox = styled.div`
 	gap: 0.4rem;
 
 	padding: 0.5rem 1rem;
-	border-radius: 3rem;
+	border-radius: 0.7rem;
 
-	background-color: var(--color-bg-primary);
+	background-color: var(--color-bg-4);
 
 	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.5s;
 `;
