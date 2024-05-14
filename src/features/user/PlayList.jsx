@@ -13,12 +13,16 @@ import { useEffect, useRef, useState } from "react";
 import { firestore, storage } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import { FormInput } from "../auth/Components";
+import PlaylistAddCard from "../playlists/PlaylistAddCard";
+import SongAddCard from "../playlists/SongAddCard";
 
 const PlayListBox = styled.div`
 	padding: 0.5rem 1rem;
 `;
 
 const PlayList = () => {
+	const [isAddOpen, setIsAddOpen] = useState(false);
+	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 	const user = useSignedInUser();
 	const musicRef = useRef();
 	const [musicUrl, setMusicUrl] = useState("");
@@ -165,10 +169,29 @@ const PlayList = () => {
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 				/>
-				<button onClick={() => createNewPlaylist(`playlists${user.uid}`)}>
+				<button
+					onClick={() => {
+						// createNewPlaylist(`playlists${user.uid}`);
+						setIsAddOpen(true);
+					}}
+				>
 					create new playlist
 				</button>
+				<button
+					onClick={() => {
+						// createNewPlaylist(`playlists${user.uid}`);
+						setIsAddSongOpen(true);
+					}}
+				>
+					add song
+				</button>
 			</div>
+			{isAddOpen && (
+				<PlaylistAddCard isOpened={isAddOpen} setIsOpened={setIsAddOpen} />
+			)}
+			{isAddSongOpen && (
+				<SongAddCard isOpened={isAddSongOpen} setIsOpened={setIsAddSongOpen} />
+			)}
 		</PlayListBox>
 	);
 };
