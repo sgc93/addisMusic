@@ -1,5 +1,5 @@
 // renaming file
-export function renameMusicFile(originalFile, newFilename) {
+export const renameMusicFile = (originalFile, newFilename) => {
 	const type = originalFile.type;
 	const reader = new FileReader();
 
@@ -15,4 +15,4 @@ export function renameMusicFile(originalFile, newFilename) {
 		reader.onerror = (error) => reject(error);
 		reader.readAsArrayBuffer(originalFile);
 	});
-}
+};
