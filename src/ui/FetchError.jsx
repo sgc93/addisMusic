@@ -13,7 +13,7 @@ const ErrorBox = styled.div`
 	text-align: center;
 	border-radius: 1rem;
 
-	background-color: var(--color-text-tertiary);
+	background-color: var(--color-text-primary);
 `;
 const ErrorImg = styled.img`
 	height: ${(props) => (props.height ? props.height : "5rem")};
@@ -30,7 +30,7 @@ const RefreshBtn = styled.button`
 
 	font-size: 1.2rem;
 	color: var(--color-bg-primary);
-	background-color: var(--color-text-tertiary);
+	background-color: var(--color-bg-secondary);
 
 	padding: 0.2rem 0.5rem;
 	margin: 1rem;
@@ -40,7 +40,8 @@ const RefreshBtn = styled.button`
 	transition: all 0.3s;
 
 	&:hover {
-		background-color: var(--color-text-primary);
+		color: var(--color-text-primary);
+		background-color: var(--color-bg-primary);
 	}
 `;
 
@@ -51,7 +52,7 @@ const IconStyle = styled.span`
 const FetchError = ({ error, detail, width, ImgHeight, tryAgain }) => {
 	return (
 		<ErrorBox width={width}>
-			<ErrorImg src="./loader.svg" height={ImgHeight} />
+			<ErrorImg src="./sorry.gif" height={ImgHeight} />
 			<Error errorMessage={error} />
 			<ErrorDetail>{detail}</ErrorDetail>
 			<RefreshBtn onClick={tryAgain}>
