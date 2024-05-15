@@ -5,7 +5,7 @@ export const getUserLoc = () => {
 				(position) => {
 					var latitude = position.coords.latitude;
 					var longitude = position.coords.longitude;
-					resolve({ lat: latitude, lng: longitude });
+					resolve({ hasData: true, data: { lat: latitude, lng: longitude } });
 				},
 				(error) => {
 					// reject(error.message);
@@ -19,12 +19,12 @@ export const getUserLoc = () => {
 				}
 			);
 		} else {
-			reject("You browser doesn't support geoloacation, sorry!");
-			// reject({
-			// 	message: "You browser doesn't support geoloacation, sorry!",
-			// 	statusIndex: 0,
-			// 	nextStatus: "finding your country",
-			// });
+			// reject("You browser doesn't support geoloacation, sorry!");
+			reject({
+				message: "You browser doesn't support geoloacation, sorry!",
+				statusIndex: 0,
+				nextStatus: "finding your country",
+			});
 		}
 	});
 };
@@ -34,13 +34,14 @@ export const reverseGeoCode = async (coords) => {
 	try {
 		const response = await fetch(url);
 		const data = await response.json();
-		return data.country;
+		return { hasData: true, data: data.country };
 	} catch (error) {
-		return {
+		// throw "unable to decode you location, try again!";
+		throw new Error({
 			message: "unable to decode you location, try again!",
 			statusIndex: 1,
-			nextStatus: "fetching top tracks in --",
-		};
+			nextStatus: "fetching top tracks in your",
+		});
 	}
 };
 
@@ -58,11 +59,13 @@ export const getTracks = async (country_code) => {
 		const response = await fetch(url, options);
 		const result = await response.json();
 		console.log(result);
+		return result;
 	} catch (error) {
-		return {
-			message: "Unable to fetch tracks, try again!",
-			statusIndex: 1,
-			nextStatus: "fetching top tracks in --",
-		};
+		throw "Unable to fetch tracks, try again!";
+		// return {
+		// 	message: "Unable to fetch tracks, try again!",
+		// 	statusIndex: 1,
+		// 	nextStatus: "fetching top tracks in --",
+		// };
 	}
 };
