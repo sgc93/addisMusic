@@ -13,8 +13,6 @@ export const getUserLoc = () => {
 						message: error.message,
 						detail:
 							"Unable to locate user because of location access denial, please permit the access and try again!",
-						statusIndex: 0,
-						nextStatus: "finding your country",
 					});
 				}
 			);
@@ -22,8 +20,8 @@ export const getUserLoc = () => {
 			// reject("You browser doesn't support geoloacation, sorry!");
 			reject({
 				message: "You browser doesn't support geoloacation, sorry!",
-				statusIndex: 0,
-				nextStatus: "finding your country",
+				detail:
+					"Unable to locate user because your browser doesn't support geolocation, try with another browser please!",
 			});
 		}
 	});
@@ -39,8 +37,7 @@ export const reverseGeoCode = async (coords) => {
 		// throw "unable to decode you location, try again!";
 		throw new Error({
 			message: "unable to decode you location, try again!",
-			statusIndex: 1,
-			nextStatus: "fetching top tracks in your",
+			detail: error.message,
 		});
 	}
 };
@@ -58,14 +55,13 @@ export const getTracks = async (country_code) => {
 	try {
 		const response = await fetch(url, options);
 		const result = await response.json();
-		console.log(result);
-		return result;
+		if (result.status) {
+			return { hasData: true, data: result.result };
+		}
 	} catch (error) {
-		throw "Unable to fetch tracks, try again!";
-		// return {
-		// 	message: "Unable to fetch tracks, try again!",
-		// 	statusIndex: 1,
-		// 	nextStatus: "fetching top tracks in --",
-		// };
+		throw new Error({
+			message: "Unable to fetch tracks, try again!",
+			detail: error.message,
+		});
 	}
 };
