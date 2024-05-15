@@ -5,7 +5,11 @@ import { BsThreeDots } from "react-icons/bs";
 import { GrClose } from "react-icons/gr";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
-import { getUserLoc, reverseGeoCode } from "../../utils/user_location";
+import {
+	getTracks,
+	getUserLoc,
+	reverseGeoCode,
+} from "../../utils/user_location";
 
 const AroundWindowBox = styled.section`
 	display: flex;
@@ -36,6 +40,7 @@ const Status = styled.div`
 	opacity: ${(props) => (props.isCompleted == "loading" ? 0.8 : 1)};
 	gap: 0.5rem;
 	width: 100%;
+	text-align: center;
 `;
 
 const StatusTitle = styled.span`
@@ -61,6 +66,7 @@ const AroundWindow = () => {
 			isCompleted: "loading",
 		},
 	]);
+	const [finalStatus, setFinalStatus] = useState();
 
 	const [statusIndex, setStatusIndex] = useState(0);
 
@@ -72,30 +78,37 @@ const AroundWindow = () => {
 			try {
 				const locResponse = await getUserLoc();
 				if (locResponse.hasData) {
-					updateStatus("completed", "finding user country");
+					updateStatus("completed", 0, "finding user country");
 					setUserLoc(locResponse.data);
 				} else {
-					updateStatus("uncompleted", "finding user country");
+					updateStatus("uncompleted", 0, "unable to locate user");
 				}
 
 				const response = await reverseGeoCode(locResponse.data);
 				if (response.hasData) {
-					updateStatus("completed", `fetching top tracks in ${response.data}`);
+					updateStatus(
+						"completed",
+						1,
+						`fetching top tracks in ${response.data}`
+					);
 				} else {
-					updateStatus("uncompleted", `fetching top tracks in your country.`);
+					updateStatus("uncompleted", 1, `unable to find user country.`);
 				}
 
-				// const tracks = await getTracks(country);
-				// if (tracks) {
-				// 	updateStatus("completed", `done`);
-				// } else {
-				// 	updateStatus("uncompleted", `operation failed, sorry!`);
-				// }
-				// console.log(tracks);
+				const tracks = await getTracks(response.data);
+				if (tracks.hasData) {
+					updateStatus("completed", 2, `done`);
+				} else {
+					updateStatus(
+						"uncompleted",
+						2,
+						`unable to fetch top tracks in ${response.data}.`
+					);
+				}
 			} catch (newError) {
-				setError(newError.message);
+				setError(newError);
 			} finally {
-				setIsLoading(false);
+				// setIsLoading(false);
 			}
 		};
 
@@ -103,28 +116,34 @@ const AroundWindow = () => {
 		return () => clearTimeout(timeoutId);
 	}, []);
 
-	const updateStatus = (isCurrStatCompleted, nextStatusTitle) => {
-		setStatus((prevStatus) => {
-			console.log(
-				"status index: " +
-					statusIndex +
-					"\n status: " +
-					prevStatus[statusIndex].title
-			);
+	const updateStatus = (isCurrStatCompleted, currIndex, nextStatusTitle) => {
+		setStatus((prevStatus) => [
+			...prevStatus
+				.map((status, index) =>
+					index == currIndex
+						? { ...status, isCompleted: isCurrStatCompleted }
+						: status
+				)
+				.concat(
+					isCurrStatCompleted != "uncompleted"
+						? prevStatus[prevStatus.length - 1].title != nextStatusTitle
+							? [
+									{
+										title: nextStatusTitle,
+										isCompleted: "loading",
+									},
+							  ]
+							: []
+						: []
+				),
+		]);
 
-			const updatedStatus = prevStatus.map((stat, index) =>
-				index === statusIndex
-					? { ...stat, isCompleted: isCurrStatCompleted }
-					: stat
-			);
-
-			return updatedStatus.length === 0 ||
-				updatedStatus[updatedStatus.length - 1].title !== nextStatusTitle
-				? [...updatedStatus, { title: nextStatusTitle, isCompleted: "loading" }]
-				: updatedStatus;
-		});
-
-		setStatusIndex((index) => index + 1);
+		if (isCurrStatCompleted == "uncompleted")
+			setError({
+				message: nextStatusTitle,
+				detail:
+					"Some thing went wrong while doing this specific operation, check you connection and try again!",
+			});
 	};
 
 	return (
@@ -166,7 +185,7 @@ const AroundWindow = () => {
 					width={"100%"}
 				/>
 			)}
-			{/* {userLoc && `Your location is lat: ${userLoc.lat}, lng: ${userLoc.lng}`} */}
+			{userLoc && `Your location is lat: ${userLoc.lat}, lng: ${userLoc.lng}`}
 		</AroundWindowBox>
 	);
 };
