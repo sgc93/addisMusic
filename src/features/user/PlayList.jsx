@@ -1,16 +1,7 @@
 import styled from "@emotion/styled";
-import {
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	setDoc,
-	updateDoc,
-} from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
-import { firestore, storage } from "../../config/firebase_config";
+import { firestore } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import { FormInput } from "../auth/Components";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
@@ -26,7 +17,6 @@ const PlayList = () => {
 	const user = useSignedInUser();
 	const musicRef = useRef();
 	const [musicUrl, setMusicUrl] = useState("");
-	const [overArtUrl, setCoverArtUrl] = useState("");
 
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -66,56 +56,6 @@ const PlayList = () => {
 		}
 	}, []);
 
-	const uploadMusic = async (musicFile) => {
-		try {
-			const musicRef = ref(storage, `  ${user.uid}/musics/${musicFile.name}`);
-			const uploadTask = await uploadBytes(musicRef, musicFile);
-			const downloadURL = await getDownloadURL(uploadTask.ref);
-			return downloadURL; // downloadUrl is unique
-		} catch (error) {
-			console.log("Error uploading music:", error);
-		}
-	};
-
-	async function uploadCoverArt(imageFile) {
-		try {
-			const coverArtRef = ref(
-				storage,
-				`fileList${user.uid}/coverArts/${imageFile.name}`
-			);
-			const uploadTask = await uploadBytes(coverArtRef, imageFile);
-			const coverArtURL = await getDownloadURL(uploadTask.ref);
-			return coverArtURL; // Return the download URL it is also unique : can be used as id
-		} catch (error) {
-			console.error("Error uploading cover art:", error);
-			// Handle upload errors
-		}
-	}
-
-	async function addMusicToPlaylist(musicData, playlistId) {
-		try {
-			// Create a reference to the playlist document
-			const playlistRef = doc(firestore, `playlists${user.id}`, playlistId);
-
-			// Get the current playlist data (optional)
-			const playlistSnapshot = await getDoc(playlistRef);
-			if (!playlistSnapshot.exists) {
-				console.error(`Playlist document '${playlistId}' not found.`);
-				return;
-			}
-			const playlistData = playlistSnapshot.data();
-
-			// Add the music data to the 'musics' array
-			playlistData.musics.push(musicData);
-
-			// Update the playlist document with the updated 'musics' array
-			await updateDoc(playlistRef, playlistData);
-			console.log("Music added to playlist successfully.");
-		} catch (error) {
-			console.error("Error adding music to playlist:", error);
-		}
-	}
-
 	// working
 	const createNewPlaylist = async (collectionName) => {
 		if (name.length == 0) {
@@ -146,10 +86,7 @@ const PlayList = () => {
 		}
 	};
 
-	const upload = async (music) => {
-		await uploadMusic(music);
-		await uploadCoverArt(metadata.coverArt);
-	};
+	const upload = async (music) => {};
 
 	return (
 		<PlayListBox>
@@ -175,7 +112,7 @@ const PlayList = () => {
 						setIsAddOpen(true);
 					}}
 				>
-					create new playlist
+					upload Music
 				</button>
 				<button
 					onClick={() => {
