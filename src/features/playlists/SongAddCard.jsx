@@ -42,6 +42,8 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const [musicName, setMusicName] = useState("");
 	const [musicFile, setMusicFile] = useState("");
 
+	const [isRenameBoxOpened, setIsRenameBoxOpened] = useState(false);
+
 	const musicRef = useRef();
 	const user = useSignedInUser();
 
@@ -113,6 +115,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 			const audioSrc = URL.createObjectURL(file);
 			setMusicSrc(audioSrc);
 			setMusicName(file.name);
+			setIsRenameBoxOpened(true);
 		} else {
 			console.log("file is not selected");
 		}
@@ -191,13 +194,17 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 								<CgMusic />
 							</LabelIcon>
 						</FormInputLabel>
-						<FileRename
-							file={musicFile}
-							setFile={setMusicFile}
-							setName={setMusicName}
-							question={"would you like to rename this music?"}
-							title={"Enter new music name"}
-						/>
+						{isRenameBoxOpened && (
+							<FileRename
+								file={musicFile}
+								setFile={setMusicFile}
+								setName={setMusicName}
+								question={"would you like to rename this music?"}
+								title={"Enter new music name"}
+								isRenameBoxOpened={isRenameBoxOpened}
+								setIsRenameBoxOpened={setIsRenameBoxOpened}
+							/>
+						)}
 					</FileBox>
 					<FormBtn
 						style={formBtnStyle}
