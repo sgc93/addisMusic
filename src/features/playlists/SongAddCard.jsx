@@ -46,6 +46,8 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const [musicName, setMusicName] = useState("");
 	const [musicFile, setMusicFile] = useState("");
 
+	const [isMusic, setIsMusic] = useState(false);
+
 	const [isRenameBoxOpened, setIsRenameBoxOpened] = useState(false);
 
 	const musicRef = useRef();
@@ -118,6 +120,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	};
 
 	const handleMusicInput = (event) => {
+		setIsMusic(true);
 		const file = event.target.files[0];
 		if (file && file.type === "audio/mpeg") {
 			const audioSrc = URL.createObjectURL(file);
@@ -130,8 +133,8 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	};
 
 	const handleImgInput = (event) => {
+		setIsMusic(false);
 		const file = event.target.files[0];
-		console.log(file);
 		if (file) {
 			const imgUrl = URL.createObjectURL(file);
 			setCoverFile(file);
@@ -187,7 +190,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 								<CgImage />
 							</LabelIcon>
 						</FormInputLabel>
-						{isRenameBoxOpened && (
+						{!isMusic && isRenameBoxOpened && (
 							<FileRename
 								file={coverFile}
 								setFile={setCoverFile}
@@ -215,7 +218,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 								<CgMusic />
 							</LabelIcon>
 						</FormInputLabel>
-						{/* {isRenameBoxOpened && (
+						{isMusic && isRenameBoxOpened && (
 							<FileRename
 								file={musicFile}
 								setFile={setMusicFile}
@@ -225,7 +228,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 								isRenameBoxOpened={isRenameBoxOpened}
 								setIsRenameBoxOpened={setIsRenameBoxOpened}
 							/>
-						)} */}
+						)}
 					</FileBox>
 					<FormBtn
 						style={formBtnStyle}
