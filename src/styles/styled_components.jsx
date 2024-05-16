@@ -18,7 +18,7 @@ export const FormBox = styled.div`
 	flex-direction: column;
 	align-items: center;
 
-	width: 32%;
+	width: ${(props) => (props.width ? props.width : "32%")};
 	padding: 1rem 1rem 3rem 1rem;
 
 	background: radial-gradient(
@@ -72,7 +72,7 @@ export const FormInput = styled.input`
 	border-radius: 0.4rem;
 	padding: 0.5rem 1rem;
 
-	width: 18rem;
+	width: ${(props) => (props.width ? props.width : "18rem")};
 	font-size: 1.3rem;
 	color: var(--color-text-secondary);
 
