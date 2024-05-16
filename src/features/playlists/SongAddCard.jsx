@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CgImage, CgMusic } from "react-icons/cg";
 import { MdClose } from "react-icons/md";
 import { firestore, storage } from "../../config/firebase_config";
@@ -34,9 +34,13 @@ const FileBox = styled.div``;
 const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const [title, setTitle] = useState("");
 	const [artist, setArtist] = useState("");
-	const [duration, setDuration] = useState("");
-	const [coverArt, setCoverArt] = useState("");
+	const [duration, setDuration] = useState(0);
+	const [coverUrl, setCoverUrl] = useState("");
+	const [musicUrl, setMusicUrl] = useState("");
+
+	const [coverFile, setCoverFile] = useState("");
 	const [coverName, setCoverName] = useState("");
+	const [coverSrc, setCoverSrc] = useState("");
 
 	const [musicSrc, setMusicSrc] = useState("");
 	const [musicName, setMusicName] = useState("");
@@ -47,10 +51,15 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const musicRef = useRef();
 	const user = useSignedInUser();
 
-	const uploadMusic = async (musicFile) => {
+	useEffect(() => {
+		setMusicName(musicFile.name);
+		setDuration(musicFile.size);
+	}, [musicFile]);
+
+	const uploadMusic = async () => {
 		try {
-			const musicRef = ref(storage, `  ${user.uid}/musics/${musicFile.name}`);
-			const uploadTask = await uploadBytes(musicRef, musicFile);
+			const musicReference = ref(storage, `  ${user.uid}/musics/${musicName}`);
+			const uploadTask = await uploadBytes(musicReference, musicFile);
 			const downloadURL = await getDownloadURL(uploadTask.ref);
 			return downloadURL; // downloadUrl is unique
 		} catch (error) {
@@ -58,20 +67,20 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 		}
 	};
 
-	async function uploadCoverArt(imageFile) {
+	const uploadCoverArt = async () => {
 		try {
 			const coverArtRef = ref(
 				storage,
-				`fileList${user.uid}/coverArts/${imageFile.name}`
+				`fileList${user.uid}/coverArts/${coverName}`
 			);
-			const uploadTask = await uploadBytes(coverArtRef, imageFile);
+			const uploadTask = await uploadBytes(coverArtRef, coverFile);
 			const coverArtURL = await getDownloadURL(uploadTask.ref);
 			return coverArtURL; // Return the download URL it is also unique : can be used as id
 		} catch (error) {
 			console.error("Error uploading cover art:", error);
 			// Handle upload errors
 		}
-	}
+	};
 
 	async function addMusicToPlaylist(playlistId) {
 		try {
@@ -110,11 +119,10 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 
 	const handleMusicInput = (event) => {
 		const file = event.target.files[0];
-		console.log(file);
 		if (file && file.type === "audio/mpeg") {
 			const audioSrc = URL.createObjectURL(file);
 			setMusicSrc(audioSrc);
-			setMusicName(file.name);
+			setMusicFile(file);
 			setIsRenameBoxOpened(true);
 		} else {
 			console.log("file is not selected");
@@ -124,11 +132,11 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const handleImgInput = (event) => {
 		const file = event.target.files[0];
 		console.log(file);
-		if (file && file.type === "image") {
-			setMusicFile(file);
+		if (file) {
 			const imgUrl = URL.createObjectURL(file);
-			setCoverArt(imgUrl);
-			setCoverName(file.name);
+			setCoverFile(file);
+			setCoverSrc(imgUrl);
+			setIsRenameBoxOpened(true);
 		} else {
 			console.log("file is not selected");
 		}
@@ -163,21 +171,34 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 						value={artist}
 						onChange={(event) => setArtist(event.target.value)}
 					/>
-					<FormFileInput
-						type="file"
-						accept="image"
-						id="coverArtInput"
-						onChange={handleImgInput}
-						hidden
-					/>
-					<FormInputLabel htmlFor="coverArtInput">
-						<FormPlaceholder>
-							{coverName ? coverName : "Upload cover art"}
-						</FormPlaceholder>
-						<LabelIcon>
-							<CgImage />
-						</LabelIcon>
-					</FormInputLabel>
+					<FileBox>
+						<FormFileInput
+							type="file"
+							accept="image/*"
+							id="coverArtInput"
+							onChange={handleImgInput}
+							hidden
+						/>
+						<FormInputLabel htmlFor="coverArtInput">
+							<FormPlaceholder>
+								{coverFile.name ? coverFile.name : "Upload cover art"}
+							</FormPlaceholder>
+							<LabelIcon>
+								<CgImage />
+							</LabelIcon>
+						</FormInputLabel>
+						{isRenameBoxOpened && (
+							<FileRename
+								file={coverFile}
+								setFile={setCoverFile}
+								setName={setCoverName}
+								question={"would you like to rename the Cover Art?"}
+								title={"Enter new cover art name"}
+								isRenameBoxOpened={isRenameBoxOpened}
+								setIsRenameBoxOpened={setIsRenameBoxOpened}
+							/>
+						)}
+					</FileBox>
 					<FileBox>
 						<FormFileInput
 							type="file"
@@ -188,13 +209,13 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 						/>
 						<FormInputLabel htmlFor="musicInput">
 							<FormPlaceholder>
-								{musicName ? musicName : "Upload song"}
+								{musicFile.name ? musicFile.name : "Upload song"}
 							</FormPlaceholder>
 							<LabelIcon>
 								<CgMusic />
 							</LabelIcon>
 						</FormInputLabel>
-						{isRenameBoxOpened && (
+						{/* {isRenameBoxOpened && (
 							<FileRename
 								file={musicFile}
 								setFile={setMusicFile}
@@ -204,7 +225,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 								isRenameBoxOpened={isRenameBoxOpened}
 								setIsRenameBoxOpened={setIsRenameBoxOpened}
 							/>
-						)}
+						)} */}
 					</FileBox>
 					<FormBtn
 						style={formBtnStyle}
