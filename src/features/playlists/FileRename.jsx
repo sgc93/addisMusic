@@ -109,21 +109,15 @@ const FileRename = ({
 		setIsRenameOpened(false);
 	};
 
-	const isNameValid = () => {
-		if (newName.length > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
 	const handleRenaming = async (event) => {
 		event.preventDefault();
 		if (newName.length > 0) {
 			try {
 				const response = await renameMusicFile(file, newName);
 				setFile(response);
+				setIsRenameOpened(false);
 			} catch (error) {
+				console.log(error);
 				setError(error.message);
 			}
 		} else {
