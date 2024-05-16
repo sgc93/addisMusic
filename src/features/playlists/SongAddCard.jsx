@@ -15,6 +15,7 @@ import {
 	FormInput,
 	FormInputLabel,
 	FormPage,
+	FormPlaceholder,
 	FormSubTitle,
 	FormTitle,
 	FormTitleBox,
@@ -32,7 +33,11 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const [artist, setArtist] = useState("");
 	const [duration, setDuration] = useState("");
 	const [coverArt, setCoverArt] = useState("");
+	const [coverName, setCoverName] = useState("");
+
 	const [musicSrc, setMusicSrc] = useState("");
+	const [musicName, setMusicName] = useState("");
+
 	const musicRef = useRef();
 	const user = useSignedInUser();
 
@@ -99,11 +104,11 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 
 	const handleMusicInput = (event) => {
 		const file = event.target.files[0];
+		console.log(file);
 		if (file && file.type === "audio/mpeg") {
-			console.log("the file type of the selected file is: " + file.type);
 			const audioSrc = URL.createObjectURL(file);
-			console.log("the temp url of the selected file is: " + audioSrc);
 			setMusicSrc(audioSrc);
+			setMusicName(file.name);
 		} else {
 			console.log("file is not selected");
 		}
@@ -159,7 +164,9 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 						hidden
 					/>
 					<FormInputLabel htmlFor="musicInput">
-						<span>Upload song</span>
+						<FormPlaceholder>
+							{musicName ? musicName : "Upload song"}
+						</FormPlaceholder>
 						<LabelIcon>
 							<CgMusic />
 						</LabelIcon>
