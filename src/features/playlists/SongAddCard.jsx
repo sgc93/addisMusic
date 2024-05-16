@@ -23,10 +23,13 @@ import {
 	formBtnStyle,
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
+import FileRename from "./FileRename";
 
 const PlaylistName = styled.span`
 	color: var(--color-gradient-2);
 `;
+
+const FileBox = styled.div``;
 
 const SongAddCard = ({ isOpened, setIsOpened }) => {
 	const [title, setTitle] = useState("");
@@ -37,6 +40,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 
 	const [musicSrc, setMusicSrc] = useState("");
 	const [musicName, setMusicName] = useState("");
+	const [musicFile, setMusicFile] = useState("");
 
 	const musicRef = useRef();
 	const user = useSignedInUser();
@@ -114,6 +118,19 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 		}
 	};
 
+	const handleImgInput = (event) => {
+		const file = event.target.files[0];
+		console.log(file);
+		if (file && file.type === "image") {
+			setMusicFile(file);
+			const imgUrl = URL.createObjectURL(file);
+			setCoverArt(imgUrl);
+			setCoverName(file.name);
+		} else {
+			console.log("file is not selected");
+		}
+	};
+
 	return (
 		<FormPage>
 			<FormBox>
@@ -143,35 +160,45 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 						value={artist}
 						onChange={(event) => setArtist(event.target.value)}
 					/>
-					<input
+					<FormFileInput
 						type="file"
-						placeholder="Cover art"
+						accept="image"
 						id="coverArtInput"
-						onChange={(event) => setCoverArt(event.target.value)}
+						onChange={handleImgInput}
+						hidden
 					/>
 					<FormInputLabel htmlFor="coverArtInput">
-						<span>Upload cover art</span>
+						<FormPlaceholder>
+							{coverName ? coverName : "Upload cover art"}
+						</FormPlaceholder>
 						<LabelIcon>
 							<CgImage />
 						</LabelIcon>
 					</FormInputLabel>
-					<FormFileInput
-						type="file"
-						accept=".mp3"
-						placeholder="Cover art"
-						id="musicInput"
-						onChange={handleMusicInput}
-						hidden
-					/>
-					<FormInputLabel htmlFor="musicInput">
-						<FormPlaceholder>
-							{musicName ? musicName : "Upload song"}
-						</FormPlaceholder>
-						<LabelIcon>
-							<CgMusic />
-						</LabelIcon>
-					</FormInputLabel>
-
+					<FileBox>
+						<FormFileInput
+							type="file"
+							accept=".mp3"
+							id="musicInput"
+							onChange={handleMusicInput}
+							hidden
+						/>
+						<FormInputLabel htmlFor="musicInput">
+							<FormPlaceholder>
+								{musicName ? musicName : "Upload song"}
+							</FormPlaceholder>
+							<LabelIcon>
+								<CgMusic />
+							</LabelIcon>
+						</FormInputLabel>
+						<FileRename
+							file={musicFile}
+							setFile={setMusicFile}
+							setName={setMusicName}
+							question={"would you like to rename this music?"}
+							title={"Enter new music name"}
+						/>
+					</FileBox>
 					<FormBtn
 						style={formBtnStyle}
 						type="submit"
