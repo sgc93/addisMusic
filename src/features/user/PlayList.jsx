@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { firestore } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
-import { FormInput } from "../auth/Components";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import SongAddCard from "../playlists/SongAddCard";
 
@@ -15,8 +14,6 @@ const PlayList = () => {
 	const [isAddOpen, setIsAddOpen] = useState(false);
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 	const user = useSignedInUser();
-	const musicRef = useRef();
-	const [musicUrl, setMusicUrl] = useState("");
 
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -24,37 +21,41 @@ const PlayList = () => {
 
 	const [name, setName] = useState("");
 
-	const musicFile = musicRef.current;
-
 	const [userPlaylists, setUserPlaylists] = useState([]);
 
-	const createPlayList = async () => {};
-
 	useEffect(() => {
-		async function getAllPlaylistDocs(collectionName) {
-			try {
-				// Create a query to retrieve all documents from the collection
-				const colRef = collection(firestore, collectionName);
-				const q = query(colRef);
-
-				// Get the query results as a snapshot
-				const querySnapshot = await getDocs(q);
-
-				// Process each document in the snapshot
-				const allDocs = [];
-				querySnapshot.forEach((doc) => {
-					const docData = doc.data();
-					docData.id = doc.id; // Add the document ID to the data
-					allDocs.push(docData);
-				});
-
-				return allDocs; // Return an array of all documents' data
-			} catch (error) {
-				console.error("Error getting documents:", error);
-				return []; // Return an empty array on error
-			}
+		if (user) {
+			getAllPlaylistDocs();
 		}
 	}, []);
+
+	const getAllPlaylistDocs = async () => {
+		setIsLoading(true);
+		setError();
+		try {
+			// Create a query to retrieve all documents from the collection
+			const colRef = collection(firestore, `playlists${user.uid}`);
+			const q = query(colRef);
+
+			// Get the query results as a snapshot
+			const playlists = await getDocs(q);
+			console.log("num of playlist : " + playlists.length);
+
+			// Process each document in the snapshot
+			const allPlaylists = [];
+			playlists.forEach((playlistDoc) => {
+				const playlistData = playlistDoc.data();
+				allPlaylists.push(playlistData);
+				console.log(playlistData);
+			});
+			setUserPlaylists((userPlaylists) => allPlaylists);
+		} catch (error) {
+			console.error("Error getting documents:", error);
+			setError(error.message);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	// working
 	const createNewPlaylist = async (collectionName) => {
@@ -86,43 +87,15 @@ const PlayList = () => {
 		}
 	};
 
-	const upload = async (music) => {};
-
 	return (
 		<PlayListBox>
-			<audio src="./qimemun.mp3" ref={musicRef} controls hidden />
+			{isLoading && <span>loading...</span>}
+			{error && <span>{error}</span>}
+			{userPlaylists &&
+				userPlaylists.map((playlist) => (
+					<span key={playlist.name}>{playlist.name}</span>
+				))}
 
-			<div>
-				<div>States: {status} </div>
-				{error && <div>error: {error}</div>}
-				{isLoading && <div> creating new playlist ...</div>}
-			</div>
-			<div>
-				<div>name: {name}</div>
-				<div>createdAt : {new Date().toLocaleDateString()}</div>
-				<div>updatedAt : {new Date().toLocaleDateString()}</div>
-				<FormInput
-					type="text"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-				/>
-				<button
-					onClick={() => {
-						// createNewPlaylist(`playlists${user.uid}`);
-						setIsAddOpen(true);
-					}}
-				>
-					upload Music
-				</button>
-				<button
-					onClick={() => {
-						// createNewPlaylist(`playlists${user.uid}`);
-						setIsAddSongOpen(true);
-					}}
-				>
-					add song
-				</button>
-			</div>
 			{isAddOpen && (
 				<PlaylistAddCard isOpened={isAddOpen} setIsOpened={setIsAddOpen} />
 			)}
