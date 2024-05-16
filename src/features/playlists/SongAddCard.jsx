@@ -57,10 +57,16 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 		setMusicName(musicFile.name);
 		setDuration(musicFile.size);
 	}, [musicFile]);
+	useEffect(() => {
+		setCoverName(coverFile.name);
+	}, [coverFile]);
 
 	const uploadMusic = async () => {
 		try {
-			const musicReference = ref(storage, `  ${user.uid}/musics/${musicName}`);
+			const musicReference = ref(
+				storage,
+				`fileList${user.uid}/musics/${musicName}`
+			);
 			const uploadTask = await uploadBytes(musicReference, musicFile);
 			const downloadURL = await getDownloadURL(uploadTask.ref);
 			return downloadURL; // downloadUrl is unique
@@ -87,24 +93,34 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 	async function addMusicToPlaylist(playlistId) {
 		try {
 			// upload music
+			const musicDownloadUrl = await uploadMusic();
 			// upload cover art
-			// have all data
-			// Create a reference to the playlist document
-			const playlistRef = doc(firestore, `playlists${user.id}`, playlistId);
+			const coverDownloadUrl = await uploadCoverArt();
 
-			// Get the current playlist data (optional)
-			const playlistSnapshot = await getDoc(playlistRef);
+			// music data
+			const musicData = {
+				title: title,
+				artist: artist,
+				duration: duration,
+				isPlayable: true,
+				coverArt: coverDownloadUrl,
+				url: musicDownloadUrl,
+			};
+
+			console.log(musicData);
+
+			// store the uploaded files to user's storage
+			const playlistDocRef = doc(firestore, `playlists${user.uid}`, playlistId);
+			const playlistSnapshot = await getDoc(playlistDocRef);
 			if (!playlistSnapshot.exists) {
 				console.error(`Playlist document '${playlistId}' not found.`);
 				return;
 			}
 			const playlistData = playlistSnapshot.data();
+			console.log(playlistData);
+			playlistData.musics.push(musicData);
 
-			// Add the music data to the 'musics' array
-			// playlistData.musics.push(musicData);
-
-			// Update the playlist document with the updated 'musics' array
-			await updateDoc(playlistRef, playlistData);
+			await updateDoc(playlistDocRef, playlistData);
 			console.log("Music added to playlist successfully.");
 		} catch (error) {
 			console.error("Error adding music to playlist:", error);
@@ -113,10 +129,6 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 
 	const closePopup = () => {
 		setIsOpened(false);
-	};
-
-	const handleCreatePlaylist = (event) => {
-		event.preventDefault();
 	};
 
 	const handleMusicInput = (event) => {
@@ -233,7 +245,10 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 					<FormBtn
 						style={formBtnStyle}
 						type="submit"
-						onClick={handleCreatePlaylist}
+						onClick={(e) => {
+							e.preventDefault();
+							addMusicToPlaylist("public");
+						}}
 					>
 						Add
 					</FormBtn>
