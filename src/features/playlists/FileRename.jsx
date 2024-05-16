@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiRename } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
 import { FormInput, FormSubTitle } from "../../styles/styled_components";
@@ -75,10 +75,29 @@ const RenameError = styled.span`
 	text-align: center;
 `;
 
-const FileRename = ({ question, title, file, setFile }) => {
+const FileRename = ({
+	question,
+	title,
+	file,
+	setFile,
+	isRenameBoxOpened,
+	setIsRenameBoxOpened,
+}) => {
 	const [newName, setNewName] = useState("");
 	const [error, setError] = useState("");
 	const [isRenameOpened, setIsRenameOpened] = useState(false);
+	const [isRenameBoxHovered, setIsRenameBoxHovered] = useState(false);
+
+	useEffect(() => {
+		let timeoutId;
+		if (isRenameBoxOpened && !isRenameBoxHovered) {
+			timeoutId = setTimeout(() => {
+				setIsRenameBoxOpened(false);
+			}, 4000);
+		}
+
+		return () => clearTimeout(timeoutId);
+	}, [isRenameBoxOpened, isRenameBoxHovered]);
 
 	const openRenameBox = (event) => {
 		event.preventDefault();
@@ -113,7 +132,10 @@ const FileRename = ({ question, title, file, setFile }) => {
 	};
 
 	return (
-		<RenameBox>
+		<RenameBox
+			onMouseEnter={() => setIsRenameBoxHovered(true)}
+			onMouseLeave={() => setIsRenameBoxHovered(false)}
+		>
 			<Question>{question}</Question>
 			<IconButton handleClick={openRenameBox}>
 				<BiRename />
