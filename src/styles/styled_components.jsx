@@ -112,6 +112,14 @@ export const FormInputLabel = styled.label`
 	}
 `;
 
+export const FormPlaceholder = styled.span`
+	width: 90%;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+`;
+
 export const LabelIcon = styled.div`
 	display: flex;
 	align-items: center;
