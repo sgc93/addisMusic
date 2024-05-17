@@ -7,7 +7,6 @@ import { AnimatedBtn } from "../../styles/styled_components";
 import PlaylistCard from "../../ui/PlaylistCard";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
-import SongAddCard from "../playlists/SongAddCard";
 
 const PlayListBox = styled.div`
 	width: 97%;
@@ -23,7 +22,7 @@ const ListBox = styled.div`
 
 const PlayList = () => {
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
-	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
+
 	const user = auth.currentUser;
 
 	const [error, setError] = useState("");
@@ -138,9 +137,6 @@ const PlayList = () => {
 					isOpened={isAddPlaylistOpen}
 					setIsOpened={setIsAddPlaylistOpen}
 				/>
-			)}
-			{isAddSongOpen && (
-				<SongAddCard isOpened={isAddSongOpen} setIsOpened={setIsAddSongOpen} />
 			)}
 		</PlayListBox>
 	);
