@@ -46,6 +46,7 @@ const AddBtn = styled.button`
 			var(--color-gradient-2)
 		);
 		z-index: -2;
+		transition: 0.5s;
 		animation: ${rotate360} 1.4s linear;
 		animation-iteration-count: infinite;
 	}
@@ -64,9 +65,11 @@ const AddBtn = styled.button`
 		z-index: -1;
 	}
 
+	&:hover::after {
+		height: 150%;
+	}
 	&:hover::before {
-		width: 100%;
-		height: 100%;
+		transform: scale(0.8);
 	}
 `;
 
