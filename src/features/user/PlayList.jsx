@@ -3,6 +3,7 @@ import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { firestore } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
+import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import SongAddCard from "../playlists/SongAddCard";
 
@@ -24,9 +25,9 @@ const PlayList = () => {
 	const [userPlaylists, setUserPlaylists] = useState([]);
 
 	useEffect(() => {
-		if (user) {
-			getAllPlaylistDocs();
-		}
+		// if (user) {
+		// 	getAllPlaylistDocs();
+		// }
 	}, []);
 
 	const getAllPlaylistDocs = async () => {
@@ -95,7 +96,7 @@ const PlayList = () => {
 				userPlaylists.map((playlist) => (
 					<span key={playlist.name}>{playlist.name}</span>
 				))}
-
+			{userPlaylists.length == 0 && <EmptyPlaylist />}
 			{isAddOpen && (
 				<PlaylistAddCard isOpened={isAddOpen} setIsOpened={setIsAddOpen} />
 			)}
