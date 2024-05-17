@@ -1,7 +1,7 @@
 export const musicList = [
 	{
 		id: "qwertyuiop245zxcv",
-		name: "Qimemun",
+		title: "Qimemun",
 		artist: "Natty Man",
 		duration: 374.904,
 		url: "./qimemun.mp3",
@@ -10,7 +10,7 @@ export const musicList = [
 	},
 	{
 		id: "qwerzxcvtyui32567v",
-		name: "tana dar",
+		title: "tana dar",
 		artist: "Wondy Mak",
 		duration: 272.117551,
 		url: "./tanadar.mp3",
@@ -19,7 +19,7 @@ export const musicList = [
 	},
 	{
 		id: "ldjfsd7876poiuy",
-		name: "Wona Nw Wona",
+		title: "Wona Nw Wona",
 		artist: "Zerubabel Molla",
 		duration: 175.36,
 		url: "./wona.mp3",

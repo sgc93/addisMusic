@@ -77,7 +77,7 @@ const PlayedMusic = ({ playedMusic }) => {
 					/>
 					<MusicData>
 						<ArtistName>{playedMusic.artist}</ArtistName>
-						<MusicName>{playedMusic.name}</MusicName>
+						<MusicName>{playedMusic.title}</MusicName>
 					</MusicData>
 				</>
 			)}

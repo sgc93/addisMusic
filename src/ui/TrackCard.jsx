@@ -278,7 +278,7 @@ const TrackCard = ({ song, index }) => {
 			</ImgBox>
 			<DataBox>
 				<ArtistName isSelected={isSelected}>{song.artist}</ArtistName>
-				<MusicName>{song.name}</MusicName>
+				<MusicName>{song.title}</MusicName>
 			</DataBox>
 			<MusicTime>{timeFormatter(song.duration)}</MusicTime>
 			<BtnBox>

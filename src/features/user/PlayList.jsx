@@ -36,8 +36,13 @@ const PlayList = () => {
 	const [userPlaylists, setUserPlaylists] = useState([]);
 
 	useEffect(() => {
-		if (user) getAllPlaylistDocs();
-	}, [auth]);
+		if (user) {
+			setIsLoading(false);
+			getAllPlaylistDocs();
+		} else {
+			setIsLoading(false);
+		}
+	}, [user]);
 
 	const getAllPlaylistDocs = async () => {
 		setIsLoading(true);
