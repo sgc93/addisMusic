@@ -11,6 +11,10 @@ import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import SongAddCard from "../playlists/SongAddCard";
 
 const PlayListBox = styled.div`
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 1rem;
 	padding: 0.5rem 1rem;
 `;
 
@@ -21,6 +25,7 @@ const PlayList = () => {
 
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const [hasPlaylist, setHasPlaylist] = useState(false);
 	const [status, setStatus] = useState("...");
 
 	const [name, setName] = useState("");
@@ -52,7 +57,8 @@ const PlayList = () => {
 				allPlaylists.push(playlistData);
 				console.log(playlistData);
 			});
-			setUserPlaylists((userPlaylists) => allPlaylists);
+			setUserPlaylists(allPlaylists);
+			setHasPlaylist(true);
 		} catch (error) {
 			console.error("Error getting documents:", error);
 			setError(error.message);
@@ -95,7 +101,7 @@ const PlayList = () => {
 		<PlayListBox>
 			{isLoading && <span>loading...</span>}
 			{error && <span>{error}</span>}
-			{userPlaylists && (
+			{!isLoading && userPlaylists && (
 				<>
 					{userPlaylists.map((playlist) => (
 						<PlaylistCard key={playlist.name} playlist={playlist} />
