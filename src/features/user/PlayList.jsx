@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { FirestoreError } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { auth, firestore } from "../../config/firebase_config";
@@ -14,6 +15,11 @@ const PlayListBox = styled.div`
 	width: 97%;
 	height: 100%;
 `;
+
+const PlaylistListBox = styled.div`
+	display: flex;
+`;
+const PlaylistTitle = styled.span``;
 
 const ListBox = styled.div`
 	display: flex;
@@ -69,11 +75,13 @@ const PlayList = () => {
 			const colRef = collection(firestore, `playlists${user.uid}`);
 			const q = query(colRef);
 
-			// Get the query results as a snapshot
 			const playlists = await getDocs(q);
-			console.log("num of playlist : " + playlists.length);
+			if (playlists.docs.length == 0) {
+				throw new Error(
+					"Unable to fetch playlist, Check you connection please!"
+				);
+			}
 
-			// Process each document in the snapshot
 			const allPlaylists = [];
 			playlists.forEach((playlistDoc) => {
 				const playlistData = playlistDoc.data();
@@ -82,8 +90,11 @@ const PlayList = () => {
 			});
 			setUserPlaylists(allPlaylists);
 		} catch (error) {
-			console.error("Error getting documents:", error);
-			setError(error.message);
+			if (error instanceof FirestoreError) {
+				console.log("firestore error is happened!");
+			}
+			console.log("Error getting documents:", error);
+			setError(error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -109,7 +120,6 @@ const PlayList = () => {
 				});
 			} catch (error) {
 				setError("un able to create new playlist");
-				console.log("playlists" + user.uid);
 				console.error("Error creating playlist document:", error);
 			} finally {
 				setIsLoading(false);
@@ -147,19 +157,25 @@ const PlayList = () => {
 				</LoadingBox>
 			)}
 			{!isLoading && userPlaylists.length > 0 && !isDetailing && (
-				<ListBox>
-					{userPlaylists.map((playlist) => (
-						<PlaylistCard
-							key={playlist.name}
-							playlist={playlist}
-							setSelectedPlaylist={setSelectedPlaylist}
-							handleClick={showPlaylistDetail}
-						/>
-					))}
-					<AnimatedBtn onClick={() => openPlaylistAdd()}>
-						<TbMusicPlus />
-					</AnimatedBtn>
-				</ListBox>
+				<PlaylistListBox>
+					<PlaylistTitle>
+						{user.displayName ? `${user.displayName.split(" ")[0]}'s ` : "your"}
+						Playlists
+					</PlaylistTitle>
+					<ListBox>
+						{userPlaylists.map((playlist) => (
+							<PlaylistCard
+								key={playlist.name}
+								playlist={playlist}
+								setSelectedPlaylist={setSelectedPlaylist}
+								handleClick={showPlaylistDetail}
+							/>
+						))}
+						<AnimatedBtn onClick={() => openPlaylistAdd()}>
+							<TbMusicPlus />
+						</AnimatedBtn>
+					</ListBox>
+				</PlaylistListBox>
 			)}
 			{isDetailing && (
 				<PlaylistDetail
