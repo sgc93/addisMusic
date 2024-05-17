@@ -16,6 +16,7 @@ import {
 	formBtnStyle,
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
+import LoaderNote from "../../ui/LoaderNote";
 
 const CreateError = styled.span`
 	text-align: center;
@@ -51,8 +52,7 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 					musics: [],
 				});
 			} catch (error) {
-				setError("un able to create new playlist");
-				console.log("Error creating playlist document:", error);
+				setError("Unable to create new playlist, Check you connection");
 			} finally {
 				setIsLoading(false);
 			}
@@ -85,22 +85,26 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 					</IconButton>
 				</FormHeader>
 				{error && <CreateError>{error}</CreateError>}
-				<Form>
-					<FormInput
-						type="text"
-						placeholder="Playlist Name"
-						value={name}
-						onChange={(event) => setName(event.target.value)}
-						required
-					/>
-					<FormBtn
-						style={formBtnStyle}
-						type="submit"
-						onClick={handleCreatePlaylist}
-					>
-						Create
-					</FormBtn>
-				</Form>
+				{isLoading ? (
+					<LoaderNote loadingMessage={`Creating ${name} ...`} />
+				) : (
+					<Form>
+						<FormInput
+							type="text"
+							placeholder="Playlist Name"
+							value={name}
+							onChange={(event) => setName(event.target.value)}
+							required
+						/>
+						<FormBtn
+							style={formBtnStyle}
+							type="submit"
+							onClick={handleCreatePlaylist}
+						>
+							Create
+						</FormBtn>
+					</Form>
+				)}
 			</FormBox>
 		</FormPage>
 	);
