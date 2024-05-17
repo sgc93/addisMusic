@@ -6,10 +6,10 @@ export const useSignedInUser = () => {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
-		const unsubscribe = () =>
+		const authChange = () =>
 			onAuthStateChanged(auth, (currUser) => setUser(currUser));
 
-		return unsubscribe;
+		return authChange;
 	}, [auth]);
 
 	return user;
