@@ -53,8 +53,14 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 	useEffect(() => {
 		setMusicName(musicFile.name);
-		setDuration(musicFile.size);
+		const audio = musicRef.current;
+		audio.onloadedmetadata = function () {
+			if (audio.readyState > 0) {
+				setDuration(audio.duration);
+			}
+		};
 	}, [musicFile]);
+
 	useEffect(() => {
 		setCoverName(coverFile.name);
 	}, [coverFile]);
