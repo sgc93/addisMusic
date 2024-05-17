@@ -2,8 +2,7 @@ import styled from "@emotion/styled";
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
-import { firestore } from "../../config/firebase_config";
-import { useSignedInUser } from "../../hooks/CheckAuth";
+import { auth, firestore } from "../../config/firebase_config";
 import { AnimatedBtn } from "../../styles/styled_components";
 import PlaylistCard from "../../ui/PlaylistCard";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
@@ -25,7 +24,7 @@ const ListBox = styled.div`
 const PlayList = () => {
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
-	const user = useSignedInUser();
+	const user = auth.currentUser;
 
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -37,10 +36,8 @@ const PlayList = () => {
 	const [userPlaylists, setUserPlaylists] = useState([]);
 
 	useEffect(() => {
-		if (user) {
-			getAllPlaylistDocs();
-		}
-	}, []);
+		if (user) getAllPlaylistDocs();
+	}, [auth]);
 
 	const getAllPlaylistDocs = async () => {
 		setIsLoading(true);
