@@ -31,12 +31,10 @@ const PlaylistName = styled.span`
 
 const FileBox = styled.div``;
 
-const SongAddCard = ({ isOpened, setIsOpened }) => {
+const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const [title, setTitle] = useState("");
 	const [artist, setArtist] = useState("");
 	const [duration, setDuration] = useState(0);
-	const [coverUrl, setCoverUrl] = useState("");
-	const [musicUrl, setMusicUrl] = useState("");
 
 	const [coverFile, setCoverFile] = useState("");
 	const [coverName, setCoverName] = useState("");
@@ -86,7 +84,6 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 			return coverArtURL; // Return the download URL it is also unique : can be used as id
 		} catch (error) {
 			console.error("Error uploading cover art:", error);
-			// Handle upload errors
 		}
 	};
 
@@ -163,7 +160,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 				<FormHeader>
 					<FormTitleBox>
 						<FormTitle>
-							Add Music to <PlaylistName>Abc</PlaylistName>
+							Add Music to <PlaylistName>{playlistName}</PlaylistName>
 						</FormTitle>
 						<FormSubTitle>Add one more song in this folder</FormSubTitle>
 					</FormTitleBox>
@@ -247,7 +244,7 @@ const SongAddCard = ({ isOpened, setIsOpened }) => {
 						type="submit"
 						onClick={(e) => {
 							e.preventDefault();
-							addMusicToPlaylist("public");
+							addMusicToPlaylist(playlistName);
 						}}
 					>
 						Add

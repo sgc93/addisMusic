@@ -137,7 +137,11 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	return (
 		<DetailBox>
 			{isAddSongOpen && (
-				<SongAddCard isOpened={isAddSongOpen} setIsOpened={setIsAddSongOpen} />
+				<SongAddCard
+					isOpened={isAddSongOpen}
+					setIsOpened={setIsAddSongOpen}
+					playlistName={playlist.name}
+				/>
 			)}
 			<DetailHeader>
 				<IconButton handleClick={() => backToPlaylists()}>
