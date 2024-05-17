@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
@@ -8,6 +8,7 @@ import IconButton from "../../ui/IconButton";
 import TrackCard from "../../ui/TrackCard";
 import { how_many_songs } from "../../utils/summarizer";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
+import SongAddCard from "./SongAddCard";
 
 const DetailBox = styled.section`
 	display: flex;
@@ -89,12 +90,17 @@ const ListTitle = styled.span`
 	font-weight: bold;
 `;
 
-const MusicList = styled.div``;
+const MusicList = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+`;
 
 const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const { name, createdAt, updatedAt, musics } = playlist;
 	const isUpdated = !(createdAt === updatedAt);
 	const dispatch = useDispatch();
+	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 
 	useEffect(() => {
 		if (playlist) {
@@ -104,9 +110,13 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	});
 
 	const backToPlaylists = () => setIsDetailing(false);
+	const openMusicAdd = () => setIsAddSongOpen(true);
 
 	return (
 		<DetailBox>
+			{isAddSongOpen && (
+				<SongAddCard isOpened={isAddSongOpen} setIsOpened={setIsAddSongOpen} />
+			)}
 			<DetailHeader>
 				<IconButton handleClick={() => backToPlaylists()}>
 					<BiArrowBack />
@@ -125,7 +135,9 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 				</HeaderContent>
 			</DetailHeader>
 			<DetailContent>
-				{musics.length == 0 && <AnimatedBtn> Add music</AnimatedBtn>}
+				{musics.length == 0 && (
+					<AnimatedBtn onClick={() => openMusicAdd()}> Add music</AnimatedBtn>
+				)}
 				{musics.length > 0 && (
 					<>
 						<ListTitle>
@@ -136,6 +148,9 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 							{musics.map((music, index) => (
 								<TrackCard song={music} index={index} key={index} />
 							))}
+							<AnimatedBtn onClick={() => openMusicAdd()}>
+								Add More Music
+							</AnimatedBtn>
 						</MusicList>
 					</>
 				)}
