@@ -44,11 +44,17 @@ const PlaylistTime = styled.span`
 	color: var(--color-bg-primary);
 `;
 
-const PlaylistCard = ({ playlist }) => {
+const PlaylistCard = ({ playlist, handleClick, setSelectedPlaylist }) => {
 	const { name, createdAt, updatedAt, musics } = playlist;
 	const isUpdated = !(createdAt === updatedAt);
+
+	const detailPlaylist = (playlist) => {
+		handleClick();
+		setSelectedPlaylist(playlist);
+	};
+
 	return (
-		<PlaylistCardBox>
+		<PlaylistCardBox onClick={() => detailPlaylist(playlist)}>
 			<PlaylistPart>
 				<PlaylistName>{name}</PlaylistName>
 				<CardName>playlist</CardName>
