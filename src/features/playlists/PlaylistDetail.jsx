@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import { useDispatch } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
 import { AnimatedBtn } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
-import MusicCard from "../../ui/MusicCard";
+import TrackCard from "../../ui/TrackCard";
 import { how_many_songs } from "../../utils/summarizer";
+import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
 
 const DetailBox = styled.section`
 	display: flex;
@@ -91,6 +94,14 @@ const MusicList = styled.div``;
 const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const { name, createdAt, updatedAt, musics } = playlist;
 	const isUpdated = !(createdAt === updatedAt);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (playlist) {
+			dispatch(currentMusicList(playlist.musics));
+			dispatch(currentMusicIndex(0));
+		}
+	});
 
 	const backToPlaylists = () => setIsDetailing(false);
 
@@ -123,7 +134,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 						</ListTitle>
 						<MusicList>
 							{musics.map((music, index) => (
-								<MusicCard song={music} key={index} />
+								<TrackCard song={music} index={index} key={index} />
 							))}
 						</MusicList>
 					</>
