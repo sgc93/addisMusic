@@ -1,8 +1,11 @@
 import styled from "@emotion/styled";
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { TbMusicPlus } from "react-icons/tb";
 import { firestore } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
+import { AnimatedBtn } from "../../styles/styled_components";
+import PlaylistCard from "../../ui/PlaylistCard";
 import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import SongAddCard from "../playlists/SongAddCard";
@@ -25,9 +28,9 @@ const PlayList = () => {
 	const [userPlaylists, setUserPlaylists] = useState([]);
 
 	useEffect(() => {
-		// if (user) {
-		// 	getAllPlaylistDocs();
-		// }
+		if (user) {
+			getAllPlaylistDocs();
+		}
 	}, []);
 
 	const getAllPlaylistDocs = async () => {
@@ -92,11 +95,17 @@ const PlayList = () => {
 		<PlayListBox>
 			{isLoading && <span>loading...</span>}
 			{error && <span>{error}</span>}
-			{userPlaylists &&
-				userPlaylists.map((playlist) => (
-					<span key={playlist.name}>{playlist.name}</span>
-				))}
-			{userPlaylists.length == 0 && <EmptyPlaylist />}
+			{userPlaylists && (
+				<>
+					{userPlaylists.map((playlist) => (
+						<PlaylistCard key={playlist.name} playlist={playlist} />
+					))}
+					<AnimatedBtn>
+						<TbMusicPlus />
+					</AnimatedBtn>
+				</>
+			)}
+			{userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
 			{isAddOpen && (
 				<PlaylistAddCard isOpened={isAddOpen} setIsOpened={setIsAddOpen} />
 			)}
