@@ -65,17 +65,22 @@ const MusicImg = styled.img`
 
 const PlayedMusic = ({ playedMusic }) => {
 	const isPaused = useSelector((state) => state.currMusic.isPaused);
+	console.log("current music is: " + playedMusic);
 	return (
 		<MusicBox>
-			<MusicImg
-				src={playedMusic.coverArt}
-				alt="playing-music"
-				isPaused={isPaused}
-			/>
-			<MusicData>
-				<ArtistName>{playedMusic.artist}</ArtistName>
-				<MusicName>{playedMusic.name}</MusicName>
-			</MusicData>
+			{playedMusic && (
+				<>
+					<MusicImg
+						src={playedMusic.coverArt ? playedMusic.coverArt : "./logo.png"}
+						alt="playing-music"
+						isPaused={isPaused}
+					/>
+					<MusicData>
+						<ArtistName>{playedMusic.artist}</ArtistName>
+						<MusicName>{playedMusic.name}</MusicName>
+					</MusicData>
+				</>
+			)}
 		</MusicBox>
 	);
 };
