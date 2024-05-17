@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { auth, firestore } from "../../config/firebase_config";
 import { AnimatedBtn } from "../../styles/styled_components";
+import FetchError from "../../ui/FetchError";
+import LoaderNote from "../../ui/LoaderNote";
 import PlaylistCard from "../../ui/PlaylistCard";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
@@ -18,6 +20,22 @@ const ListBox = styled.div`
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 1rem;
+`;
+
+const LoadingBox = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 100%;
+	height: 100%;
+	border-radius: 1rem;
+`;
+
+const Loader = styled.div`
+	padding: 1rem;
+	border-radius: 0.6rem;
+	background-color: var(--color-bg-primary);
 `;
 
 const PlayList = () => {
@@ -108,8 +126,26 @@ const PlayList = () => {
 
 	return (
 		<PlayListBox>
-			{isLoading && <span>loading...</span>}
-			{error && <span>{error}</span>}
+			{isLoading && (
+				<LoadingBox>
+					<Loader>
+						<LoaderNote loadingMessage={"loading playlists ..."} />
+					</Loader>
+				</LoadingBox>
+			)}
+			{error && (
+				<LoadingBox>
+					<FetchError
+						error={"Unable to fetch Playlists, please try again!"}
+						detail={
+							"Unable to fetch user playlists for some kind of technical issues, please check you connection and try again!"
+						}
+						tryAgain={() => getAllPlaylistDocs()}
+					>
+						{error}
+					</FetchError>
+				</LoadingBox>
+			)}
 			{!isLoading && userPlaylists.length > 0 && !isDetailing && (
 				<ListBox>
 					{userPlaylists.map((playlist) => (
