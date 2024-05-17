@@ -6,13 +6,12 @@ import { firestore } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import { AnimatedBtn } from "../../styles/styled_components";
 import PlaylistCard from "../../ui/PlaylistCard";
-import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
 import SongAddCard from "../playlists/SongAddCard";
 
 const PlayListBox = styled.div`
-	width: 100%;
+	width: 97%;
 	height: 100%;
 `;
 
@@ -110,7 +109,7 @@ const PlayList = () => {
 		<PlayListBox>
 			{isLoading && <span>loading...</span>}
 			{error && <span>{error}</span>}
-			{!isLoading && userPlaylists.length && !isDetailing && (
+			{!isLoading && userPlaylists.length > 0 && !isDetailing && (
 				<ListBox>
 					{userPlaylists.map((playlist) => (
 						<PlaylistCard
@@ -131,7 +130,7 @@ const PlayList = () => {
 					setIsDetailing={setIsDetailing}
 				/>
 			)}
-			{userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
+			{/* {userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />} */}
 			{isAddPlaylistOpen && (
 				<PlaylistAddCard
 					isOpened={isAddPlaylistOpen}
