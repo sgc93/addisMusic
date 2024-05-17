@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	currentMusicIndex,
 	currentMusicPausePlay,
-} from "../../features/music/musicSlice";
-import { fadeClose, fadeOpen } from "../../styles/animation";
-import { timeFormatter } from "../../utils/time_formater";
+} from "../features/music/musicSlice";
+import { fadeClose, fadeOpen } from "../styles/animation";
+import { timeFormatter } from "../utils/time_formater";
 
 const Card = styled.div`
 	position: relative;

@@ -4,8 +4,8 @@ import { musicList } from "../../assets/music_list";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
+import TrackCard from "../../ui/TrackCard";
 import { currentMusicList } from "../music/musicSlice";
-import TrackCard from "./TrackCard";
 
 const ListBox = styled.div`
 	width: 100%;
