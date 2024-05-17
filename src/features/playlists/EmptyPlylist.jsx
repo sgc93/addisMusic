@@ -9,9 +9,6 @@ import {
 	FormTitleBox,
 } from "../../styles/styled_components";
 
-const AddBtnBox = styled.div``;
-
-const AddBtnOverly = styled.div``;
 const AddBtn = styled.button`
 	position: relative;
 	z-index: 2;
@@ -71,6 +68,9 @@ const AddBtn = styled.button`
 	&:hover::before {
 		transform: scale(0.8);
 	}
+	&:active::before {
+		transform: scale(1.1);
+	}
 `;
 
 const EmptyPlaylist = () => {
@@ -81,12 +81,9 @@ const EmptyPlaylist = () => {
 					<FormTitle>You have no playlists</FormTitle>
 					<FormSubTitle>Click plus button to create one!</FormSubTitle>
 				</FormTitleBox>
-				<AddBtnBox>
-					<AddBtnOverly />
-					<AddBtn>
-						<TbMusicPlus />
-					</AddBtn>
-				</AddBtnBox>
+				<AddBtn>
+					<TbMusicPlus />
+				</AddBtn>
 			</FormBox>
 		</FormPage>
 	);
