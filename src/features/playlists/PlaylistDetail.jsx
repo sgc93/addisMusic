@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
-import { AnimatedBtn } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import TrackCard from "../../ui/TrackCard";
 import { how_many_songs } from "../../utils/summarizer";
@@ -96,6 +95,29 @@ const MusicList = styled.div`
 	gap: 1rem;
 `;
 
+const AddBtn = styled.button`
+	align-self: center;
+	font-weight: bold;
+	font-size: 1.2rem;
+
+	padding: 0.5rem 1rem;
+	margin-top: 1rem;
+	border: none;
+	outline: none;
+	border-radius: 0.4rem;
+	color: var(--color-text-secondary);
+	background-color: var(--color-bg-primary);
+
+	opacity: 0.9;
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		opacity: 1;
+		color: var(--color-text-primary);
+	}
+`;
+
 const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const { name, createdAt, updatedAt, musics } = playlist;
 	const isUpdated = !(createdAt === updatedAt);
@@ -136,7 +158,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 			</DetailHeader>
 			<DetailContent>
 				{musics.length == 0 && (
-					<AnimatedBtn onClick={() => openMusicAdd()}> Add music</AnimatedBtn>
+					<AddBtn onClick={() => openMusicAdd()}> Add music</AddBtn>
 				)}
 				{musics.length > 0 && (
 					<>
@@ -148,9 +170,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 							{musics.map((music, index) => (
 								<TrackCard song={music} index={index} key={index} />
 							))}
-							<AnimatedBtn onClick={() => openMusicAdd()}>
-								Add More Music
-							</AnimatedBtn>
+							<AddBtn onClick={() => openMusicAdd()}>Add more music</AddBtn>
 						</MusicList>
 					</>
 				)}
