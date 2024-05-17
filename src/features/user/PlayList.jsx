@@ -8,25 +8,30 @@ import { AnimatedBtn } from "../../styles/styled_components";
 import PlaylistCard from "../../ui/PlaylistCard";
 import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
+import PlaylistDetail from "../playlists/PlaylistDetail";
 import SongAddCard from "../playlists/SongAddCard";
 
 const PlayListBox = styled.div`
+	width: 100%;
+	height: 100%;
+`;
+
+const ListBox = styled.div`
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 1rem;
-	padding: 0.5rem 1rem;
 `;
 
 const PlayList = () => {
-	const [isAddOpen, setIsAddOpen] = useState(false);
+	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 	const user = useSignedInUser();
 
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [hasPlaylist, setHasPlaylist] = useState(false);
-	const [status, setStatus] = useState("...");
+	const [isDetailing, setIsDetailing] = useState(false);
+	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
 	const [name, setName] = useState("");
 
@@ -58,7 +63,6 @@ const PlayList = () => {
 				console.log(playlistData);
 			});
 			setUserPlaylists(allPlaylists);
-			setHasPlaylist(true);
 		} catch (error) {
 			console.error("Error getting documents:", error);
 			setError(error.message);
@@ -74,7 +78,6 @@ const PlayList = () => {
 		} else {
 			setIsLoading(true);
 			setError("");
-			setStatus("...");
 			const playlistData = {
 				name: name,
 				createdAt: new Date().toLocaleDateString(),
@@ -86,7 +89,6 @@ const PlayList = () => {
 					...playlistData,
 					musics: [],
 				});
-				setStatus(`Playlist '${name}' created successfully.`);
 			} catch (error) {
 				setError("un able to create new playlist");
 				console.log("playlists" + user.uid);
@@ -97,23 +99,44 @@ const PlayList = () => {
 		}
 	};
 
+	const openPlaylistAdd = () => {
+		setIsAddPlaylistOpen(true);
+	};
+	const showPlaylistDetail = () => {
+		setIsDetailing(true);
+	};
+
 	return (
 		<PlayListBox>
 			{isLoading && <span>loading...</span>}
 			{error && <span>{error}</span>}
-			{!isLoading && userPlaylists && (
-				<>
+			{!isLoading && userPlaylists.length && !isDetailing && (
+				<ListBox>
 					{userPlaylists.map((playlist) => (
-						<PlaylistCard key={playlist.name} playlist={playlist} />
+						<PlaylistCard
+							key={playlist.name}
+							playlist={playlist}
+							setSelectedPlaylist={setSelectedPlaylist}
+							handleClick={showPlaylistDetail}
+						/>
 					))}
-					<AnimatedBtn>
+					<AnimatedBtn onClick={() => openPlaylistAdd()}>
 						<TbMusicPlus />
 					</AnimatedBtn>
-				</>
+				</ListBox>
+			)}
+			{isDetailing && (
+				<PlaylistDetail
+					playlist={selectedPlaylist}
+					setIsDetailing={setIsDetailing}
+				/>
 			)}
 			{userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
-			{isAddOpen && (
-				<PlaylistAddCard isOpened={isAddOpen} setIsOpened={setIsAddOpen} />
+			{isAddPlaylistOpen && (
+				<PlaylistAddCard
+					isOpened={isAddPlaylistOpen}
+					setIsOpened={setIsAddPlaylistOpen}
+				/>
 			)}
 			{isAddSongOpen && (
 				<SongAddCard isOpened={isAddSongOpen} setIsOpened={setIsAddSongOpen} />
