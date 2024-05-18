@@ -76,12 +76,14 @@ const PlaylistTime = styled.span`
 `;
 
 const DetailContent = styled.div`
-	display: flex;
+	display: ${(props) => (props.shouldDisplay ? "flex" : "none")};
+
 	flex-direction: column;
 	gap: 0.5rem;
 
 	width: 100%;
 	padding: 0.3rem 0.5rem 1rem;
+	animation: ${fadeOpen} 0.4s linear;
 `;
 
 const ListTitle = styled.span`
@@ -161,7 +163,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 					</HeaderLeft>
 				</HeaderContent>
 			</DetailHeader>
-			<DetailContent>
+			<DetailContent shouldDisplay={!isAddSongOpen}>
 				{musics.length == 0 && (
 					<AddBtn onClick={() => openMusicAdd()}> Add music</AddBtn>
 				)}
