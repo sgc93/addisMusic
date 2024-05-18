@@ -13,6 +13,8 @@ body {
 	--color-text-tertiary: #ffffffa2;
 	--color-text-error: rgb(144, 22, 22);
 	--color-text-success: rgb(2, 199, 2);
+	--color-text-warning: #ffb300;
+
 	--color-border-primary: #ffffff50;
 
 	--color-tab-bg: #00000030;
