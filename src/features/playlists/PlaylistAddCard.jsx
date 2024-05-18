@@ -27,11 +27,33 @@ const CreateError = styled.span`
 	border-radius: 0.4rem;
 `;
 
+const SuccessBox = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.3rem;
+
+	background-color: var(--color-text-primary);
+	padding: 0rem 1rem 1rem;
+	border-radius: 0.4rem;
+	width: 90%;
+`;
+const SuccessImg = styled.img`
+	width: 4rem;
+`;
+const SuccessMessage = styled.span`
+	font-size: 1.3rem;
+	font-weight: bold;
+	text-align: center;
+	color: var(--color-text-success);
+`;
+
 const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 	const user = auth.currentUser;
 	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
+	const [isSucceed, setIsSucceed] = useState(false);
 
 	// working
 	const createNewPlaylist = async (collectionName) => {
@@ -51,6 +73,7 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 					...playlistData,
 					musics: [],
 				});
+				setIsSucceed(true);
 			} catch (error) {
 				setError("Unable to create new playlist, Check you connection");
 			} finally {
@@ -68,7 +91,7 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 		if (name.length == 0) {
 			setError("Please enter playlist name!");
 		} else {
-			createNewPlaylist(`playlist${user.uid}`);
+			createNewPlaylist(`playlists${user.uid}`);
 		}
 	};
 
@@ -84,26 +107,37 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 						<MdClose />
 					</IconButton>
 				</FormHeader>
+				{isSucceed && (
+					<SuccessBox>
+						<SuccessImg src="./thumbsup.gif" />
+						<SuccessMessage>
+							<span style={{ textTransform: "capitalize" }}>{name}</span> is
+							created successfully!
+						</SuccessMessage>
+					</SuccessBox>
+				)}
 				{error && <CreateError>{error}</CreateError>}
 				{isLoading ? (
 					<LoaderNote loadingMessage={`Creating ${name} ...`} />
 				) : (
-					<Form>
-						<FormInput
-							type="text"
-							placeholder="Playlist Name"
-							value={name}
-							onChange={(event) => setName(event.target.value)}
-							required
-						/>
-						<FormBtn
-							style={formBtnStyle}
-							type="submit"
-							onClick={handleCreatePlaylist}
-						>
-							Create
-						</FormBtn>
-					</Form>
+					!isSucceed && (
+						<Form>
+							<FormInput
+								type="text"
+								placeholder="Playlist Name"
+								value={name}
+								onChange={(event) => setName(event.target.value)}
+								required
+							/>
+							<FormBtn
+								style={formBtnStyle}
+								type="submit"
+								onClick={handleCreatePlaylist}
+							>
+								Create
+							</FormBtn>
+						</Form>
+					)
 				)}
 			</FormBox>
 		</FormPage>
