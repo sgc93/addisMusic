@@ -65,11 +65,14 @@ const AddBtnBox = styled.div`
 	position: relative;
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	padding: 1rem 2rem;
+
+	width: calc(50% - 5rem);
 `;
 const AddBtnToolTip = styled.span`
 	position: absolute;
-	left: 100%;
-
+	bottom: -1.7rem;
 	padding: 0.3rem 0.7rem;
 	margin: 1.7rem 0rem 0rem 1rem;
 	border-radius: 0.4rem;
