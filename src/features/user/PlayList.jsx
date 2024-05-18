@@ -4,6 +4,7 @@ import { FirestoreError } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { auth, firestore } from "../../config/firebase_config";
+import { fadeOpen } from "../../styles/animation";
 import { AnimatedBtn } from "../../styles/styled_components";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
@@ -19,14 +20,28 @@ const PlayListBox = styled.div`
 
 const PlaylistListBox = styled.div`
 	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	animation: ${fadeOpen} 0.5s linear;
 `;
-const PlaylistTitle = styled.span``;
+
+const PlaylistTitle = styled.span`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-weight: bold;
+	font-size: 1.3rem;
+	color: var(--color-text-primary);
+	width: 100%;
+`;
 
 const ListBox = styled.div`
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 1rem;
+	padding: 0rem 1rem;
 `;
 
 const LoadingBox = styled.div`
@@ -133,8 +148,12 @@ const PlayList = () => {
 			{!isLoading && userPlaylists.length > 0 && !isDetailing && (
 				<PlaylistListBox>
 					<PlaylistTitle>
-						{user.displayName ? `${user.displayName.split(" ")[0]}'s ` : "your"}
-						Playlists
+						<span>
+							{user.displayName
+								? `${user.displayName.split(" ")[0]}'s `
+								: "your"}
+							Playlists
+						</span>
 					</PlaylistTitle>
 					<ListBox>
 						{userPlaylists.map((playlist) => (
