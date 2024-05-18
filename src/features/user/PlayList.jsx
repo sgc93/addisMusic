@@ -4,7 +4,7 @@ import { FirestoreError } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { auth, firestore } from "../../config/firebase_config";
-import { fadeOpen } from "../../styles/animation";
+import { fadeClose, fadeOpen } from "../../styles/animation";
 import { AnimatedBtn } from "../../styles/styled_components";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
@@ -60,6 +60,27 @@ const Loader = styled.div`
 	background-color: var(--color-bg-primary);
 `;
 
+const AddBtnBox = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+`;
+const AddBtnToolTip = styled.span`
+	position: absolute;
+	left: 100%;
+
+	padding: 0.3rem 0.7rem;
+	margin: 1.7rem 0rem 0rem 1rem;
+	border-radius: 0.4rem;
+	width: 11rem;
+	background-color: var(--color-text-primary);
+	color: var(--color-bg-primary);
+	display: ${(props) => (props.shouldDisplayed ? "flex" : "none")};
+
+	transition: 0.7s;
+	transition: ${(props) => (props.display ? fadeOpen : fadeClose)} 0.7s linear;
+`;
+
 const PlayList = () => {
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 
@@ -70,7 +91,7 @@ const PlayList = () => {
 	const [isDetailing, setIsDetailing] = useState(false);
 	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
-	const [name, setName] = useState("");
+	const [shouldDisplayed, setShouldDisplayed] = useState();
 
 	const [userPlaylists, setUserPlaylists] = useState([]);
 
@@ -123,6 +144,9 @@ const PlayList = () => {
 		setIsDetailing(true);
 	};
 
+	const handleHovering = () =>
+		setShouldDisplayed((shouldDisplayed) => !shouldDisplayed);
+
 	return (
 		<PlayListBox>
 			{isLoading && (
@@ -164,9 +188,18 @@ const PlayList = () => {
 								handleClick={showPlaylistDetail}
 							/>
 						))}
-						<AnimatedBtn onClick={() => openPlaylistAdd()}>
-							<TbMusicPlus />
-						</AnimatedBtn>
+						<AddBtnBox>
+							<AddBtnToolTip shouldDisplayed={shouldDisplayed}>
+								Add one more playlist
+							</AddBtnToolTip>
+							<AnimatedBtn
+								onClick={() => openPlaylistAdd()}
+								onMouseEnter={() => handleHovering()}
+								onMouseLeave={() => handleHovering()}
+							>
+								<TbMusicPlus />
+							</AnimatedBtn>
+						</AddBtnBox>
 					</ListBox>
 				</PlaylistListBox>
 			)}
