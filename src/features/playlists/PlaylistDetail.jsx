@@ -81,6 +81,7 @@ const DetailContent = styled.div`
 	gap: 0.5rem;
 
 	width: 100%;
+	padding: 0.3rem 0.5rem 1rem;
 `;
 
 const ListTitle = styled.span`
