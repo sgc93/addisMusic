@@ -39,6 +39,7 @@ const PlaylistTitle = styled.span`
 const ListBox = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	flex-wrap: wrap;
 	gap: 1rem;
 	padding: 0rem 1rem;
