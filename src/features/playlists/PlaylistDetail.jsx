@@ -1,11 +1,13 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import { CgMore } from "react-icons/cg";
+import { MdClose } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
 import IconButton from "../../ui/IconButton";
 import TrackCard from "../../ui/TrackCard";
-import { how_many_songs } from "../../utils/summarizer";
+import { how_many_songs, playlist_summarizer } from "../../utils/summarizer";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
 import SongAddCard from "./SongAddCard";
 
@@ -39,11 +41,12 @@ const DetailHeader = styled.div`
 const HeaderContent = styled.div`
 	display: flex;
 	gap: 1.3rem;
+	margin-bottom: 0.6rem;
 `;
 
 const PlaylistImg = styled.div`
-	height: 12rem;
-	width: 13rem;
+	width: 12rem;
+	height: 10rem;
 
 	border-radius: 0.6rem;
 	background-image: url("./light1.jpg");
@@ -55,7 +58,6 @@ const HeaderLeft = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
-	gap: 1rem;
 `;
 
 const PlaylistName = styled.span`
@@ -121,18 +123,62 @@ const AddBtn = styled.button`
 	}
 `;
 
+const About = styled.div`
+	display: flex;
+	align-items: flex-start;
+	gap: 1rem;
+	margin-left: 3rem;
+`;
+
+const AboutBtn = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+`;
+
+const BtnBox = styled.span`
+	background-color: var(--color-bg-primary);
+	border-radius: 0.3rem;
+`;
+
+const BtnTooltip = styled.span`
+	display: ${(props) => (props.isHovered ? "block" : "none")};
+	position: absolute;
+	right: calc(100% + 0.4rem);
+	top: 0;
+	width: 5rem;
+	padding: 0.2rem 0.4rem;
+
+	border-radius: 0.6rem;
+	background-color: var(--color-text-secondary);
+	color: var(--color-bg-primary);
+	font-weight: bold;
+	font-size: small;
+	text-align: center;
+	animation: ${fadeOpen} 0.4s linear;
+`;
+
+const AboutDetail = styled.div`
+	display: flex;
+`;
+
 const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const { name, createdAt, updatedAt, musics } = playlist;
 	const isUpdated = !(createdAt === updatedAt);
 	const dispatch = useDispatch();
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 
+	const [isHovered, setIsHovered] = useState(false);
+	const [isDetailed, setIsDetailed] = useState(true);
+
 	useEffect(() => {
 		if (playlist) {
+			playlist_summarizer(playlist);
 			dispatch(currentMusicList(playlist.musics));
 			dispatch(currentMusicIndex(0));
 		}
-	});
+	}, []);
 
 	const backToPlaylists = () => setIsDetailing(false);
 	const openMusicAdd = () => setIsAddSongOpen(true);
@@ -153,6 +199,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 				<HeaderContent>
 					<PlaylistImg />
 					<HeaderLeft>
+						<PlaylistTime>playlist</PlaylistTime>
 						<PlaylistName>{name}</PlaylistName>
 						<PlaylistSongs>{how_many_songs(musics.length)}</PlaylistSongs>
 						<PlaylistTime>
@@ -161,6 +208,27 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 								: `created at ${createdAt}`}
 						</PlaylistTime>
 					</HeaderLeft>
+					<About>
+						<AboutBtn>
+							<BtnBox
+								onMouseEnter={() => setIsHovered(true)}
+								onMouseLeave={() => setIsHovered(false)}
+							>
+								<IconButton
+									handleClick={() => setIsDetailed((isDetailed) => !isDetailed)}
+								>
+									{isDetailed ? <MdClose /> : <CgMore />}
+								</IconButton>
+							</BtnBox>
+							<BtnTooltip isHovered={isHovered}>
+								{" "}
+								{isDetailed ? "hide detail" : "show detail"}
+							</BtnTooltip>
+						</AboutBtn>
+						{isDetailed && (
+							<AboutDetail>this is summarization about {name}</AboutDetail>
+						)}
+					</About>
 				</HeaderContent>
 			</DetailHeader>
 			<DetailContent shouldDisplay={!isAddSongOpen}>
