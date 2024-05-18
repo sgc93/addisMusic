@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { FirestoreError } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
@@ -8,6 +8,7 @@ import { AnimatedBtn } from "../../styles/styled_components";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
 import PlaylistCard from "../../ui/PlaylistCard";
+import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
 
@@ -63,7 +64,7 @@ const PlayList = () => {
 			setIsLoading(false);
 			getAllPlaylistDocs();
 		} else {
-			setIsLoading(false);
+			setIsLoading(true);
 		}
 	}, [user]);
 
@@ -97,33 +98,6 @@ const PlayList = () => {
 			setError(error);
 		} finally {
 			setIsLoading(false);
-		}
-	};
-
-	// working
-	const createNewPlaylist = async (collectionName) => {
-		if (name.length == 0) {
-			setError("enter playlist name first");
-		} else {
-			setIsLoading(true);
-			setError("");
-			const playlistData = {
-				name: name,
-				createdAt: new Date().toLocaleDateString(),
-				updatedAt: new Date().toLocaleDateString(),
-			};
-			try {
-				const docRef = doc(firestore, collectionName, name);
-				await setDoc(docRef, {
-					...playlistData,
-					musics: [],
-				});
-			} catch (error) {
-				setError("un able to create new playlist");
-				console.error("Error creating playlist document:", error);
-			} finally {
-				setIsLoading(false);
-			}
 		}
 	};
 
@@ -183,7 +157,8 @@ const PlayList = () => {
 					setIsDetailing={setIsDetailing}
 				/>
 			)}
-			{/* {userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />} */}
+			{userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
+
 			{isAddPlaylistOpen && (
 				<PlaylistAddCard
 					isOpened={isAddPlaylistOpen}
