@@ -1,9 +1,9 @@
-import styled from "@emotion/styled";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { auth, firestore } from "../../config/firebase_config";
 import {
+	CreateError,
 	Form,
 	FormBox,
 	FormBtn,
@@ -13,40 +13,13 @@ import {
 	FormSubTitle,
 	FormTitle,
 	FormTitleBox,
+	SuccessBox,
+	SuccessImg,
+	SuccessMessage,
 	formBtnStyle,
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
-
-const CreateError = styled.span`
-	text-align: center;
-	font-size: 1.1rem;
-	color: var(--color-text-error);
-	background-color: var(--color-text-tertiary);
-	padding: 0.2rem 0.4rem;
-	border-radius: 0.4rem;
-`;
-
-const SuccessBox = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.3rem;
-
-	background-color: var(--color-text-primary);
-	padding: 0rem 1rem 1rem;
-	border-radius: 0.4rem;
-	width: 90%;
-`;
-const SuccessImg = styled.img`
-	width: 4rem;
-`;
-const SuccessMessage = styled.span`
-	font-size: 1.3rem;
-	font-weight: bold;
-	text-align: center;
-	color: var(--color-text-success);
-`;
 
 const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 	const user = auth.currentUser;
