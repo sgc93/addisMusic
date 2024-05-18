@@ -3,11 +3,13 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
 import { CgImage, CgMusic } from "react-icons/cg";
+import { IoWarning } from "react-icons/io5";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
 import { firestore, storage } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import {
 	CreateError,
+	CreateWarning,
 	Form,
 	FormBox,
 	FormBtn,
@@ -24,6 +26,7 @@ import {
 	SuccessBox,
 	SuccessImg,
 	SuccessMessage,
+	WarningIcon,
 	formBtnStyle,
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
@@ -89,6 +92,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const [error, setError] = useState("");
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [status, setStatus] = useState("");
+	const [warning, setWarning] = useState("");
 
 	useEffect(() => {
 		setMusicName(musicFile.name);
@@ -118,6 +122,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			return downloadURL; // downloadUrl is unique
 		} catch (error) {
 			setError("Unable to upload music, please try again!");
+			setIsLoading(false);
 		} finally {
 			setStatus("");
 		}
@@ -132,9 +137,10 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			);
 			const uploadTask = await uploadBytes(coverArtRef, coverFile);
 			const coverArtURL = await getDownloadURL(uploadTask.ref);
-			return coverArtURL; // Return the download URL it is also unique : can be used as id
+			return coverArtURL;
 		} catch (error) {
 			setError("Unable to upload cover art, please try again!");
+			setIsLoading(false);
 		} finally {
 			setStatus("");
 		}
@@ -142,9 +148,30 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 	async function addMusicToPlaylist(playlistId) {
 		try {
+			// do validation
+			if (!musicFile) {
+				setError("Music is not selected!");
+				return;
+			} else if (!coverFile) {
+				setError("Cover art is not selected!");
+				return;
+			} else if (!title || !artist) {
+				let message;
+				if (!title && !artist) {
+					message = " Title & artist aren't specified!";
+					setWarning(message);
+				} else if (!title && artist) {
+					message = "This music has no title!";
+					setWarning(message);
+				} else if (title && !artist) {
+					message = "No artist is specified!";
+					setWarning(message);
+				}
+			}
 			setIsLoading(true);
 			setError("");
 			setIsSuccess(false);
+
 			// upload music and cover art
 			const musicDownloadUrl = await uploadMusic();
 			const coverDownloadUrl = await uploadCoverArt();
@@ -193,7 +220,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setMusicFile(file);
 			setIsRenameBoxOpened(true);
 		} else {
-			console.log("file is not selected");
+			setError("Music is not selected!");
 		}
 	};
 
@@ -204,7 +231,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setCoverFile(file);
 			setIsRenameBoxOpened(true);
 		} else {
-			console.log("file is not selected");
+			setError("Cover art is not Selected");
 		}
 	};
 
@@ -238,6 +265,14 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 				)}
 				{isLoading && <LoaderNote loadingMessage={status} />}
 				{error && <CreateError>{error}</CreateError>}
+				{warning && (
+					<CreateWarning>
+						<WarningIcon>
+							<IoWarning />
+						</WarningIcon>
+						<span>{warning}</span>
+					</CreateWarning>
+				)}
 				{!isLoading && !isSuccess && (
 					<Form>
 						<audio src={musicSrc} ref={musicRef} hidden />
