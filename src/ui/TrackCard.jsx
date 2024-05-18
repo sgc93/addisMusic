@@ -173,16 +173,23 @@ const DotBtnDetail = styled.div`
 	padding: 0.7rem;
 	margin: 0.5rem;
 	border-radius: 0.4rem;
-	background-color: var(--color-bg-tertiary);
+	box-shadow: -1rem 1rem 03rem 0.3rem var(--color-bg-tertiary);
+
+	background: radial-gradient(
+		var(--color-rad-outer) 10%,
+		var(--color-bg-primary)
+	);
 	backdrop-filter: blur(7rem);
 
-	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.5s;
+	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.8s;
 
 	z-index: 1;
 `;
 
 const DetailTitle = styled.div`
-	color: var(--color-text-primary);
+	color: var(--color-gradient-2);
+	text-transform: capitalize;
+	font-weight: bold;
 	border-bottom: 1px solid var(--color-border-primary);
 `;
 
@@ -193,6 +200,7 @@ const DetailChoice = styled.div`
 
 	padding: 0.4rem;
 `;
+
 const Choice = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -200,22 +208,30 @@ const Choice = styled.div`
 	gap: 0.5rem;
 `;
 const ChoiceTitle = styled.span`
-	color: var(--color-bg-primary);
+	color: var(--color-text-tertiary);
 	font-weight: thin;
+	font-size: small;
 `;
+
 const ChoiceBtn = styled.button`
-	padding: 0.2rem 0.5rem;
-	background-color: var(--color-bg-secondary);
+	padding: 0.3rem 0.6rem;
+	background-color: var(--color-bg-primary);
 	color: var(--color-text-primary);
 	font-weight: bold;
 	border-radius: 0.4rem;
-	border: none;
+	border: 2px solid var(--color-bg-primary);
 	outline: none;
 
+	opacity: 0.8;
 	cursor: pointer;
 	transition: all 0.4s;
 	&:hover {
-		background-color: var(--color-bg-primary);
+		opacity: 1;
+		border-color: var(--color-text-tertiary);
+	}
+	&:active {
+		opacity: 1;
+		border-color: var(--color-border-primary);
 	}
 `;
 
@@ -287,7 +303,7 @@ const TrackCard = ({ song, index }) => {
 					<DotBtnBox>
 						{isOpened && (
 							<DotBtnDetail isOpened={isOpened}>
-								<DetailTitle> {song.name}</DetailTitle>
+								<DetailTitle> {song.title}</DetailTitle>
 								<DetailChoice>
 									<Choice>
 										<ChoiceTitle>
@@ -299,7 +315,7 @@ const TrackCard = ({ song, index }) => {
 										<ChoiceTitle>
 											Enrich your song list by one more track
 										</ChoiceTitle>
-										<ChoiceBtn onClick={() => {}}>Add to playlist</ChoiceBtn>
+										<ChoiceBtn onClick={() => {}}>Add to songs</ChoiceBtn>
 									</Choice>
 								</DetailChoice>
 							</DotBtnDetail>
