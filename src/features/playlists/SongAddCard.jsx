@@ -3,7 +3,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
 import { CgImage, CgMusic } from "react-icons/cg";
-import { MdClose } from "react-icons/md";
+import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
 import { firestore, storage } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import {
@@ -31,21 +31,49 @@ const PlaylistName = styled.span`
 
 const FileBox = styled.div``;
 
+const FavoriteBox = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+`;
+const FavoriteText = styled.span`
+	color: var(--color-text-tertiary);
+	text-align: center;
+`;
+const FavoriteBtn = styled.button`
+	display: flex;
+	background: none;
+	border: none;
+	outline: none;
+
+	font-size: 1.4rem;
+	transition: all 0.5s;
+	color: ${(props) =>
+		props.isFavorite
+			? "var(--color-text-success)"
+			: "var(--color-text-secondary)"};
+	cursor: pointer;
+`;
+
 const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
+	// to have music data > title, artist name, duration, cover url and music url
 	const [title, setTitle] = useState("");
 	const [artist, setArtist] = useState("");
 	const [duration, setDuration] = useState(0);
+	const [isFavorite, setIsFavorite] = useState(false);
 
+	// to handling uploadable image file
 	const [coverFile, setCoverFile] = useState("");
 	const [coverName, setCoverName] = useState("");
-	const [coverSrc, setCoverSrc] = useState("");
 
+	// to handling uploadable music file
 	const [musicSrc, setMusicSrc] = useState("");
 	const [musicName, setMusicName] = useState("");
 	const [musicFile, setMusicFile] = useState("");
 
+	// which file's name is being renamed : music/image
 	const [isMusic, setIsMusic] = useState(false);
-
 	const [isRenameBoxOpened, setIsRenameBoxOpened] = useState(false);
 
 	const musicRef = useRef();
@@ -75,7 +103,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			const downloadURL = await getDownloadURL(uploadTask.ref);
 			return downloadURL; // downloadUrl is unique
 		} catch (error) {
-			console.log("Error uploading music:", error);
+			//
 		}
 	};
 
@@ -106,6 +134,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 				artist: artist,
 				duration: duration,
 				isPlayable: true,
+				isFavorite: isFavorite,
 				coverArt: coverDownloadUrl,
 				url: musicDownloadUrl,
 			};
@@ -151,13 +180,16 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 		setIsMusic(false);
 		const file = event.target.files[0];
 		if (file) {
-			const imgUrl = URL.createObjectURL(file);
 			setCoverFile(file);
-			setCoverSrc(imgUrl);
 			setIsRenameBoxOpened(true);
 		} else {
 			console.log("file is not selected");
 		}
+	};
+
+	const handleFavorite = (event) => {
+		event.preventDefault();
+		setIsFavorite((isFavorite) => !isFavorite);
 	};
 
 	return (
@@ -176,7 +208,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 				</FormHeader>
 
 				<Form>
-					<audio src={musicSrc} ref={musicRef} controls />
+					<audio src={musicSrc} ref={musicRef} hidden />
 					<FormInput
 						type="text"
 						placeholder="Song title"
@@ -245,6 +277,12 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 							/>
 						)}
 					</FileBox>
+					<FavoriteBox>
+						<FavoriteText>Favorite? </FavoriteText>
+						<FavoriteBtn isFavorite={isFavorite} onClick={handleFavorite}>
+							{isFavorite ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
+						</FavoriteBtn>
+					</FavoriteBox>
 					<FormBtn
 						style={formBtnStyle}
 						type="submit"
