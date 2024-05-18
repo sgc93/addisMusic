@@ -283,6 +283,25 @@ export const CreateError = styled.span`
 	border-radius: 0.4rem;
 `;
 
+export const CreateWarning = styled.span`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+
+	max-width: 20rem;
+	text-align: center;
+	font-size: 1.1rem;
+	color: var(--color-text-warning);
+	padding: 0.2rem 0.4rem;
+	border-radius: 0.4rem;
+`;
+
+export const WarningIcon = styled.span`
+	font-size: 1.5rem;
+	padding-left: 0.2rem;
+`;
+
 export const SuccessBox = styled.div`
 	display: flex;
 	flex-direction: column;
