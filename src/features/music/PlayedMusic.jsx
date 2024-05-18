@@ -65,7 +65,6 @@ const MusicImg = styled.img`
 
 const PlayedMusic = ({ playedMusic }) => {
 	const isPaused = useSelector((state) => state.currMusic.isPaused);
-	console.log("current music is: " + playedMusic);
 	return (
 		<MusicBox>
 			{playedMusic && (
