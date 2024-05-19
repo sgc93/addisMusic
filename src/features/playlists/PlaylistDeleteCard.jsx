@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { deleteDoc, doc } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoWarning } from "react-icons/io5";
 import { auth, firestore } from "../../config/firebase_config";
 import {
@@ -81,6 +81,17 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
+
+	useEffect(() => {
+		let timeoutId;
+		if (isSucceed || error) {
+			timeoutId = setTimeout(() => {
+				setIsOpened(false);
+			}, 2000);
+		}
+
+		return () => clearTimeout(timeoutId);
+	}, [isSucceed, error]);
 
 	const deletePlaylist = async (collectionName, playlistId) => {
 		try {
