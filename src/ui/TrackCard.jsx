@@ -1,15 +1,19 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
-import { BiPause, BiPlay } from "react-icons/bi";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { BiCheckCircle, BiPause, BiPlay } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { GoHeart, GoHeartFill } from "react-icons/go";
-import { MdClose } from "react-icons/md";
+import { LuLoader2 } from "react-icons/lu";
+import { MdClose, MdError } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { auth, firestore } from "../config/firebase_config";
 import {
 	currentMusicIndex,
 	currentMusicPausePlay,
+	currentMusicTouch,
 } from "../features/music/musicSlice";
-import { fadeClose, fadeOpen } from "../styles/animation";
+import { fadeClose, fadeOpen, rotate360 } from "../styles/animation";
 import { timeFormatter } from "../utils/time_formater";
 
 const Card = styled.div`
@@ -139,15 +143,18 @@ const Btn = styled.button`
 	border-radius: 50%;
 	padding: 0.3rem;
 	background-color: ${(props) =>
-		props.bg == "colored"
+		props.shouldBeBold
 			? "var(--color-text-primary)"
 			: "var(--color-border-primary)"};
 	color: ${(props) =>
-		props.bg == "colored"
+		props.shouldBeBold
 			? "var(--color-bg-primary)"
 			: "var(--color-bg-tertiary)"};
 	cursor: pointer;
 	transition: all 0.4s;
+
+	animation: ${(props) => (props.isLoading ? rotate360 : "")} 1s linear;
+	animation-iteration-count: infinite;
 
 	&:hover {
 		background-color: var(--color-text-primary);
@@ -243,12 +250,32 @@ const TrackNo = styled.span`
 
 const TrackCard = ({ song, index }) => {
 	const dispatch = useDispatch();
-	const { music, isPaused, currMusicIndex } = useSelector(
+	const user = auth.currentUser;
+
+	const { music, isPaused, currMusicIndex, touchedIndex } = useSelector(
 		(state) => state.currMusic
 	);
 	const isSelected = currMusicIndex == index;
+	const isTouched = touchedIndex === index;
+
 	const [hint, setHint] = useState("");
 	const [isOpened, setIsOpened] = useState(false);
+
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
+	const [isSucceed, setIsSucceed] = useState(false);
+
+	useEffect(() => {
+		let timeoutId;
+		if (isSucceed || error) {
+			timeoutId = setTimeout(() => {
+				setIsSucceed(false);
+				setError("");
+			}, 2000);
+		}
+
+		return () => clearTimeout(timeoutId);
+	}, [error, isSucceed]);
 
 	const handlePlay = (index) => {
 		if (currMusicIndex != index) {
@@ -273,6 +300,49 @@ const TrackCard = ({ song, index }) => {
 	};
 	const addToSongs = () => {
 		// add to user's songs list
+	};
+
+	const removeFromFavorite = async (song) => {
+		try {
+			setIsLoading(true);
+			setError("");
+			setIsSucceed(false);
+
+			const docRef = doc(firestore, `playlists${user.uid}`, song.playlist);
+			const docSnap = await getDoc(docRef);
+			if (docSnap.exists) {
+				const docData = docSnap.data();
+				const allMusics = docData.musics;
+
+				const updatedMusicList = allMusics.map((music) => {
+					if (music.title === song.title) {
+						return { ...music, isFavorite: false };
+					} else {
+						return music;
+					}
+				});
+
+				// updating the playlist with the updated music list
+				const updatedDocData = { ...docData, musics: updatedMusicList };
+				await updateDoc(docRef, updatedDocData);
+				setIsSucceed(true);
+			}
+		} catch (error) {
+			console.log(error);
+			setError(error.message);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleFavoriteIcon = (song) => {
+		dispatch(currentMusicTouch(index));
+
+		if (song.isFavorite) {
+			removeFromFavorite(song);
+		} else {
+			addToFavorite(song);
+		}
 	};
 
 	return (
@@ -331,16 +401,33 @@ const TrackCard = ({ song, index }) => {
 						</Btn>
 					</DotBtnBox>
 					<Btn
-						onClick={() => addToFavorite()}
+						onClick={() => handleFavoriteIcon(song)}
 						onMouseEnter={() =>
 							setHint(
 								song.isFavorite ? "remove from favorites" : "add to favorites"
 							)
 						}
 						onMouseLeave={() => setHint("")}
-						bg={song.isFavorite ? "colored" : ""}
+						shouldBeBold={
+							song.isFavorite || (isTouched && (isLoading || error))
+						}
+						isLoading={isTouched && isLoading}
 					>
-						{song.isFavorite ? (
+						{isTouched ? (
+							!isLoading && !error && !isSucceed ? (
+								song.isFavorite ? (
+									<GoHeartFill color="red" />
+								) : (
+									<GoHeart color="red" />
+								)
+							) : isLoading ? (
+								<LuLoader2 />
+							) : error ? (
+								<MdError />
+							) : (
+								isSucceed && <BiCheckCircle />
+							)
+						) : song.isFavorite ? (
 							<GoHeartFill color="red" />
 						) : (
 							<GoHeart color="red" />
