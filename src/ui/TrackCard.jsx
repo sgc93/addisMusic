@@ -1,15 +1,16 @@
 import styled from "@emotion/styled";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { BiCheckCircle, BiPause, BiPlay } from "react-icons/bi";
-import { CgAdd } from "react-icons/cg";
+import { BiCheckCircle, BiError, BiPause, BiPlay } from "react-icons/bi";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import { HiDotsVertical } from "react-icons/hi";
 import { LuLoader2 } from "react-icons/lu";
 import { MdClose, MdError } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, firestore } from "../config/firebase_config";
 import {
 	currentMusicIndex,
+	currentMusicOpenedIndex,
 	currentMusicPausePlay,
 	currentMusicTouch,
 } from "../features/music/musicSlice";
@@ -142,18 +143,16 @@ const Btn = styled.button`
 	border: none;
 	border-radius: 50%;
 	padding: 0.3rem;
-	background-color: ${(props) =>
-		props.shouldBeBold
-			? "var(--color-text-primary)"
-			: "var(--color-border-primary)"};
+	background: ${(props) =>
+		props.shouldBeBold ? "var(--color-bg-primary)" : "none"};
 	color: ${(props) =>
 		props.shouldBeBold
 			? props.isSucceed
 				? "var(--color-text-success)"
 				: props.error
 				? "var(--color-text-warning)"
-				: "var(--color-bg-primary)"
-			: "var(--color-bg-tertiary)"};
+				: "var(--color-text-primary),"
+			: "var(--color-text-primary)"};
 	cursor: pointer;
 	transition: all 0.4s;
 
@@ -161,8 +160,7 @@ const Btn = styled.button`
 	animation-iteration-count: infinite;
 
 	&:hover {
-		background-color: var(--color-text-primary);
-		color: var(--color-bg-primary);
+		background-color: var(--color-bg-primary);
 	}
 `;
 
@@ -219,14 +217,18 @@ const Choice = styled.div`
 	gap: 0.5rem;
 `;
 const ChoiceTitle = styled.span`
-	color: var(--color-text-tertiary);
+	color: ${(props) =>
+		props.isDelete
+			? "var(--color-text-warning)"
+			: "var(--color-text-tertiary)"};
 	font-weight: thin;
 	font-size: small;
 `;
 
 const ChoiceBtn = styled.button`
 	padding: 0.3rem 0.6rem;
-	background-color: var(--color-bg-primary);
+	background-color: ${(props) =>
+		props.isDelete ? "var(--color-text-error)" : "var(--color-bg-primary)"};
 	color: var(--color-text-primary);
 	font-weight: bold;
 	border-radius: 0.4rem;
@@ -252,15 +254,19 @@ const TrackNo = styled.span`
 	font-weight: 600;
 `;
 
-const TrackCard = ({ song, index }) => {
+const btnStyle = {
+	backgroundColor: "var(--color-text-primary)",
+};
+
+const TrackCard = ({ song, index, shouldMore }) => {
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
 
-	const { music, isPaused, currMusicIndex, touchedIndex } = useSelector(
-		(state) => state.currMusic
-	);
+	const { music, isPaused, currMusicIndex, touchedIndex, openedIndex } =
+		useSelector((state) => state.currMusic);
 	const isSelected = currMusicIndex == index;
 	const isTouched = touchedIndex === index;
+	const isDetailOpened = openedIndex === index;
 
 	const [hint, setHint] = useState("");
 	const [isOpened, setIsOpened] = useState(false);
@@ -275,7 +281,8 @@ const TrackCard = ({ song, index }) => {
 			timeoutId = setTimeout(() => {
 				setIsSucceed(false);
 				setError("");
-			}, 2000);
+				dispatch(currentMusicTouch(null));
+			}, 3000);
 		}
 
 		return () => clearTimeout(timeoutId);
@@ -342,6 +349,14 @@ const TrackCard = ({ song, index }) => {
 		}
 	};
 
+	const handleOpenDetail = () => {
+		if (isDetailOpened != null) {
+			dispatch(currentMusicOpenedIndex(index));
+		} else {
+			dispatch(currentMusicOpenedIndex(null));
+		}
+	};
+
 	return (
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
@@ -367,36 +382,58 @@ const TrackCard = ({ song, index }) => {
 			<BtnBox>
 				{hint && <BtnText hint={hint}>{hint}</BtnText>}
 				<BtnList>
-					<DotBtnBox>
-						{isOpened && (
-							<DotBtnDetail isOpened={isOpened}>
-								<DetailTitle> {song.title}</DetailTitle>
-								<DetailChoice>
-									<Choice>
-										<ChoiceTitle>
-											Build thicker one of your playlist with this track
-										</ChoiceTitle>
-										<ChoiceBtn onClick={() => {}}>Add to playlist</ChoiceBtn>
-									</Choice>
-									<Choice>
-										<ChoiceTitle>
-											Enrich your song list by one more track
-										</ChoiceTitle>
-										<ChoiceBtn onClick={() => {}}>Add to songs</ChoiceBtn>
-									</Choice>
-								</DetailChoice>
-							</DotBtnDetail>
-						)}
+					{shouldMore && (
+						<DotBtnBox>
+							{isDetailOpened && (
+								<DotBtnDetail isOpened={isDetailOpened}>
+									<DetailTitle> {song.title}</DetailTitle>
+									<DetailChoice>
+										<Choice>
+											<ChoiceTitle>
+												Build thicker one of your playlist with this track
+											</ChoiceTitle>
+											<ChoiceBtn onClick={() => {}}>Add to playlist</ChoiceBtn>
+										</Choice>
+										<Choice>
+											<ChoiceTitle>
+												Enrich your song list by one more track
+											</ChoiceTitle>
+											<ChoiceBtn onClick={() => {}}>Add to songs</ChoiceBtn>
+										</Choice>
+										<Choice>
+											<ChoiceTitle isDelete={true}>
+												<BiError size={15} />{" "}
+												<span style={{ fontWeight: "bold" }}>
+													Delete this music from {song.playlist}
+												</span>
+											</ChoiceTitle>
+											<ChoiceBtn onClick={() => {}} isDelete={true}>
+												Delete
+											</ChoiceBtn>
+										</Choice>
+									</DetailChoice>
+								</DotBtnDetail>
+							)}
 
-						<Btn
-							onClick={() => setIsOpened((isOpened) => !isOpened)}
-							onMouseEnter={() => setHint(isOpened ? "" : "add to your things")}
-							onMouseLeave={() => setHint("")}
-							bg={isOpened ? "colored" : ""}
-						>
-							{isOpened ? <MdClose /> : <CgAdd />}
-						</Btn>
-					</DotBtnBox>
+							<Btn
+								onClick={() => handleOpenDetail()}
+								onMouseEnter={() =>
+									setHint(isOpened ? "" : "add to your things")
+								}
+								onMouseLeave={() => setHint("")}
+								shouldBeBold={isDetailOpened}
+								style={
+									isSelected && isDetailOpened
+										? { color: "var(--color-text-primary)" }
+										: isDetailOpened
+										? { color: "var(--color-text-primary)" }
+										: {}
+								}
+							>
+								{isDetailOpened ? <MdClose /> : <HiDotsVertical />}
+							</Btn>
+						</DotBtnBox>
+					)}
 					<Btn
 						onClick={() => handleFavoriteIcon(song)}
 						onMouseEnter={() =>
@@ -405,9 +442,7 @@ const TrackCard = ({ song, index }) => {
 							)
 						}
 						onMouseLeave={() => setHint("")}
-						shouldBeBold={
-							song.isFavorite || (isTouched && (isLoading || error))
-						}
+						shouldBeBold={isTouched && (isLoading || error || isSucceed)}
 						isSucceed={isSucceed}
 						error={error}
 						isLoading={isTouched && isLoading}
@@ -440,7 +475,9 @@ const TrackCard = ({ song, index }) => {
 						onMouseLeave={() => {
 							setHint("");
 						}}
-						bg={isSelected ? "colored" : ""}
+						shouldBeBold={isSelected}
+						isSelected={isSelected}
+						style={isSelected ? btnStyle : {}}
 					>
 						{isSelected && isPaused ? <BiPause /> : <BiPlay />}
 					</Btn>
