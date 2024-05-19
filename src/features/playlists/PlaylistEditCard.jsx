@@ -48,7 +48,6 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 			const oldPlaylistRef = doc(firestore, collectionName, oldId);
 
-			setStatus("getting old playlist data...");
 			const oldPlaylistSnap = await getDoc(oldPlaylistRef);
 
 			if (oldPlaylistSnap.exists) {
@@ -59,15 +58,11 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 					name: name,
 					updatedAt: new Date().toLocaleDateString(),
 				};
-				setStatus("creating new playlist with updated data...");
 				await setDoc(newPlaylistRef, updatedData);
-				setStatus("deleting old playlist ...");
 				await deleteDoc(oldPlaylistRef);
-
 				setIsSucceed(true);
 			}
 		} catch (error) {
-			console.log(error);
 			setError(`Unable to update ${playlistName}, Check you connection`);
 		} finally {
 			setIsLoading(false);
@@ -129,7 +124,6 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 						</SuccessMessage>
 					</SuccessBox>
 				)}
-				{status && <span>{status}</span>}
 				{hasWarning && !error && (
 					<CreateWarning>
 						<WarningIcon>
