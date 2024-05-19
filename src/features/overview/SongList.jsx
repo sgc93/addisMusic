@@ -83,7 +83,7 @@ const SongList = () => {
 					tracks.map((song, index) => (
 						<TrackCard
 							key={song?.id}
-							songs={tracks}
+							shouldMore={true}
 							song={song}
 							index={index}
 						/>

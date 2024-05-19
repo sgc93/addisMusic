@@ -295,7 +295,12 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 						</ListTitle>
 						<MusicList>
 							{musics.map((music, index) => (
-								<TrackCard song={music} index={index} key={index} />
+								<TrackCard
+									song={music}
+									index={index}
+									key={index}
+									shouldMore={true}
+								/>
 							))}
 							<AddBtn onClick={() => openMusicAdd()}>Add more music</AddBtn>
 						</MusicList>
