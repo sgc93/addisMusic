@@ -8,6 +8,7 @@ import { fadeOpen } from "../../styles/animation";
 import TrackCard from "../../ui/TrackCard";
 import { how_many_songs, playlist_summarizer } from "../../utils/summarizer";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
+import PlaylistDeleteCard from "./PlaylistDeleteCard";
 import PlaylistEditCard from "./PlaylistEditCard";
 import SongAddCard from "./SongAddCard";
 
@@ -218,6 +219,13 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 				<PlaylistEditCard
 					isOpened={isPlaylistEditOpened}
 					setIsOpened={setIsPlaylistEditOpened}
+					playlistName={playlist.name}
+				/>
+			)}
+			{isPlaylistDeleteOpened && (
+				<PlaylistDeleteCard
+					isOpened={isPlaylistDeleteOpened}
+					setIsOpened={setIsPlaylistDeleteOpened}
 					playlistName={playlist.name}
 				/>
 			)}
