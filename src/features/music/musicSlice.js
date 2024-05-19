@@ -8,6 +8,7 @@ const initialState = {
 	currTime: 0,
 	duration: 0,
 	currMusicIndex: 0,
+	touchedIndex: null,
 };
 const musicSlice = createSlice({
 	name: "music",
@@ -36,6 +37,9 @@ const musicSlice = createSlice({
 		currentMusicIndex(state, action) {
 			state.currMusicIndex = action.payload;
 		},
+		currentMusicTouch(state, action) {
+			state.touchedIndex = action.payload;
+		},
 	},
 });
 
@@ -47,6 +51,7 @@ export const {
 	currentMusicDuration,
 	currentMusicList,
 	currentMusicIndex,
+	currentMusicTouch,
 } = musicSlice.actions;
 
 export default musicSlice.reducer;
