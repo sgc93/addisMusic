@@ -8,7 +8,6 @@ import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
 import TrackCard from "../../ui/TrackCard";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
-import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
 
@@ -168,7 +167,7 @@ const Favorite = () => {
 					</FetchError>
 				</LoadingBox>
 			)}
-			{!isLoading && userPlaylists.length > 0 && !isDetailing && (
+			{!isLoading && allFavorites.length > 0 && !isDetailing && (
 				<PlaylistListBox>
 					<PlaylistTitle>
 						<span>
@@ -195,7 +194,7 @@ const Favorite = () => {
 					setIsDetailing={setIsDetailing}
 				/>
 			)}
-			{userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
+			{/* {userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />} */}
 
 			{isAddPlaylistOpen && (
 				<PlaylistAddCard
