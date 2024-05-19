@@ -39,23 +39,20 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 	}, []);
 
 	// working
-	const updatePlaylist = async (collectionName) => {
+	const updatePlaylist = async (collectionName, oldId, newId) => {
 		try {
 			setIsLoading(true);
 			setError("");
 			setIsSucceed(false);
 			setStatus("");
 
-			const oldPlaylistRef = doc(
-				firestore,
-				`playlists${user.uid}`,
-				playlistName
-			);
-			const newPlaylistRef = doc(firestore, `playlists${user.uid}`, name);
+			const oldPlaylistRef = doc(firestore, collectionName, oldId);
+
 			setStatus("getting old playlist data...");
 			const oldPlaylistSnap = await getDoc(oldPlaylistRef);
 
-			if (!oldPlaylistSnap.exists) {
+			if (oldPlaylistSnap.exists) {
+				const newPlaylistRef = doc(firestore, collectionName, newId);
 				const oldData = oldPlaylistSnap.data();
 				const updatedData = {
 					...oldData,
@@ -89,7 +86,9 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 		} else if (hasWarning) {
 			setError("No change has been made!");
 		} else {
-			updatePlaylist(`playlists${user.uid}`);
+			if (user) {
+				updatePlaylist(`playlists${user.uid}`, playlistName, name);
+			}
 		}
 	};
 
@@ -109,8 +108,24 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
-							<span style={{ textTransform: "capitalize" }}>{name}</span> is
-							updated successfully!
+							<span
+								style={{
+									textTransform: "capitalize",
+									color: "var(--color-gradient-1)",
+								}}
+							>
+								{playlistName}
+							</span>{" "}
+							is updated to{" "}
+							<span
+								style={{
+									textTransform: "capitalize",
+									color: "var(--color-gradient-3)",
+								}}
+							>
+								{name}
+							</span>{" "}
+							successfully!
 						</SuccessMessage>
 					</SuccessBox>
 				)}
