@@ -2,10 +2,9 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { BiArrowBack, BiEdit } from "react-icons/bi";
 import { CgMore } from "react-icons/cg";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
-import IconButton from "../../ui/IconButton";
 import TrackCard from "../../ui/TrackCard";
 import { how_many_songs, playlist_summarizer } from "../../utils/summarizer";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
@@ -131,29 +130,49 @@ const About = styled.div`
 	margin-left: 3rem;
 `;
 
-const AboutBtn = styled.div`
+const AboutBtn = styled.button`
 	position: relative;
 	display: flex;
 	align-items: center;
-	gap: 1rem;
+
+	padding: 0.2rem 0.4rem;
+	color: var(--color-text-primary);
+	/* background-color: var(--color-bg-primary); */
+	background: none;
+	font-size: 1.2rem;
+	border: none;
+	border-radius: 0.3rem;
+
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		color: var(--color-bg-primary);
+		background-color: var(--color-text-primary);
+	}
 `;
 
 const BtnBox = styled.span`
-	background-color: var(--color-bg-primary);
-	border-radius: 0.3rem;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 9rem;
 `;
 
 const BtnTooltip = styled.span`
-	display: ${(props) => (props.isHovered ? "block" : "none")};
+	display: ${(props) => (props.shouldDisplay ? "flex" : "none")};
+	align-items: center;
+	justify-content: center;
 	position: absolute;
-	right: calc(100% + 0.4rem);
-	top: 0;
-	width: 5rem;
+
 	padding: 0.2rem 0.4rem;
+	margin-bottom: 4rem;
 
 	border-radius: 0.6rem;
 	background-color: var(--color-text-secondary);
-	color: var(--color-bg-primary);
+	color: ${(props) =>
+		props.isDelete ? "var(--color-text-error)" : "var(--color-bg-primary)"};
 	font-weight: bold;
 	font-size: small;
 	text-align: center;
@@ -170,8 +189,9 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const dispatch = useDispatch();
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 	const [isPlaylistEditOpened, setIsPlaylistEditOpened] = useState(false);
+	const [isPlaylistDeleteOpened, setIsPlaylistDeleteOpened] = useState(false);
 
-	const [isHovered, setIsHovered] = useState(false);
+	const [tooltip, setTooltip] = useState("");
 	const [isDetailed, setIsDetailed] = useState(true);
 
 	useEffect(() => {
@@ -202,14 +222,9 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 				/>
 			)}
 			<DetailHeader>
-				<BtnBox>
-					<IconButton handleClick={() => backToPlaylists()}>
-						<BiArrowBack />
-					</IconButton>
-					<IconButton handleClick={() => setIsPlaylistEditOpened(true)}>
-						<BiEdit />
-					</IconButton>
-				</BtnBox>
+				<AboutBtn onClick={() => backToPlaylists()}>
+					<BiArrowBack />
+				</AboutBtn>
 				<HeaderContent>
 					<PlaylistImg />
 					<HeaderLeft>
@@ -223,22 +238,37 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 						</PlaylistTime>
 					</HeaderLeft>
 					<About>
-						<AboutBtn>
-							<BtnBox
-								onMouseEnter={() => setIsHovered(true)}
-								onMouseLeave={() => setIsHovered(false)}
+						<BtnBox>
+							<AboutBtn
+								onClick={() => setIsPlaylistEditOpened(true)}
+								onMouseEnter={() => setTooltip("edit")}
+								onMouseLeave={() => setTooltip("")}
 							>
-								<IconButton
-									handleClick={() => setIsDetailed((isDetailed) => !isDetailed)}
-								>
-									{isDetailed ? <MdClose /> : <CgMore />}
-								</IconButton>
-							</BtnBox>
-							<BtnTooltip isHovered={isHovered}>
-								{" "}
-								{isDetailed ? "hide detail" : "show detail"}
+								<BiEdit />
+							</AboutBtn>
+							<AboutBtn
+								onClick={() => setIsPlaylistDeleteOpened(true)}
+								onMouseEnter={() => setTooltip("delete permanently")}
+								onMouseLeave={() => setTooltip("")}
+							>
+								<MdDelete />
+							</AboutBtn>
+							<AboutBtn
+								onClick={() => setIsDetailed((isDetailed) => !isDetailed)}
+								onMouseEnter={() =>
+									setTooltip(isDetailed ? "hide detail" : "show detail")
+								}
+								onMouseLeave={() => setTooltip("")}
+							>
+								{isDetailed ? <MdClose /> : <CgMore />}
+							</AboutBtn>
+							<BtnTooltip
+								isDelete={tooltip == "delete permanently"}
+								shouldDisplay={tooltip}
+							>
+								{tooltip}
 							</BtnTooltip>
-						</AboutBtn>
+						</BtnBox>
 						{isDetailed && (
 							<AboutDetail>this is summarization about {name}</AboutDetail>
 						)}
