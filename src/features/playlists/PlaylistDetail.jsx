@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { BiArrowBack } from "react-icons/bi";
+import { BiArrowBack, BiEdit } from "react-icons/bi";
 import { CgMore } from "react-icons/cg";
 import { MdClose } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -9,6 +9,7 @@ import IconButton from "../../ui/IconButton";
 import TrackCard from "../../ui/TrackCard";
 import { how_many_songs, playlist_summarizer } from "../../utils/summarizer";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
+import PlaylistEditCard from "./PlaylistEditCard";
 import SongAddCard from "./SongAddCard";
 
 const DetailBox = styled.section`
@@ -168,6 +169,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const isUpdated = !(createdAt === updatedAt);
 	const dispatch = useDispatch();
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
+	const [isPlaylistEditOpened, setIsPlaylistEditOpened] = useState(false);
 
 	const [isHovered, setIsHovered] = useState(false);
 	const [isDetailed, setIsDetailed] = useState(true);
@@ -192,10 +194,22 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 					playlistName={playlist.name}
 				/>
 			)}
+			{isPlaylistEditOpened && (
+				<PlaylistEditCard
+					isOpened={isPlaylistEditOpened}
+					setIsOpened={setIsPlaylistEditOpened}
+					playlistName={playlist.name}
+				/>
+			)}
 			<DetailHeader>
-				<IconButton handleClick={() => backToPlaylists()}>
-					<BiArrowBack />
-				</IconButton>
+				<BtnBox>
+					<IconButton handleClick={() => backToPlaylists()}>
+						<BiArrowBack />
+					</IconButton>
+					<IconButton handleClick={() => setIsPlaylistEditOpened(true)}>
+						<BiEdit />
+					</IconButton>
+				</BtnBox>
 				<HeaderContent>
 					<PlaylistImg />
 					<HeaderLeft>
