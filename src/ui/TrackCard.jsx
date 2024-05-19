@@ -295,14 +295,7 @@ const TrackCard = ({ song, index }) => {
 		}
 	};
 
-	const addToFavorite = () => {
-		// add to favorite
-	};
-	const addToSongs = () => {
-		// add to user's songs list
-	};
-
-	const removeFromFavorite = async (song) => {
+	const favorite = async (song, isFavorite) => {
 		try {
 			setIsLoading(true);
 			setError("");
@@ -316,7 +309,7 @@ const TrackCard = ({ song, index }) => {
 
 				const updatedMusicList = allMusics.map((music) => {
 					if (music.title === song.title) {
-						return { ...music, isFavorite: false };
+						return { ...music, isFavorite: isFavorite };
 					} else {
 						return music;
 					}
@@ -339,9 +332,9 @@ const TrackCard = ({ song, index }) => {
 		dispatch(currentMusicTouch(index));
 
 		if (song.isFavorite) {
-			removeFromFavorite(song);
+			favorite(song, false);
 		} else {
-			addToFavorite(song);
+			favorite(song, true);
 		}
 	};
 
