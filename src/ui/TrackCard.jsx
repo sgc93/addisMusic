@@ -148,7 +148,11 @@ const Btn = styled.button`
 			: "var(--color-border-primary)"};
 	color: ${(props) =>
 		props.shouldBeBold
-			? "var(--color-bg-primary)"
+			? props.isSucceed
+				? "var(--color-text-success)"
+				: props.error
+				? "var(--color-text-warning)"
+				: "var(--color-bg-primary)"
 			: "var(--color-bg-tertiary)"};
 	cursor: pointer;
 	transition: all 0.4s;
@@ -404,6 +408,8 @@ const TrackCard = ({ song, index }) => {
 						shouldBeBold={
 							song.isFavorite || (isTouched && (isLoading || error))
 						}
+						isSucceed={isSucceed}
+						error={error}
 						isLoading={isTouched && isLoading}
 					>
 						{isTouched ? (
