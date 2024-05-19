@@ -180,6 +180,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			const musicData = {
 				title: title,
 				artist: artist,
+				playlist: playlistName,
 				duration: duration,
 				isPlayable: true,
 				isFavorite: isFavorite,
