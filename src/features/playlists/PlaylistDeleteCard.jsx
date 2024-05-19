@@ -1,28 +1,80 @@
+import styled from "@emotion/styled";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useState } from "react";
 import { IoWarning } from "react-icons/io5";
-import { MdClose } from "react-icons/md";
 import { auth, firestore } from "../../config/firebase_config";
 import {
 	CreateError,
-	CreateWarning,
-	Form,
-	FormBox,
-	FormBtn,
-	FormHeader,
-	FormInput,
 	FormPage,
-	FormSubTitle,
-	FormTitle,
-	FormTitleBox,
 	SuccessBox,
 	SuccessImg,
 	SuccessMessage,
-	WarningIcon,
-	formBtnStyle,
 } from "../../styles/styled_components";
-import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
+
+const DeleteBox = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.4rem;
+
+	padding: 2rem;
+	background-color: var(--color-bg-primary);
+	border-radius: 1rem;
+	border: 2px solid var(--color-border-primary);
+
+	max-width: 23rem;
+`;
+const MessageBox = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6rem;
+
+	color: var(--color-text-warning);
+`;
+const IconStyle = styled.span`
+	font-size: 2.4rem;
+`;
+const DeleteMessage = styled.span`
+	text-align: center;
+`;
+
+const DeleteBtn = styled.button`
+	padding: 0.4rem 0.8rem;
+	font-weight: bold;
+	color: var(--color-text-tertiary);
+	background-color: var(--color-text-error);
+	border: none;
+	border-radius: 0.4rem;
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		color: var(--color-text-primary);
+	}
+`;
+const CancelBtn = styled.button`
+	padding: 0.4rem 0.8rem;
+	font-weight: bold;
+	color: var(--color-text-tertiary);
+	background-color: var(--color-bg-secondary);
+	border: none;
+	border-radius: 0.4rem;
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		color: var(--color-text-primary);
+	}
+`;
+
+const BtnBox = styled.div`
+	align-self: flex-end;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+`;
 
 const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const user = auth.currentUser;
@@ -60,73 +112,48 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 	return (
 		<FormPage>
-			<FormBox>
-				<FormHeader>
-					<FormTitleBox>
-						<FormTitle>Deleting a playlist</FormTitle>
-						<FormSubTitle>Y one more music folder</FormSubTitle>
-					</FormTitleBox>
-					<IconButton handleClick={() => closePopup()}>
-						<MdClose />
-					</IconButton>
-				</FormHeader>
+			<DeleteBox>
 				{isSucceed && (
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
-							<span
-								style={{
-									textTransform: "capitalize",
-									color: "var(--color-gradient-1)",
-								}}
-							>
-								{playlistName}
-							</span>{" "}
-							is updated to{" "}
+							You have deleted
 							<span
 								style={{
 									textTransform: "capitalize",
 									color: "var(--color-gradient-3)",
 								}}
 							>
-								{name}
+								{" "}
+								{playlistName}
 							</span>{" "}
 							successfully!
 						</SuccessMessage>
 					</SuccessBox>
 				)}
-				{!error && (
-					<CreateWarning>
-						<WarningIcon>
-							<IoWarning />
-						</WarningIcon>
-						<span>No change has been made yet!</span>
-					</CreateWarning>
-				)}
+
 				{error && <CreateError>{error}</CreateError>}
 				{isLoading ? (
 					<LoaderNote loadingMessage={`Updating ${name} ...`} />
 				) : (
 					!isSucceed && (
-						<Form>
-							<FormInput
-								type="text"
-								placeholder="Playlist Name"
-								value={name}
-								onChange={(event) => setName(event.target.value)}
-								required
-							/>
-							<FormBtn
-								style={formBtnStyle}
-								type="submit"
-								onClick={handleDeletingPlaylist}
-							>
-								Delete
-							</FormBtn>
-						</Form>
+						<>
+							<MessageBox>
+								<IconStyle>
+									<IoWarning />
+								</IconStyle>
+								<DeleteMessage>
+									This will permanently delete all data in {playlistName}!
+								</DeleteMessage>
+							</MessageBox>
+							<BtnBox>
+								<CancelBtn>Cancel</CancelBtn>
+								<DeleteBtn> Delete</DeleteBtn>
+							</BtnBox>
+						</>
 					)
 				)}
-			</FormBox>
+			</DeleteBox>
 		</FormPage>
 	);
 };
