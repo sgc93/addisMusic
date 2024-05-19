@@ -81,7 +81,6 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
-	const [isConfirmed, setIsConfirmed] = useState(false);
 
 	const deletePlaylist = async (collectionName, playlistId) => {
 		try {
@@ -106,7 +105,7 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const handleDeletingPlaylist = (event) => {
 		event.preventDefault();
 		if (user) {
-			deletePlaylist(`playlists${user.uid}`, playlistName, name);
+			deletePlaylist(`playlists${user.uid}`, playlistName);
 		}
 	};
 
@@ -134,7 +133,9 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 				{error && <CreateError>{error}</CreateError>}
 				{isLoading ? (
-					<LoaderNote loadingMessage={`Updating ${name} ...`} />
+					<LoaderNote
+						loadingMessage={`Deleting ${playlistName} permanently ...`}
+					/>
 				) : (
 					!isSucceed && (
 						<>
@@ -147,8 +148,8 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 								</DeleteMessage>
 							</MessageBox>
 							<BtnBox>
-								<CancelBtn>Cancel</CancelBtn>
-								<DeleteBtn> Delete</DeleteBtn>
+								<CancelBtn onClick={() => closePopup()}>Cancel</CancelBtn>
+								<DeleteBtn onClick={handleDeletingPlaylist}> Delete</DeleteBtn>
 							</BtnBox>
 						</>
 					)
