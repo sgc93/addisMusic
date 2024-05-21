@@ -24,7 +24,7 @@ const HeaderLeft = styled.div`
 	align-items: center;
 	gap: 1rem;
 
-	width: 100%;
+	width: 80%;
 `;
 
 const TextBtn = styled.button`
