@@ -350,10 +350,10 @@ const TrackCard = ({ song, index, shouldMore }) => {
 	};
 
 	const handleOpenDetail = () => {
-		if (isDetailOpened != null) {
-			dispatch(currentMusicOpenedIndex(index));
-		} else {
+		if (isDetailOpened) {
 			dispatch(currentMusicOpenedIndex(null));
+		} else {
+			dispatch(currentMusicOpenedIndex(index));
 		}
 	};
 
