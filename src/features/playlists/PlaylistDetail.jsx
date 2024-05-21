@@ -300,6 +300,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 									index={index}
 									key={index}
 									shouldMore={true}
+									shouldMoreAdd={false}
 								/>
 							))}
 							<AddBtn onClick={() => openMusicAdd()}>Add more music</AddBtn>

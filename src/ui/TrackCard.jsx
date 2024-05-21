@@ -258,7 +258,7 @@ const btnStyle = {
 	backgroundColor: "var(--color-text-primary)",
 };
 
-const TrackCard = ({ song, index, shouldMore }) => {
+const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
 
@@ -357,6 +357,8 @@ const TrackCard = ({ song, index, shouldMore }) => {
 		}
 	};
 
+	const handleDeletingMusic = (song) => {};
+
 	return (
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
@@ -388,26 +390,35 @@ const TrackCard = ({ song, index, shouldMore }) => {
 								<DotBtnDetail isOpened={isDetailOpened}>
 									<DetailTitle> {song.title}</DetailTitle>
 									<DetailChoice>
-										<Choice>
-											<ChoiceTitle>
-												Build thicker one of your playlist with this track
-											</ChoiceTitle>
-											<ChoiceBtn onClick={() => {}}>Add to playlist</ChoiceBtn>
-										</Choice>
-										<Choice>
-											<ChoiceTitle>
-												Enrich your song list by one more track
-											</ChoiceTitle>
-											<ChoiceBtn onClick={() => {}}>Add to songs</ChoiceBtn>
-										</Choice>
+										{shouldMoreAdd && (
+											<>
+												<Choice>
+													<ChoiceTitle>
+														Build thicker one of your playlist with this track
+													</ChoiceTitle>
+													<ChoiceBtn onClick={() => {}}>
+														Add to playlist
+													</ChoiceBtn>
+												</Choice>
+												<Choice>
+													<ChoiceTitle>
+														Enrich your song list by one more track
+													</ChoiceTitle>
+													<ChoiceBtn onClick={() => {}}>Add to songs</ChoiceBtn>
+												</Choice>
+											</>
+										)}
 										<Choice>
 											<ChoiceTitle isDelete={true}>
 												<BiError size={15} />{" "}
 												<span style={{ fontWeight: "bold" }}>
-													Delete this music from {song.playlist}
+													Delete this music from {song.playlist} permanently!
 												</span>
 											</ChoiceTitle>
-											<ChoiceBtn onClick={() => {}} isDelete={true}>
+											<ChoiceBtn
+												onClick={() => handleDeletingMusic(song)}
+												isDelete={true}
+											>
 												Delete
 											</ChoiceBtn>
 										</Choice>
