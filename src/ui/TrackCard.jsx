@@ -357,7 +357,29 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 		}
 	};
 
-	const handleDeletingMusic = (song) => {};
+	const handleDeletingMusic = async (song) => {
+		try {
+			const docRef = doc(firestore, `playlists${user.uid}`, song.playlist);
+			const docSnap = await getDoc(docRef);
+			if (docSnap.exists) {
+				const docData = docSnap.data();
+				const { musics } = docData;
+				const updatedMusicList = [];
+				musics.forEach((music) => {
+					if (music.title !== song.title) {
+						updatedMusicList.push(music);
+					}
+				});
+
+				// update the playlist with the updated properties
+				const newPlaylistData = { ...docData, musics: updatedMusicList };
+				await updateDoc(docRef, newPlaylistData);
+				console.log(`you have deleted ${song.title} successfully`);
+			}
+		} catch (error) {
+			console.log(`something happened while deleting a ${song.title}`);
+		}
+	};
 
 	return (
 		<Card isSelected={isSelected}>
