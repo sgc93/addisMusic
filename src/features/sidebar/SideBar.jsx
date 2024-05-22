@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
+import { FiFile } from "react-icons/fi";
 import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
-import About from "./About";
 import SideBarMenu from "./SideBarMenu";
 import SideBarTab from "./SideBarTab";
 
@@ -28,6 +28,7 @@ const SidebarChild = styled.div`
 
 const IconStyle = styled.div`
 	font-size: 20px;
+	border-radius: 50%;
 `;
 
 const SideBar = () => {
@@ -43,6 +44,30 @@ const SideBar = () => {
 		<Sidebar>
 			<SidebarChild>
 				<Logo />
+				<SideBarTab
+					style={{
+						backgroundColor:
+							pathName == "/local" ? "var(--color-bg-primary)" : "",
+					}}
+					handleClick={() => selectTab("local")}
+				>
+					<IconStyle
+						style={{
+							background:
+								"radial-gradient(var(--color-gradient-2),var(--color-gradient-3))",
+							padding: " 0.4rem",
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							fontSize: "1.2rem;",
+						}}
+					>
+						<FiFile />
+					</IconStyle>
+					Play locals
+				</SideBarTab>
+			</SidebarChild>
+			<SidebarChild>
 				<SideBarTab
 					style={{
 						backgroundColor: pathName == "/" ? "var(--color-bg-primary)" : "",
@@ -93,9 +118,6 @@ const SideBar = () => {
 			</SidebarChild>
 			<SidebarChild>
 				<SideBarMenu />
-			</SidebarChild>
-			<SidebarChild>
-				<About />
 			</SidebarChild>
 		</Sidebar>
 	);
