@@ -2,6 +2,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Album from "./features/categories/Album";
 import Artist from "./features/categories/Artist";
 import Track from "./features/categories/Track";
+import Local from "./features/local/Local";
 import Overview from "./features/overview/Overview";
 import Favorite from "./features/user/Favorite";
 import PlayList from "./features/user/PlayList";
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
 			{
 				path: "",
 				element: <Overview />,
+			},
+			{
+				path: "local",
+				element: <Local />,
 			},
 			{
 				path: "albums",
