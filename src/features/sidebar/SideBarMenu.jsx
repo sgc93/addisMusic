@@ -28,7 +28,7 @@ const Title = styled.div`
 const MenuItemList = styled.div`
 	overflow-x: hidden;
 	overflow-y: scroll;
-	height: 10.3rem;
+	height: 14.2rem;
 
 	&::-webkit-scrollbar {
 		background-color: transparent;
