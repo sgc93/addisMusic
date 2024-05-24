@@ -18,37 +18,43 @@ const LocalBox = styled.div`
 	background: linear-gradient(to top, var(--color-rad-outer2), #ffffff13 10%);
 `;
 
+const LocalHeader = styled.div``;
+const LocalBody = styled.div``;
+
 const Local = () => {
 	const [files, setFiles] = useState([]);
+	const [songs, setSongs] = useState([]);
 
 	const handleSelectingFiles = (event) => {
 		const selectedFiles = event.target.files;
+
 		if (selectedFiles) {
 			setFiles(selectedFiles);
+			const allSrc = [];
+			for (var i = 0; i < selectedFiles.length; i++) {
+				allSrc.push(URL.createObjectURL(selectedFiles[i]));
+				setFiles(allSrc);
+			}
 		}
 	};
 
 	return (
 		<LocalBox>
-			<>
-				{files.length > 0 && (
-					<audio src={URL.createObjectURL(files[0])} controls />
-				)}
-				<FormInput
-					type="file"
-					accept="*.mp3"
-					multiple
-					onChange={handleSelectingFiles}
-					id="localInput"
-					hidden
-				/>
-				<FormInputLabel htmlFor="localInput">
-					<FormPlaceholder>Select file(s)</FormPlaceholder>
-					<LabelIcon>
-						<RiFileMusicFill size={20} />
-					</LabelIcon>
-				</FormInputLabel>
-			</>
+			{files.length > 0 && <audio src={files[0]} controls />}
+			<FormInput
+				type="file"
+				accept="*.mp3"
+				multiple
+				onChange={handleSelectingFiles}
+				id="localInput"
+				hidden
+			/>
+			<FormInputLabel htmlFor="localInput">
+				<FormPlaceholder>Select file(s)</FormPlaceholder>
+				<LabelIcon>
+					<RiFileMusicFill size={20} />
+				</LabelIcon>
+			</FormInputLabel>
 		</LocalBox>
 	);
 };
