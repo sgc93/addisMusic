@@ -1,21 +1,29 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiFileMusicFill } from "react-icons/ri";
+import { useDispatch } from "react-redux";
 import {
 	FormInputLabel,
 	FormPlaceholder,
 	LabelIcon,
 } from "../../styles/styled_components";
+import TrackCard from "../../ui/TrackCard";
 import { FormInput } from "../auth/Components";
+import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
 
 const LocalBox = styled.div`
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 97%;
+	flex-direction: column;
 
 	margin: 0rem 0.5rem 1rem 0rem;
-	background: linear-gradient(to top, var(--color-rad-outer2), #ffffff13 10%);
+`;
+
+const MusicList = styled.div`
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	gap: 1rem;
+	padding: 1rem;
 `;
 
 const LocalHeader = styled.div``;
@@ -23,24 +31,46 @@ const LocalBody = styled.div``;
 
 const Local = () => {
 	const [files, setFiles] = useState([]);
-	const [songs, setSongs] = useState([]);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (files.length > 0) {
+			dispatch(currentMusicList(files));
+			dispatch(currentMusicIndex(0));
+		}
+	}, [files]);
 
 	const handleSelectingFiles = (event) => {
 		const selectedFiles = event.target.files;
 
 		if (selectedFiles) {
-			setFiles(selectedFiles);
-			const allSrc = [];
+			const songs = [];
 			for (var i = 0; i < selectedFiles.length; i++) {
-				allSrc.push(URL.createObjectURL(selectedFiles[i]));
-				setFiles(allSrc);
+				const song = {
+					title: selectedFiles[i].name,
+					coverArt: "./note1.jpg",
+					isFavorite: false,
+					url: URL.createObjectURL(selectedFiles[i]),
+				};
+				songs.push(song);
 			}
+			setFiles(songs);
 		}
 	};
 
 	return (
 		<LocalBox>
-			{files.length > 0 && <audio src={files[0]} controls />}
+			<MusicList>
+				{files.map((songFile, index) => (
+					<TrackCard
+						key={index}
+						song={songFile}
+						index={index}
+						shouldMore
+						shouldMoreAdd
+					/>
+				))}
+			</MusicList>
 			<FormInput
 				type="file"
 				accept="*.mp3"
