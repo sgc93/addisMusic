@@ -88,7 +88,6 @@ const MusicController = () => {
 		if (isHovered) {
 			clearTimeout(timeoutId);
 		}
-		console.log(timeoutId);
 		return () => clearTimeout(timeoutId);
 	}, [isOpened, isHovered]);
 
