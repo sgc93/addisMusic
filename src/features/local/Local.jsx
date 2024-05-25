@@ -43,7 +43,7 @@ const Local = () => {
 	const handleSelectingFiles = (event) => {
 		const selectedFiles = event.target.files;
 
-		if (selectedFiles) {
+		if (selectedFiles.length > 0) {
 			const songs = [];
 			for (var i = 0; i < selectedFiles.length; i++) {
 				const song = {
