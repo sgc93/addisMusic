@@ -269,7 +269,6 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 	const isDetailOpened = openedIndex === index;
 
 	const [hint, setHint] = useState("");
-	const [isOpened, setIsOpened] = useState(false);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
@@ -451,7 +450,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 							<Btn
 								onClick={() => handleOpenDetail()}
 								onMouseEnter={() =>
-									setHint(isOpened ? "" : "add to your things")
+									setHint(isDetailOpened ? "" : "add to your things")
 								}
 								onMouseLeave={() => setHint("")}
 								shouldBeBold={isDetailOpened}
