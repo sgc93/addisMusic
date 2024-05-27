@@ -42,27 +42,20 @@ export const playlist_summarizer = (playlist) => {
 				const { folder } = isThereBefore;
 				folders[folders.indexOf(folder)].musics.push(music);
 			} else {
+				artists.push(music.artist);
 				folders.push({
 					artist: music.artist,
 					musics: [music],
 				});
-				artists.push(music.artist);
 			}
 		} else {
+			artists.push(music.artist);
 			folders.push({
 				artist: music.artist,
 				musics: [music],
 			});
-			console.log("<=0");
 		}
 	});
-
-	console.log("is folderabole: " + (folders.length > 0));
-	console.log("total folders: " + folders.length);
-	console.log("total artists: " + folders.length);
-	console.log("total duration: " + timeFormatter(total_duration));
-	console.log("favorited musics: " + favorites);
-	console.log("artists: " + artists);
 
 	return {
 		artists: artists,
