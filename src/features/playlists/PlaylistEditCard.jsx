@@ -47,14 +47,19 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setStatus("");
 
 			const oldPlaylistRef = doc(firestore, collectionName, oldId);
-
 			const oldPlaylistSnap = await getDoc(oldPlaylistRef);
 
 			if (oldPlaylistSnap.exists) {
 				const newPlaylistRef = doc(firestore, collectionName, newId);
 				const oldData = oldPlaylistSnap.data();
+				const { musics } = oldData;
+				const updatedMusics = musics.map((music) => {
+					return { ...music, playlist: name };
+				});
+
 				const updatedData = {
 					...oldData,
+					musics: updatedMusics,
 					name: name,
 					updatedAt: new Date().toLocaleDateString(),
 				};
@@ -136,7 +141,8 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 				{isLoading ? (
 					<LoaderNote loadingMessage={`Updating ${name} ...`} />
 				) : (
-					!isSucceed && (
+					!isSucceed &&
+					!error && (
 						<Form>
 							<FormInput
 								type="text"
