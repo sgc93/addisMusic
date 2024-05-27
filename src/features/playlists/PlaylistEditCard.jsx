@@ -97,8 +97,8 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 			<FormBox>
 				<FormHeader>
 					<FormTitleBox>
-						<FormTitle>Creating a playlist</FormTitle>
-						<FormSubTitle>Have one more music folder</FormSubTitle>
+						<FormTitle>Renaming a playlist</FormTitle>
+						<FormSubTitle>Ya, Names should be expressive!</FormSubTitle>
 					</FormTitleBox>
 					<IconButton handleClick={() => closePopup()}>
 						<MdClose />
