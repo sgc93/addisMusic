@@ -115,7 +115,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setStatus("Uploading music to storage...");
 			const musicReference = ref(
 				storage,
-				`fileList${user.uid}/${playlistName}/${title}/${musicName}`
+				`fileList${user.uid}/${title}/${musicName}`
 			);
 			const uploadTask = await uploadBytes(musicReference, musicFile);
 			const downloadURL = await getDownloadURL(uploadTask.ref);
@@ -133,7 +133,7 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setStatus("Uploading image to storage...");
 			const coverArtRef = ref(
 				storage,
-				`fileList${user.uid}/${playlistName}/${title}/${coverName}`
+				`fileList${user.uid}/${title}/${coverName}`
 			);
 			const uploadTask = await uploadBytes(coverArtRef, coverFile);
 			const coverArtURL = await getDownloadURL(uploadTask.ref);
@@ -186,8 +186,8 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 				isFavorite: isFavorite,
 				coverArt: coverDownloadUrl,
 				url: musicDownloadUrl,
-				songRef: `fileList${user.uid}/${playlistName}/${title}/${musicName}`,
-				coverRef: `fileList${user.uid}/${playlistName}/${title}/${coverName}`,
+				songRef: `fileList${user.uid}/${title}/${musicName}`,
+				coverRef: `fileList${user.uid}/${title}/${coverName}`,
 			};
 
 			// store the uploaded files to user's storage
