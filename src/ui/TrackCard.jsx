@@ -16,7 +16,14 @@ import {
 	currentMusicTouch,
 } from "../features/music/musicSlice";
 import { fadeClose, fadeOpen, rotate360 } from "../styles/animation";
+import {
+	SuccessBox,
+	SuccessImg,
+	SuccessMessage,
+} from "../styles/styled_components";
 import { timeFormatter } from "../utils/time_formater";
+import Error from "./Error";
+import LoaderNote from "./LoaderNote";
 
 const Card = styled.div`
 	position: relative;
@@ -270,6 +277,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 	const isDetailOpened = openedIndex === index;
 
 	const [hint, setHint] = useState("");
+	const [deleteStatus, setDeleteStatus] = useState("");
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
@@ -287,6 +295,22 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 
 		return () => clearTimeout(timeoutId);
 	}, [error, isSucceed]);
+
+	useEffect(() => {
+		let timeoutId;
+		if (isDetailOpened && (error || isSucceed)) {
+			timeoutId = setTimeout(
+				() => {
+					setIsSucceed(false);
+					setError("");
+					handleOpenDetail();
+				},
+				isSucceed ? 1000 : 2000
+			);
+		}
+
+		return () => clearTimeout(timeoutId);
+	}, [isSucceed, error]);
 
 	const handlePlay = (index) => {
 		if (currMusicIndex != index) {
@@ -360,6 +384,12 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 	const handleDeletingMusic = async (song) => {
 		console.log(song);
 		try {
+			setIsLoading(true);
+			setError("");
+			setDeleteStatus("");
+			setIsSucceed(false);
+
+			setDeleteStatus("Navigating to music's playlists ...");
 			const docRef = doc(firestore, `playlists${user.uid}`, song.playlist);
 			const docSnap = await getDoc(docRef);
 			if (docSnap.exists) {
@@ -372,35 +402,38 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 					}
 				});
 
-				// update the playlist with the updated properties
+				setDeleteStatus("Deleting music metadata ...");
 				const newPlaylistData = { ...docData, musics: updatedMusicList };
 				await updateDoc(docRef, newPlaylistData);
-				console.log(`you have deleted ${song.title} successfully`);
 
 				// Create a reference to the file to delete
 				const songRef = ref(storage, song.songRef);
 				const coverRef = ref(storage, song.coverRef);
 
-				// Delete the file
+				setDeleteStatus("Deleting music file ...");
 				deleteObject(songRef)
 					.then(() => {
-						console.log("song deleted successfully");
+						//
 					})
 					.catch((error) => {
-						console.log("unable to delete song");
-						console.log(error);
+						setError("Unable to delete song file.");
 					});
+
+				setDeleteStatus("Deleting music's cover art file ...");
 				deleteObject(coverRef)
 					.then(() => {
-						console.log("unable to delete cover art");
-						console.log("cover deleted successfully");
+						//
 					})
 					.catch((error) => {
-						console.log(error);
+						setError("Unable to delete cover art file.");
 					});
+				setIsSucceed(true);
 			}
 		} catch (error) {
-			console.log(`something happened while deleting a ${song.title}`);
+			setError("Unable to delete music, please try again!");
+		} finally {
+			setDeleteStatus("");
+			setIsLoading(false);
 		}
 	};
 
@@ -433,7 +466,12 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 						<DotBtnBox>
 							{isDetailOpened && (
 								<DotBtnDetail isOpened={isDetailOpened}>
-									<DetailTitle> {song.title}</DetailTitle>
+									<DetailTitle>
+										{" "}
+										{isLoading && !isSucceed
+											? `Deleting ${song.title} ...`
+											: song.title}
+									</DetailTitle>
 									<DetailChoice>
 										{shouldMoreAdd && (
 											<>
@@ -453,20 +491,33 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 												</Choice>
 											</>
 										)}
-										<Choice>
-											<ChoiceTitle isDelete={true}>
-												<BiError size={15} />{" "}
-												<span style={{ fontWeight: "bold" }}>
-													Delete this music from {song.playlist} permanently!
-												</span>
-											</ChoiceTitle>
-											<ChoiceBtn
-												onClick={() => handleDeletingMusic(song)}
-												isDelete={true}
-											>
-												Delete
-											</ChoiceBtn>
-										</Choice>
+										{isLoading && <LoaderNote loadingMessage={deleteStatus} />}
+										{isSucceed && (
+											<SuccessBox>
+												<SuccessImg src="./thumbsup.gif" />
+												<SuccessMessage>
+													You have deleted {song.title} from {song.playlist}{" "}
+													successfully!
+												</SuccessMessage>
+											</SuccessBox>
+										)}
+										{error && <Error errorMessage={error} />}
+										{!isLoading && !isSucceed && !error && (
+											<Choice>
+												<ChoiceTitle isDelete={true}>
+													<BiError size={15} />{" "}
+													<span style={{ fontWeight: "bold" }}>
+														Delete this music from {song.playlist} permanently!
+													</span>
+												</ChoiceTitle>
+												<ChoiceBtn
+													onClick={() => handleDeletingMusic(song)}
+													isDelete={true}
+												>
+													Delete
+												</ChoiceBtn>
+											</Choice>
+										)}
 									</DetailChoice>
 								</DotBtnDetail>
 							)}
