@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { BiArrowBack, BiEdit } from "react-icons/bi";
+import { BsPerson } from "react-icons/bs";
 import { CgMore } from "react-icons/cg";
-import { MdClose, MdDelete } from "react-icons/md";
+import { MdClose, MdDelete, MdOutlineFavoriteBorder } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
 import TrackCard from "../../ui/TrackCard";
@@ -182,6 +183,45 @@ const BtnTooltip = styled.span`
 
 const AboutDetail = styled.div`
 	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+
+	background: var(--color-text-tertiary);
+	padding: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 2px 2px 15px 2px var(--color-bg-tertiary);
+
+	max-height: 80%;
+	overflow: hidden;
+	animation: ${fadeOpen} 0.4s linear;
+`;
+
+const DetailTab = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+
+	background: var(--color-text-tertiary);
+	padding: 0.5rem;
+	border-radius: 0.3rem;
+`;
+
+const TabTitle = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1rem;
+	color: var(--color-bg-primary);
+	padding-bottom: 0.2rem;
+	border-bottom: 1px solid var(--color-bg-tertiary);
+`;
+const TabBody = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+
+	font-weight: bold;
+	color: var(--color-bg-primary);
 `;
 
 const PlaylistDetail = ({ playlist, setIsDetailing }) => {
@@ -193,11 +233,14 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 	const [isPlaylistDeleteOpened, setIsPlaylistDeleteOpened] = useState(false);
 
 	const [tooltip, setTooltip] = useState("");
-	const [isDetailed, setIsDetailed] = useState(true);
+	const [isDetailed, setIsDetailed] = useState(false);
+	const [detailData, setDetailData] = useState(false);
+	const { artists, favorites, folders, isFolderable, totalDuration } =
+		detailData;
 
 	useEffect(() => {
 		if (playlist) {
-			playlist_summarizer(playlist);
+			setDetailData(playlist_summarizer(playlist));
 			dispatch(currentMusicList(playlist.musics));
 			dispatch(currentMusicIndex(0));
 		}
@@ -277,8 +320,32 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 								{tooltip}
 							</BtnTooltip>
 						</BtnBox>
-						{isDetailed && (
-							<AboutDetail>this is summarization about {name}</AboutDetail>
+						{isDetailed && detailData && (
+							<AboutDetail>
+								<DetailTab>
+									<TabTitle>
+										<BsPerson /> <span>{artists.length} artists</span>
+									</TabTitle>
+									<TabBody>
+										{artists &&
+											artists.map((artist, index) => (
+												<span key={index}>{artist} </span>
+											))}
+									</TabBody>
+								</DetailTab>
+								<DetailTab>
+									<TabTitle>
+										<MdOutlineFavoriteBorder color="red" />{" "}
+										<span>{favorites.length} favorites</span>
+									</TabTitle>
+									<TabBody>
+										{favorites &&
+											favorites.map((music, index) => (
+												<span key={index}>{music.title}</span>
+											))}
+									</TabBody>
+								</DetailTab>
+							</AboutDetail>
 						)}
 					</About>
 				</HeaderContent>
