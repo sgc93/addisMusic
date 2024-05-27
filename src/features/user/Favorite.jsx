@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { collection, getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../../config/firebase_config";
 import { fadeClose, fadeOpen } from "../../styles/animation";
 import FetchError from "../../ui/FetchError";
@@ -81,6 +82,37 @@ const AddBtnToolTip = styled.span`
 	transition: ${(props) => (props.display ? fadeOpen : fadeClose)} 0.7s linear;
 `;
 
+const EmptyFavorites = styled.div`
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+`;
+const EmptyMessage = styled.span`
+	font-size: 1.3rem;
+`;
+
+const EmptyBtn = styled.button`
+	color: #2b2bbb;
+	background: none;
+	border: 1px solid #2b2bbb;
+	border-radius: 0.4rem;
+	padding: 0.3rem 0.6rem;
+	font-size: 1rem;
+	font-weight: bold;
+
+	cursor: pointer;
+	transition: all 0.4s;
+	&:hover {
+		color: white;
+		background-color: #3c3ccd;
+	}
+`;
+
 const Favorite = () => {
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 
@@ -91,8 +123,8 @@ const Favorite = () => {
 	const [isDetailing, setIsDetailing] = useState(false);
 	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
-	const [userPlaylists, setUserPlaylists] = useState([]);
 	const [allFavorites, setAllFavorites] = useState([]);
+	const navigateTo = useNavigate();
 
 	const dispatch = useDispatch();
 
@@ -167,34 +199,42 @@ const Favorite = () => {
 					</FetchError>
 				</LoadingBox>
 			)}
-			{!isLoading && allFavorites.length > 0 && !isDetailing && (
-				<PlaylistListBox>
-					<PlaylistTitle>
-						<span>
-							{user.displayName
-								? `${user.displayName.split(" ")[0]}'s `
-								: "your"}
-							<span style={{ color: "pink" }}>favorite</span> songs
-						</span>
-					</PlaylistTitle>
-					<ListBox>
-						{allFavorites.length > 0 && (
-							<>
-								{allFavorites.map((favorite, index) => (
-									<TrackCard song={favorite} index={index} key={index} />
-								))}
-							</>
-						)}
-					</ListBox>
-				</PlaylistListBox>
-			)}
+			{!isLoading &&
+				!isDetailing &&
+				(allFavorites.length > 0 ? (
+					<PlaylistListBox>
+						<PlaylistTitle>
+							<span>
+								{user.displayName
+									? `${user.displayName.split(" ")[0]}'s `
+									: "your"}
+								<span style={{ color: "pink" }}>favorite</span> songs
+							</span>
+						</PlaylistTitle>
+						<ListBox>
+							{allFavorites.length > 0 && (
+								<>
+									{allFavorites.map((favorite, index) => (
+										<TrackCard song={favorite} index={index} key={index} />
+									))}
+								</>
+							)}
+						</ListBox>
+					</PlaylistListBox>
+				) : (
+					<EmptyFavorites>
+						<EmptyMessage>You have no favorites!</EmptyMessage>
+						<EmptyBtn onClick={() => navigateTo("/playlists")}>
+							Your playlistst
+						</EmptyBtn>
+					</EmptyFavorites>
+				))}
 			{isDetailing && (
 				<PlaylistDetail
 					playlist={selectedPlaylist}
 					setIsDetailing={setIsDetailing}
 				/>
 			)}
-			{/* {userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />} */}
 
 			{isAddPlaylistOpen && (
 				<PlaylistAddCard
