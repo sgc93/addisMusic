@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { IoWarning } from "react-icons/io5";
-import { auth, firestore } from "../../config/firebase_config";
+import { auth, firestore, storage } from "../../config/firebase_config";
 import {
 	CreateError,
 	FormPage,
@@ -81,6 +82,7 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
+	const [deletingStatus, setDeletingStatus] = useState("");
 
 	useEffect(() => {
 		let timeoutId;
@@ -98,11 +100,48 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setIsLoading(true);
 			setError("");
 			setIsSucceed(false);
+			setDeletingStatus("");
 
 			const playlistRef = doc(firestore, collectionName, playlistId);
-			await deleteDoc(playlistRef);
-			setIsSucceed(true);
+			setDeletingStatus("Navigating to playlist ...");
+			const playlistSnap = await getDoc(playlistRef);
+			if (playlistSnap.exists) {
+				setDeletingStatus(`Deleting ${playlistName}'s metadata ...`);
+				await deleteDoc(playlistRef);
+
+				const { musics } = playlistSnap.data();
+
+				musics.forEach((music, index) => {
+					setDeletingStatus(`Deleting songs (${index + 1}/${musics.length})`);
+					const songRef = ref(storage, music.songRef);
+					const coverRef = ref(storage, music.coverRef);
+
+					setDeletingStatus("Deleting music file ...");
+					deleteObject(songRef)
+						.then(() => {
+							//
+						})
+						.catch((error) => {
+							setError("Unable to delete song file.");
+						});
+
+					setDeletingStatus("Deleting music's cover art file ...");
+					deleteObject(coverRef)
+						.then(() => {
+							//
+						})
+						.catch((error) => {
+							setError("Unable to delete cover art file.");
+						});
+				});
+
+				setIsSucceed(true);
+			} else {
+				console.log("playlist doesnot exist andymore");
+				throw new Error(`${playlistName} doesn't exist anymore!`);
+			}
 		} catch (error) {
+			console.log(error);
 			setError(`Unable to delete ${playlistName}, Check you connection`);
 		} finally {
 			setIsLoading(false);
@@ -144,11 +183,10 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 				{error && <CreateError>{error}</CreateError>}
 				{isLoading ? (
-					<LoaderNote
-						loadingMessage={`Deleting ${playlistName} permanently ...`}
-					/>
+					<LoaderNote loadingMessage={deletingStatus} />
 				) : (
-					!isSucceed && (
+					!isSucceed &&
+					!error && (
 						<>
 							<MessageBox>
 								<IconStyle>
