@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { collection, getDocs, query } from "firebase/firestore";
-import { FirestoreError } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { auth, firestore } from "../../config/firebase_config";
@@ -110,18 +109,13 @@ const PlayList = () => {
 
 	const getAllPlaylistDocs = async () => {
 		setIsLoading(true);
-		setError();
+		setError("");
 		try {
 			// Create a query to retrieve all documents from the collection
 			const colRef = collection(firestore, `playlists${user.uid}`);
 			const q = query(colRef);
 
 			const playlists = await getDocs(q);
-			if (playlists.docs.length == 0) {
-				throw new Error(
-					"Unable to fetch playlist, Check you connection please!"
-				);
-			}
 
 			const allPlaylists = [];
 			playlists.forEach((playlistDoc) => {
@@ -131,10 +125,6 @@ const PlayList = () => {
 			});
 			setUserPlaylists(allPlaylists);
 		} catch (error) {
-			if (error instanceof FirestoreError) {
-				console.log("firestore error is happened!");
-			}
-			console.log("Error getting documents:", error);
 			setError(error);
 		} finally {
 			setIsLoading(false);
