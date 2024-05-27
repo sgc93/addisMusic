@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { BiCheckCircle, BiError, BiPause, BiPlay } from "react-icons/bi";
 import { GoHeart, GoHeartFill } from "react-icons/go";
@@ -7,7 +8,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { LuLoader2 } from "react-icons/lu";
 import { MdClose, MdError } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, firestore } from "../config/firebase_config";
+import { auth, firestore, storage } from "../config/firebase_config";
 import {
 	currentMusicIndex,
 	currentMusicOpenedIndex,
@@ -357,6 +358,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 	};
 
 	const handleDeletingMusic = async (song) => {
+		console.log(song);
 		try {
 			const docRef = doc(firestore, `playlists${user.uid}`, song.playlist);
 			const docSnap = await getDoc(docRef);
@@ -374,6 +376,28 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 				const newPlaylistData = { ...docData, musics: updatedMusicList };
 				await updateDoc(docRef, newPlaylistData);
 				console.log(`you have deleted ${song.title} successfully`);
+
+				// Create a reference to the file to delete
+				const songRef = ref(storage, song.songRef);
+				const coverRef = ref(storage, song.coverRef);
+
+				// Delete the file
+				deleteObject(songRef)
+					.then(() => {
+						console.log("song deleted successfully");
+					})
+					.catch((error) => {
+						console.log("unable to delete song");
+						console.log(error);
+					});
+				deleteObject(coverRef)
+					.then(() => {
+						console.log("unable to delete cover art");
+						console.log("cover deleted successfully");
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 			}
 		} catch (error) {
 			console.log(`something happened while deleting a ${song.title}`);
