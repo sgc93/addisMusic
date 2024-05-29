@@ -502,7 +502,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 											</SuccessBox>
 										)}
 										{error && <Error errorMessage={error} />}
-										{!isLoading && !isSucceed && !error && (
+										{!isLoading && !isSucceed && !error && !isLocal && (
 											<Choice>
 												<ChoiceTitle isDelete={true}>
 													<BiError size={15} />{" "}
@@ -541,39 +541,41 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 							</Btn>
 						</DotBtnBox>
 					)}
-					<Btn
-						onClick={() => handleFavoriteIcon(song)}
-						onMouseEnter={() =>
-							setHint(
-								song.isFavorite ? "remove from favorites" : "add to favorites"
-							)
-						}
-						onMouseLeave={() => setHint("")}
-						shouldBeBold={isTouched && (isLoading || error || isSucceed)}
-						isSucceed={isSucceed}
-						error={error}
-						isLoading={isTouched && isLoading}
-					>
-						{isTouched ? (
-							!isLoading && !error && !isSucceed ? (
-								song.isFavorite ? (
-									<GoHeartFill color="red" />
-								) : (
-									<GoHeart color="red" />
+					{!isLocal && (
+						<Btn
+							onClick={() => handleFavoriteIcon(song)}
+							onMouseEnter={() =>
+								setHint(
+									song.isFavorite ? "remove from favorites" : "add to favorites"
 								)
-							) : isLoading ? (
-								<LuLoader2 />
-							) : error ? (
-								<MdError />
+							}
+							onMouseLeave={() => setHint("")}
+							shouldBeBold={isTouched && (isLoading || error || isSucceed)}
+							isSucceed={isSucceed}
+							error={error}
+							isLoading={isTouched && isLoading}
+						>
+							{isTouched ? (
+								!isLoading && !error && !isSucceed ? (
+									song.isFavorite ? (
+										<GoHeartFill color="red" />
+									) : (
+										<GoHeart color="red" />
+									)
+								) : isLoading ? (
+									<LuLoader2 />
+								) : error ? (
+									<MdError />
+								) : (
+									isSucceed && <BiCheckCircle />
+								)
+							) : song.isFavorite ? (
+								<GoHeartFill color="red" />
 							) : (
-								isSucceed && <BiCheckCircle />
-							)
-						) : song.isFavorite ? (
-							<GoHeartFill color="red" />
-						) : (
-							<GoHeart color="red" />
-						)}
-					</Btn>
+								<GoHeart color="red" />
+							)}
+						</Btn>
+					)}
 					<Btn
 						onClick={() => handlePlay(index)}
 						onMouseEnter={() => {
