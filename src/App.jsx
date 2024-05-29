@@ -4,6 +4,7 @@ import Artist from "./features/categories/Artist";
 import Track from "./features/categories/Track";
 import Local from "./features/local/Local";
 import Overview from "./features/overview/Overview";
+import Search from "./features/search/Search";
 import Favorite from "./features/user/Favorite";
 import PlayList from "./features/user/PlayList";
 import UserSong from "./features/user/UserSong";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
 			{
 				path: "favorites",
 				element: <Favorite />,
+			},
+			{
+				path: "search",
+				element: <Search />,
 			},
 		],
 	},
