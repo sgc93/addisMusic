@@ -175,6 +175,7 @@ const Local = () => {
 								index={index}
 								shouldMore
 								shouldMoreAdd
+								isLocal
 							/>
 						))}
 					</MusicList>

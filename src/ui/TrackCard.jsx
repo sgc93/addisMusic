@@ -266,7 +266,7 @@ const btnStyle = {
 	backgroundColor: "var(--color-text-primary)",
 };
 
-const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
+const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
 
@@ -458,7 +458,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd }) => {
 				<ArtistName isSelected={isSelected}>{song.artist}</ArtistName>
 				<MusicName>{song.title}</MusicName>
 			</DataBox>
-			<MusicTime>{timeFormatter(song.duration)}</MusicTime>
+			{!isLocal && <MusicTime>{timeFormatter(song.duration)}</MusicTime>}
 			<BtnBox>
 				{hint && <BtnText hint={hint}>{hint}</BtnText>}
 				<BtnList>
