@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FaThumbsUp } from "react-icons/fa";
-import Search from "./Search";
+import SearchBtn from "./SearchBtn";
 import SignInUp from "./SignInUp";
 
 const HeaderBox = styled.div`
@@ -53,7 +53,7 @@ const Header = () => {
 	return (
 		<HeaderBox>
 			<HeaderLeft>
-				<Search />
+				<SearchBtn />
 				<TextBtn>About</TextBtn>
 				<TextBtn>Contact</TextBtn>
 				<LikeBtn>
