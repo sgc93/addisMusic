@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { LuSearchX } from "react-icons/lu";
+import { TbMusicExclamation } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
 import { fadeOpen } from "../../styles/animation";
+import TrackCard from "../../ui/TrackCard";
 
 const SearchBox = styled.div`
 	display: flex;
@@ -48,13 +49,19 @@ const ResultLists = styled.div`
 `;
 const EmptyResult = styled.div`
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	gap: 0.5rem;
 
 	height: 70%;
+`;
+
+const EmptyTitle = styled.span`
 	font-size: 1.3rem;
 	font-weight: bold;
 `;
+const EmptySubTitle = styled.span``;
 
 const Search = () => {
 	const [searchParams] = useSearchParams();
@@ -62,7 +69,18 @@ const Search = () => {
 	const [results, setResults] = useState([]);
 
 	useEffect(() => {
-		setResults([]);
+		setResults((results) => [
+			...results,
+			{
+				id: "qwerzxcvtyui32567v",
+				title: "tana dar",
+				artist: "Wondy Mak",
+				duration: 272.117551,
+				url: "./tanadar.mp3",
+				coverArt: "./note4.jpg",
+				isFavorite: true,
+			},
+		]);
 	}, [query]);
 
 	return (
@@ -72,11 +90,19 @@ const Search = () => {
 					<SearchTitle>
 						Search results for <SearchQ>{query}</SearchQ>
 					</SearchTitle>
-					<ResultLists>results</ResultLists>
+					<ResultLists>
+						{results.map((result, index) => (
+							<TrackCard key={index} song={result} index={index} />
+						))}
+					</ResultLists>
 				</>
 			) : (
 				<EmptyResult>
-					<LuSearchX />
+					<TbMusicExclamation size={40} color="var(--color-text-error)" />
+					<EmptyTitle>Music not found</EmptyTitle>
+					<EmptySubTitle>
+						update query with song title or artist name
+					</EmptySubTitle>
 				</EmptyResult>
 			)}
 		</SearchBox>
