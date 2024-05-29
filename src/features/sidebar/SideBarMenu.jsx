@@ -2,10 +2,8 @@ import styled from "@emotion/styled";
 import { LuLibrary } from "react-icons/lu";
 import { MdLibraryMusic } from "react-icons/md";
 import { TbMusicHeart, TbMusicPlus } from "react-icons/tb";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useSignedInUser } from "../../hooks/CheckAuth";
-import { checkSignInOpen } from "../auth/singIn/signInSlice";
+import { useLocation } from "react-router-dom";
+import { useNavigateMenu } from "../../hooks/useNavigateMenu";
 import SideBarTab from "./SideBarTab";
 
 const Menu = styled.div`
@@ -57,28 +55,9 @@ const MenuTitle = styled.div`
 `;
 
 const SideBarMenu = ({ handleClick, children, style }) => {
-	const user = useSignedInUser();
-	const dispatch = useDispatch();
-	const navigateTo = useNavigate();
-
-	const isUserSignedIn = () => {
-		if (user) {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	const openMenuRoute = (route) => {
-		if (isUserSignedIn()) {
-			navigateTo(`/${route}`);
-		} else {
-			dispatch(checkSignInOpen());
-			if (isUserSignedIn()) {
-				navigateTo(`/${route}`);
-			}
-		}
-	};
+	const openRoute = useNavigateMenu();
+	const location = useLocation();
+	const pathName = location.pathname;
 
 	return (
 		<Menu style={style} onClick={handleClick}>
@@ -91,7 +70,13 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 			<MenuItemList>
 				<MenuItem>
 					<MenuTitle>Create your own playlist </MenuTitle>
-					<SideBarTab handleClick={() => openMenuRoute("playlists")}>
+					<SideBarTab
+						style={{
+							backgroundColor:
+								pathName == "/playlists" ? "var(--color-bg-primary)" : "",
+						}}
+						handleClick={() => openRoute("playlists")}
+					>
 						<IconStyle>
 							<TbMusicPlus />
 						</IconStyle>
@@ -100,7 +85,13 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 				</MenuItem>
 				<MenuItem>
 					<MenuTitle>Manage songs that you have liked</MenuTitle>
-					<SideBarTab handleClick={() => openMenuRoute("favorites")}>
+					<SideBarTab
+						style={{
+							backgroundColor:
+								pathName == "/favorites" ? "var(--color-bg-primary)" : "",
+						}}
+						handleClick={() => openRoute("favorites")}
+					>
 						<IconStyle>
 							<TbMusicHeart />
 						</IconStyle>
@@ -109,7 +100,13 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 				</MenuItem>
 				<MenuItem>
 					<MenuTitle>Have list of selected musics</MenuTitle>
-					<SideBarTab handleClick={() => openMenuRoute("songs")}>
+					<SideBarTab
+						style={{
+							backgroundColor:
+								pathName == "/songs" ? "var(--color-bg-primary)" : "",
+						}}
+						handleClick={() => openRoute("songs")}
+					>
 						<IconStyle>
 							<MdLibraryMusic />
 						</IconStyle>
