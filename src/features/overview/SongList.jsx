@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { musicList } from "../../assets/music_list";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
@@ -31,15 +32,6 @@ const ListBox = styled.div`
 		border-radius: 1rem;
 	}
 `;
-const ListTitle = styled.span`
-	align-self: flex-start;
-	font-size: 1.3rem;
-	font-weight: bold;
-	color: var(--color-text-primary);
-	padding-bottom: 0.2rem;
-	margin: 1rem;
-	border-bottom: 2px solid var(--color-border-primary);
-`;
 const List = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -48,8 +40,37 @@ const List = styled.div`
 	padding: 1rem;
 `;
 
+const ListHeader = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+
+	padding-left: 1rem;
+`;
+
+const ListBtn = styled.button`
+	background: radial-gradient(var(--color-rad-outer), var(--color-bg-primary));
+	color: var(--color-text-primary);
+	font-size: 1.2rem;
+
+	padding: 0.3rem 1rem;
+	outline: none;
+	border: 2px solid;
+	border-color: ${(props) =>
+		props.isSelected ? "var(--color-text-primary)" : "var(--color-bg-primary)"};
+	border-radius: 0.5rem;
+
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		border-color: var(--color-text-primary);
+	}
+`;
+
 const SongList = () => {
 	const dispatch = useDispatch();
+	const navigateTo = useNavigate();
 
 	const tracks = musicList;
 	const isLoading = false;
@@ -59,9 +80,17 @@ const SongList = () => {
 		dispatch(currentMusicList(tracks));
 	}
 
+	const handleBtnClick = () => {
+		//
+	};
+
 	return (
 		<ListBox>
-			<ListTitle>Selected Top Tracks</ListTitle>
+			<ListHeader>
+				<ListBtn isSelected>For you</ListBtn>
+				<ListBtn onClick={() => navigateTo("/songs")}>Your songs</ListBtn>
+				<ListBtn onClick={() => navigateTo("/local")}>Play Locals</ListBtn>
+			</ListHeader>
 			<List>
 				{isLoading &&
 					Array.from({ length: 8 }).map((index) => (
