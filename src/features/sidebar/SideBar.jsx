@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FiFile } from "react-icons/fi";
+import { BiFolderOpen } from "react-icons/bi";
 import { MdAlbum, MdHome, MdPerson4, MdQueueMusic } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../ui/Logo";
@@ -54,7 +54,7 @@ const SideBar = () => {
 					<IconStyle
 						style={{
 							background:
-								"radial-gradient(var(--color-gradient-2),var(--color-gradient-3))",
+								"radial-gradient(var(--color-bg-primary) ,var(--color-gradient-3))",
 							padding: " 0.4rem",
 							display: "flex",
 							alignItems: "center",
@@ -62,7 +62,7 @@ const SideBar = () => {
 							fontSize: "1.2rem;",
 						}}
 					>
-						<FiFile />
+						<BiFolderOpen />
 					</IconStyle>
 					Play locals
 				</SideBarTab>

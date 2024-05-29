@@ -95,7 +95,16 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 						<IconStyle>
 							<TbMusicPlus />
 						</IconStyle>
-						Create Playlist
+						Your Playlist
+					</SideBarTab>
+				</MenuItem>
+				<MenuItem>
+					<MenuTitle>Manage songs that you have liked</MenuTitle>
+					<SideBarTab handleClick={() => openMenuRoute("favorites")}>
+						<IconStyle>
+							<TbMusicHeart />
+						</IconStyle>
+						Your Favorites
 					</SideBarTab>
 				</MenuItem>
 				<MenuItem>
@@ -105,17 +114,6 @@ const SideBarMenu = ({ handleClick, children, style }) => {
 							<MdLibraryMusic />
 						</IconStyle>
 						Your Songs
-					</SideBarTab>
-				</MenuItem>
-				<MenuItem>
-					<MenuTitle>
-						Add and watch over whenever you like what you have liked
-					</MenuTitle>
-					<SideBarTab handleClick={() => openMenuRoute("favorites")}>
-						<IconStyle>
-							<TbMusicHeart />
-						</IconStyle>
-						Your Favorites
 					</SideBarTab>
 				</MenuItem>
 			</MenuItemList>
