@@ -1,31 +1,33 @@
 import styled from "@emotion/styled";
 import { MdClose } from "react-icons/md";
 import IconButton from "../../ui/IconButton";
-import {
-	AuthBox,
-	AuthHeader,
-	SubTitle,
-	Title,
-	TitleBox,
-} from "../auth/Components";
+import { AuthHeader, SubTitle, Title, TitleBox } from "../auth/Components";
 
 const ModalWindow = styled.div`
 	position: absolute;
-	top: -0.6rem;
-	right: -0.6rem;
+	top: 2.7rem;
+	left: ${(props) => (props.isAbout ? "26.7%" : "40%")};
 	display: flex;
 	align-items: center;
 	justify-content: center;
+`;
 
-	width: 100dvw;
-	height: 100dvh;
-	backdrop-filter: blur(10px);
+const ModalBox = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	padding: 0.7rem;
+
+	background: radial-gradient(var(--color-rad-center), var(--color-rad-outer));
+	border: 3px solid var(--color-border-primary);
+	border-radius: 1rem;
 `;
 
 const HeaderModal = ({ isAbout, isContact, isLike, closeModal }) => {
 	return (
-		<ModalWindow>
-			<AuthBox>
+		<ModalWindow isAbout={isAbout}>
+			<ModalBox>
 				<AuthHeader>
 					<TitleBox>
 						<Title>{isAbout ? "About" : "Contact"}</Title>
@@ -39,7 +41,7 @@ const HeaderModal = ({ isAbout, isContact, isLike, closeModal }) => {
 						<MdClose />
 					</IconButton>
 				</AuthHeader>
-			</AuthBox>
+			</ModalBox>
 		</ModalWindow>
 	);
 };
