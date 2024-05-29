@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { TbMusicExclamation } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
+import { musicList } from "../../assets/music_list";
 import { fadeOpen } from "../../styles/animation";
 import TrackCard from "../../ui/TrackCard";
 
@@ -64,23 +65,28 @@ const EmptyTitle = styled.span`
 const EmptySubTitle = styled.span``;
 
 const Search = () => {
+	const songs = musicList;
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get("q");
 	const [results, setResults] = useState([]);
 
 	useEffect(() => {
-		setResults((results) => [
-			...results,
-			{
-				id: "qwerzxcvtyui32567v",
-				title: "tana dar",
-				artist: "Wondy Mak",
-				duration: 272.117551,
-				url: "./tanadar.mp3",
-				coverArt: "./note4.jpg",
-				isFavorite: true,
-			},
-		]);
+		const search = (query) => {
+			try {
+				const validSongs = [];
+				songs.forEach((music) => {
+					const str = (music.title + " " + music.artist).toLowerCase();
+					if (str.includes(query.toLowerCase())) {
+						validSongs.push(music);
+					}
+				});
+				setResults(validSongs);
+			} catch (error) {
+				//
+			}
+		};
+
+		if (query) search(query);
 	}, [query]);
 
 	return (
