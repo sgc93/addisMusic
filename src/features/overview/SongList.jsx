@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { musicList } from "../../assets/music_list";
+import { useNavigateMenu } from "../../hooks/useNavigateMenu";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
@@ -71,6 +72,7 @@ const ListBtn = styled.button`
 const SongList = () => {
 	const dispatch = useDispatch();
 	const navigateTo = useNavigate();
+	const openMenu = useNavigateMenu();
 
 	const tracks = musicList;
 	const isLoading = false;
@@ -80,15 +82,11 @@ const SongList = () => {
 		dispatch(currentMusicList(tracks));
 	}
 
-	const handleBtnClick = () => {
-		//
-	};
-
 	return (
 		<ListBox>
 			<ListHeader>
 				<ListBtn isSelected>For you</ListBtn>
-				<ListBtn onClick={() => navigateTo("/songs")}>Your songs</ListBtn>
+				<ListBtn onClick={() => openMenu("/songs")}>Your songs</ListBtn>
 				<ListBtn onClick={() => navigateTo("/local")}>Play Locals</ListBtn>
 			</ListHeader>
 			<List>
