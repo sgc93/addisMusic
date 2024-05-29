@@ -12,6 +12,8 @@ const LocalBox = styled.div`
 	flex-direction: column;
 
 	margin: 0rem 0.5rem 1rem 0rem;
+	width: 100%;
+	height: 97%;
 `;
 
 const LocalHeader = styled.div`
@@ -19,33 +21,13 @@ const LocalHeader = styled.div`
 	align-items: center;
 	justify-content: space-between;
 
-	padding: 1rem;
+	padding: 1rem 1.8rem 1rem;
 `;
 const LocalText = styled.span`
 	font-size: 1.2rem;
 	font-weight: bold;
 
 	color: var(--color-bg-primary);
-`;
-
-const LocalBtn = styled.button`
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-
-	color: var(--color-text-primary);
-	background-color: #3c3ccd;
-	border: 1px solid #2b2bbb;
-	border-radius: 0.4rem;
-	padding: 0.3rem 0.6rem;
-	font-size: 1rem;
-	font-weight: bold;
-
-	cursor: pointer;
-	transition: all 0.4s;
-	&:hover {
-		color: white;
-	}
 `;
 
 const InputLabel = styled.label`
@@ -77,10 +59,22 @@ const Placeholder = styled.span`
 const MusicList = styled.div`
 	display: flex;
 	flex-direction: column;
-	flex-wrap: wrap;
 
 	gap: 1rem;
 	padding: 1rem;
+
+	overflow-y: scroll;
+	overflow-x: hidden;
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		width: 12px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: var(--color-bg-secondary);
+
+		border-radius: 1rem;
+	}
 `;
 
 const EmptyBox = styled.div`
