@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import { FaThumbsUp } from "react-icons/fa";
+import HeaderModal from "./HeaderModal";
 import SearchBtn from "./SearchBtn";
 import SignInUp from "./SignInUp";
 
@@ -16,9 +18,11 @@ const HeaderBox = styled.div`
 	margin: 0.6rem;
 
 	backdrop-filter: blur(4px);
+	z-index: 1;
 `;
 
 const HeaderLeft = styled.div`
+	position: relative;
 	align-self: flex-start;
 	display: flex;
 	align-items: center;
@@ -50,17 +54,35 @@ const LikeBtn = styled.button`
 `;
 
 const Header = () => {
+	const [isAbout, setIsAbout] = useState(false);
+	const [isContact, setIsContact] = useState(false);
+	const [isLike, setIsLike] = useState(false);
+	const shouldOpened = isAbout || isContact;
+
+	const closeModal = () => {
+		setIsAbout(false);
+		setIsContact(false);
+	};
+
 	return (
 		<HeaderBox>
 			<HeaderLeft>
 				<SearchBtn />
-				<TextBtn>About</TextBtn>
-				<TextBtn>Contact</TextBtn>
+				<TextBtn onClick={() => setIsAbout(true)}>About</TextBtn>
+				<TextBtn onClick={() => setIsContact(true)}>Contact</TextBtn>
 				<LikeBtn>
 					<FaThumbsUp />
 				</LikeBtn>
 			</HeaderLeft>
 			<SignInUp />
+			{shouldOpened && (
+				<HeaderModal
+					isAbout={isAbout}
+					isLike={isLike}
+					isContact={isContact}
+					closeModal={closeModal}
+				/>
+			)}
 		</HeaderBox>
 	);
 };
