@@ -5,15 +5,15 @@ function* workPlaylistLoad() {
 }
 
 function* workPlaylistUpload() {
-	yield console.log();
+	yield console.log("uploading");
 }
 
 export function* playlistUploadSaga() {
-	yield takeEvery("playlist/playlistLoad", workPlaylistUpload);
+	yield takeEvery("playlist/playlistLoadUpload", workPlaylistUpload);
 }
 
 function* playlistSaga() {
-	yield takeEvery("playlist/playlistLoadUpload", workPlaylistLoad);
+	yield takeEvery("playlist/playlistLoad", workPlaylistLoad);
 }
 
 export default playlistSaga;
