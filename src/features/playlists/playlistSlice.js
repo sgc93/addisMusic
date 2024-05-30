@@ -28,21 +28,21 @@ const playListSlice = createSlice({
 			state.error = action.payload;
 			state.isLoading = false;
 		},
-		playlistAdd(state) {
+		playlistUpdate(state) {
 			state.updateError = "";
 			state.isUpdated = false;
 			state.isUpdating = true;
 		},
-		playlistAddSuccess(state, action) {
+		playlistUpdateSuccess(state, action) {
 			state.updateError = "";
 			state.isUpdating = false;
 			state.allPlaylists = action.payload;
 			state.isUpdated = true;
 		},
-		playlistAddClose(state) {
+		playlistUpdateClose(state) {
 			state.isUpdated = false;
 		},
-		playlistAddFailure(state, action) {
+		playlistUpdateFailure(state, action) {
 			state.isUpdating = false;
 			state.updateError = action.payload;
 		},
@@ -53,10 +53,10 @@ export const {
 	playlistLoad,
 	playlistLoadSuccess,
 	playlistLoadFailure,
-	playlistAdd,
-	playlistAddSuccess,
-	playlistAddClose,
-	playlistAddFailure,
+	playlistUpdate,
+	playlistUpdateSuccess,
+	playlistUpdateClose,
+	playlistUpdateFailure,
 } = playListSlice.actions;
 
 export default playListSlice.reducer;
