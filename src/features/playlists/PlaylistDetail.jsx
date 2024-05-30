@@ -262,7 +262,6 @@ const PlaylistDetail = ({
 			)}
 			{isPlaylistEditOpened && (
 				<PlaylistEditCard
-					isOpened={isPlaylistEditOpened}
 					setIsOpened={setIsPlaylistEditOpened}
 					playlistName={playlist.name}
 				/>

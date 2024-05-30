@@ -2,6 +2,7 @@ import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { IoWarning } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { auth, firestore } from "../../config/firebase_config";
 import {
 	CreateError,
@@ -24,15 +25,15 @@ import {
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
 
-const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
+const PlaylistEditCard = ({ setIsOpened, playlistName }) => {
+	const { allPlaylists } = useSelector((state) => state.playlist);
+
 	const user = auth.currentUser;
 	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [isSucceed, setIsSucceed] = useState(false);
 	const hasWarning = playlistName === name;
-
-	const [status, setStatus] = useState("");
 
 	useEffect(() => {
 		setName(playlistName);
@@ -44,7 +45,6 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setIsLoading(true);
 			setError("");
 			setIsSucceed(false);
-			setStatus("");
 
 			const oldPlaylistRef = doc(firestore, collectionName, oldId);
 			const oldPlaylistSnap = await getDoc(oldPlaylistRef);
@@ -71,7 +71,6 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setError(`Unable to update ${playlistName}, Check you connection`);
 		} finally {
 			setIsLoading(false);
-			setStatus("");
 		}
 	};
 
