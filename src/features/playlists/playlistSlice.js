@@ -36,11 +36,13 @@ const playListSlice = createSlice({
 			state.isAdding = true;
 		},
 		playlistAddSuccess(state, action) {
-			console.log(action);
 			state.addError = "";
 			state.isAdding = false;
 			state.allPlaylists = action.payload;
 			state.isPlaylistAdded = true;
+		},
+		playlistAddClose(state) {
+			state.isPlaylistAdded = false;
 		},
 		playlistAddFailure(state, action) {
 			state.isAdding = false;
@@ -55,6 +57,7 @@ export const {
 	playlistLoadFailure,
 	playlistAdd,
 	playlistAddSuccess,
+	playlistAddClose,
 	playlistAddFailure,
 } = playListSlice.actions;
 
