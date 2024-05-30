@@ -12,7 +12,7 @@ import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDeleteCard from "../playlists/PlaylistDeleteCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
-import { playlistLoad } from "../playlists/playlistSlice";
+import { playlistLoad, playlistSelect } from "../playlists/playlistSlice";
 
 const PlayListBox = styled.div`
 	width: 97%;
@@ -98,7 +98,6 @@ const PlayList = () => {
 
 	const [isDetailing, setIsDetailing] = useState(false);
 	const [isPlaylistDeleteOpened, setIsPlaylistDeleteOpened] = useState(false);
-	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
 	const [shouldDisplayed, setShouldDisplayed] = useState();
 
@@ -115,7 +114,9 @@ const PlayList = () => {
 	const openPlaylistAdd = () => {
 		setIsAddPlaylistOpen(true);
 	};
-	const showPlaylistDetail = () => {
+
+	const showPlaylistDetail = (playlist) => {
+		dispatch(playlistSelect(playlist));
 		setIsDetailing(true);
 	};
 
@@ -159,7 +160,6 @@ const PlayList = () => {
 							<PlaylistCard
 								key={index}
 								playlist={playlist}
-								setSelectedPlaylist={setSelectedPlaylist}
 								handleClick={showPlaylistDetail}
 							/>
 						))}
@@ -180,7 +180,6 @@ const PlayList = () => {
 			)}
 			{isDetailing && (
 				<PlaylistDetail
-					playlist={selectedPlaylist}
 					setIsDetailing={setIsDetailing}
 					setIsPlaylistDeleteOpened={setIsPlaylistDeleteOpened}
 				/>
@@ -196,7 +195,6 @@ const PlayList = () => {
 			{isPlaylistDeleteOpened && (
 				<PlaylistDeleteCard
 					setIsOpened={setIsPlaylistDeleteOpened}
-					playlistName={selectedPlaylist.name}
 					setIsDetailing={setIsDetailing}
 				/>
 			)}
