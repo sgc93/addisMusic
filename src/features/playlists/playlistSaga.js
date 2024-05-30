@@ -1,5 +1,5 @@
-import { takeEvery, put, call } from "redux-saga/effects";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDocs, query } from "firebase/firestore";
+import { put, takeEvery } from "redux-saga/effects";
 import { firestore } from "../../config/firebase_config";
 
 function* workPlaylistLoad(action) {
@@ -32,12 +32,36 @@ function* workPlaylistLoad(action) {
 	}
 }
 
-function* workPlaylistUpload() {
-	yield console.log("uploading");
+function* workPlaylistAdd(action) {
+	const { name, collectionName, currentPlaylists } = action.payload;
+	console.log(action);
+
+	const newPlaylist = {
+		name: name,
+		createdAt: new Date().toLocaleDateString(),
+		updatedAt: new Date().toLocaleDateString(),
+		musics: [],
+	};
+	try {
+		const docRef = doc(firestore, collectionName, name);
+		// yield setDoc(docRef, newPlaylist);
+		const updatedPlaylists = currentPlaylists;
+		updatedPlaylists.push(newPlaylist);
+		yield put({
+			type: "playlist/playlistAddSuccess",
+			payload: updatedPlaylists,
+		});
+	} catch (error) {
+		console.log(error);
+		yield put({
+			type: "playlist/playlistAddFailure",
+			payload: "Unable to create new playlist, Check you connection",
+		});
+	}
 }
 
-export function* playlistUploadSaga() {
-	yield takeEvery("playlist/playlistLoadUpload", workPlaylistUpload);
+export function* playlistAddSaga() {
+	yield takeEvery("playlist/playlistAdd", workPlaylistAdd);
 }
 
 function* playlistSaga() {
