@@ -55,6 +55,9 @@ const playListSlice = createSlice({
 			state.updateError = "";
 			state.error = "";
 		},
+		playlistUpdateAll(state, action) {
+			state.allPlaylists = action.payload;
+		},
 	},
 });
 
@@ -68,6 +71,7 @@ export const {
 	playlistUpdateFailure,
 	playlistReset,
 	playlistSelect,
+	playlistUpdateAll,
 } = playListSlice.actions;
 
 export default playListSlice.reducer;
