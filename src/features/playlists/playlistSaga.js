@@ -36,16 +36,29 @@ function* workPlaylistLoad(action) {
 }
 
 function* workPlaylistAdd(action) {
-	const { updateType, name, collectionName, playlistName, currentPlaylists } =
-		action.payload;
+	const {
+		updateType,
+		name,
+		collectionName,
+		oldPlaylistName,
+		newPlaylistName,
+		playlistName,
+		currentPlaylists,
+	} = action.payload;
+	console.log("list: " + currentPlaylists);
 	try {
 		let response;
 		switch (updateType) {
 			case "create":
 				response = yield addPlaylist(name, collectionName, currentPlaylists);
 				break;
-			case "update":
-				response = yield renamePlaylist();
+			case "rename":
+				response = yield renamePlaylist(
+					collectionName,
+					oldPlaylistName,
+					newPlaylistName,
+					currentPlaylists
+				);
 				break;
 			case "delete":
 				response = yield deletePlaylist(
@@ -60,6 +73,12 @@ function* workPlaylistAdd(action) {
 				type: "playlist/playlistUpdateSuccess",
 				payload: response.updatedPlaylists,
 			});
+			if (updateType === "rename") {
+				yield put({
+					type: "playlist/playlistSelect",
+					payload: response.updatedSelectedPlaylist,
+				});
+			}
 		} else {
 			yield put({
 				type: "playlist/playlistUpdateFailure",
