@@ -12,7 +12,7 @@ import {
 	SuccessMessage,
 } from "../../styles/styled_components";
 import LoaderNote from "../../ui/LoaderNote";
-import { playlistUpdate } from "./playlistSlice";
+import { playlistReset, playlistUpdate } from "./playlistSlice";
 
 const DeleteBox = styled.div`
 	display: flex;
@@ -78,12 +78,16 @@ const BtnBox = styled.div`
 	gap: 0.6rem;
 `;
 
-const PlaylistDeleteCard = ({ setIsOpened, playlistName, setIsDetailing }) => {
-	const { isUpdating, isUpdated, updateError, allPlaylists } = useSelector(
-		(state) => state.playlist
-	);
+const PlaylistDeleteCard = ({ setIsOpened, setIsDetailing }) => {
+	const { isUpdating, isUpdated, updateError, allPlaylists, selectedPlaylist } =
+		useSelector((state) => state.playlist);
+	const playlistName = selectedPlaylist.name;
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
+
+	useEffect(() => {
+		dispatch(playlistReset());
+	}, []);
 
 	useEffect(() => {
 		let timeoutId;
