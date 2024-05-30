@@ -1,9 +1,9 @@
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { IoWarning } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
-import { useSelector } from "react-redux";
-import { auth, firestore } from "../../config/firebase_config";
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../../config/firebase_config";
+import { useClearUpdateState } from "../../hooks/useClearUpdateState";
 import {
 	CreateError,
 	CreateWarning,
@@ -24,57 +24,29 @@ import {
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
+import { playlistReset, playlistUpdate } from "./playlistSlice";
 
-const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
+const PlaylistEditCard = ({ setIsOpened, playlistName }) => {
+	const { isUpdating, isUpdated, updateError, allPlaylists } = useSelector(
+		(state) => state.playlist
+	);
+
+	const dispatch = useDispatch();
 	const user = auth.currentUser;
 	const [name, setName] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
-	const [isSucceed, setIsSucceed] = useState(false);
-	const hasWarning = playlistName === name;
+	const hasWarning = !isUpdated && playlistName === name;
 
 	useEffect(() => {
 		setName(playlistName);
+		dispatch(playlistReset());
 	}, []);
-
-	// working
-	const updatePlaylist = async (collectionName, oldId, newId) => {
-		try {
-			setIsLoading(true);
-			setError("");
-			setIsSucceed(false);
-
-			const oldPlaylistRef = doc(firestore, collectionName, oldId);
-			const oldPlaylistSnap = await getDoc(oldPlaylistRef);
-
-			if (oldPlaylistSnap.exists) {
-				const newPlaylistRef = doc(firestore, collectionName, newId);
-				const oldData = oldPlaylistSnap.data();
-				const { musics } = oldData;
-				const updatedMusics = musics.map((music) => {
-					return { ...music, playlist: name };
-				});
-
-				const updatedData = {
-					...oldData,
-					musics: updatedMusics,
-					name: name,
-					updatedAt: new Date().toLocaleDateString(),
-				};
-				await setDoc(newPlaylistRef, updatedData);
-				await deleteDoc(oldPlaylistRef);
-				setIsSucceed(true);
-			}
-		} catch (error) {
-			setError(`Unable to update ${playlistName}, Check you connection`);
-		} finally {
-			setIsLoading(false);
-		}
-	};
 
 	const closePopup = () => {
 		setIsOpened(false);
 	};
+
+	useClearUpdateState(closePopup);
 
 	const handleUpdatingPlaylist = (event) => {
 		event.preventDefault();
@@ -84,7 +56,17 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 			setError("No change has been made!");
 		} else {
 			if (user) {
-				updatePlaylist(`playlists${user.uid}`, playlistName, name);
+				dispatch(
+					playlistUpdate({
+						updateType: "rename",
+						collectionName: `playlists${user.uid}`,
+						oldPlaylistName: playlistName,
+						newPlaylistName: name,
+						currentPlaylists: allPlaylists,
+					})
+				);
+
+				// updatePlaylist(`playlists${user.uid}`, playlistName, name);
 			}
 		}
 	};
@@ -101,7 +83,7 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 						<MdClose />
 					</IconButton>
 				</FormHeader>
-				{isSucceed && (
+				{isUpdated && (
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
@@ -126,7 +108,7 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 						</SuccessMessage>
 					</SuccessBox>
 				)}
-				{hasWarning && !error && (
+				{hasWarning && !error && !updateError && (
 					<CreateWarning>
 						<WarningIcon>
 							<IoWarning />
@@ -134,18 +116,24 @@ const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 						<span>No change has been made yet!</span>
 					</CreateWarning>
 				)}
-				{error && <CreateError>{error}</CreateError>}
-				{isLoading ? (
-					<LoaderNote loadingMessage={`Updating ${name} ...`} />
+				{error && !updateError && <CreateError>{error}</CreateError>}
+				{!error && updateError && <CreateError>{updateError}</CreateError>}
+				{isUpdating ? (
+					<LoaderNote
+						loadingMessage={`Renaming ${playlistName} to ${name} ...`}
+					/>
 				) : (
-					!isSucceed &&
-					!error && (
+					!isUpdated &&
+					!updateError && (
 						<Form>
 							<FormInput
 								type="text"
 								placeholder="Playlist Name"
 								value={name}
-								onChange={(event) => setName(event.target.value)}
+								onChange={(event) => {
+									setName(event.target.value);
+									setError("");
+								}}
 								required
 							/>
 							<FormBtn
