@@ -36,7 +36,8 @@ function* workPlaylistLoad(action) {
 }
 
 function* workPlaylistAdd(action) {
-	const { updateType, name, collectionName, currentPlaylists } = action.payload;
+	const { updateType, name, collectionName, playlistName, currentPlaylists } =
+		action.payload;
 	try {
 		let response;
 		switch (updateType) {
@@ -47,7 +48,11 @@ function* workPlaylistAdd(action) {
 				response = yield renamePlaylist();
 				break;
 			case "delete":
-				response = yield deletePlaylist();
+				response = yield deletePlaylist(
+					collectionName,
+					playlistName,
+					currentPlaylists
+				);
 				break;
 		}
 		if (response.status === "ok") {
