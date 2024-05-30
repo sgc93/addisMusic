@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { collection, getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
 import { auth, firestore } from "../../config/firebase_config";
 import { fadeClose, fadeOpen } from "../../styles/animation";
 import { AnimatedBtn } from "../../styles/styled_components";
@@ -85,6 +86,9 @@ const AddBtnToolTip = styled.span`
 `;
 
 const PlayList = () => {
+	const { allPlaylists } = useSelector((state) => state.playlist);
+
+	const dispatch = useDispatch();
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 
 	const user = auth.currentUser;
