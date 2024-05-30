@@ -10,6 +10,7 @@ import LoaderNote from "../../ui/LoaderNote";
 import PlaylistCard from "../../ui/PlaylistCard";
 import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
+import PlaylistDeleteCard from "../playlists/PlaylistDeleteCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
 import { playlistLoad } from "../playlists/playlistSlice";
 
@@ -96,6 +97,7 @@ const PlayList = () => {
 	const user = useSignedInUser();
 
 	const [isDetailing, setIsDetailing] = useState(false);
+	const [isPlaylistDeleteOpened, setIsPlaylistDeleteOpened] = useState(false);
 	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
 	const [shouldDisplayed, setShouldDisplayed] = useState();
@@ -153,9 +155,9 @@ const PlayList = () => {
 						</span>
 					</PlaylistTitle>
 					<ListBox>
-						{allPlaylists.map((playlist) => (
+						{allPlaylists.map((playlist, index) => (
 							<PlaylistCard
-								key={playlist.name}
+								key={index}
 								playlist={playlist}
 								setSelectedPlaylist={setSelectedPlaylist}
 								handleClick={showPlaylistDetail}
@@ -180,6 +182,7 @@ const PlayList = () => {
 				<PlaylistDetail
 					playlist={selectedPlaylist}
 					setIsDetailing={setIsDetailing}
+					setIsPlaylistDeleteOpened={setIsPlaylistDeleteOpened}
 				/>
 			)}
 			{allPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
@@ -188,6 +191,13 @@ const PlayList = () => {
 				<PlaylistAddCard
 					currentPlaylists={allPlaylists}
 					setIsOpened={setIsAddPlaylistOpen}
+				/>
+			)}
+			{isPlaylistDeleteOpened && (
+				<PlaylistDeleteCard
+					setIsOpened={setIsPlaylistDeleteOpened}
+					playlistName={selectedPlaylist.name}
+					setIsDetailing={setIsDetailing}
 				/>
 			)}
 		</PlayListBox>
