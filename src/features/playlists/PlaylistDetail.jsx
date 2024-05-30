@@ -4,7 +4,7 @@ import { BiArrowBack, BiEdit } from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
 import { CgMore } from "react-icons/cg";
 import { MdClose, MdDelete, MdOutlineFavoriteBorder } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fadeOpen } from "../../styles/animation";
 import TrackCard from "../../ui/TrackCard";
 import { how_many_songs, playlist_summarizer } from "../../utils/summarizer";
@@ -223,27 +223,23 @@ const TabBody = styled.div`
 	color: var(--color-bg-primary);
 `;
 
-const PlaylistDetail = ({
-	playlist,
-	setIsDetailing,
-	setIsPlaylistDeleteOpened,
-}) => {
-	const { name, createdAt, updatedAt, musics } = playlist;
-	const isUpdated = !(createdAt === updatedAt);
+const PlaylistDetail = ({ setIsDetailing, setIsPlaylistDeleteOpened }) => {
+	const { selectedPlaylist } = useSelector((state) => state.playlist);
 	const dispatch = useDispatch();
+	const { name, createdAt, updatedAt, musics } = selectedPlaylist;
+	const isUpdated = !(createdAt === updatedAt);
 	const [isAddSongOpen, setIsAddSongOpen] = useState(false);
 	const [isPlaylistEditOpened, setIsPlaylistEditOpened] = useState(false);
 
 	const [tooltip, setTooltip] = useState("");
 	const [isDetailed, setIsDetailed] = useState(false);
 	const [detailData, setDetailData] = useState(false);
-	const { artists, favorites, folders, isFolderable, totalDuration } =
-		detailData;
+	const { artists, favorites } = detailData;
 
 	useEffect(() => {
-		if (playlist.musics.length > 0) {
-			setDetailData(playlist_summarizer(playlist));
-			dispatch(currentMusicList(playlist.musics));
+		if (selectedPlaylist.musics.length > 0) {
+			setDetailData(playlist_summarizer(selectedPlaylist));
+			dispatch(currentMusicList(selectedPlaylist.musics));
 			dispatch(currentMusicIndex(0));
 		}
 	}, []);
@@ -257,13 +253,13 @@ const PlaylistDetail = ({
 				<SongAddCard
 					isOpened={isAddSongOpen}
 					setIsOpened={setIsAddSongOpen}
-					playlistName={playlist.name}
+					playlistName={name}
 				/>
 			)}
 			{isPlaylistEditOpened && (
 				<PlaylistEditCard
 					setIsOpened={setIsPlaylistEditOpened}
-					playlistName={playlist.name}
+					playlistName={name}
 				/>
 			)}
 			<DetailHeader>
