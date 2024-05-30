@@ -87,4 +87,57 @@ export const deletePlaylist = async (
 	}
 };
 
-export const renamePlaylist = async () => {};
+export const renamePlaylist = async (
+	collectionName,
+	oldPlaylistName,
+	newPlaylistName,
+	currentPlaylists
+) => {
+	try {
+		const oldPlaylistRef = doc(firestore, collectionName, oldPlaylistName);
+		const oldPlaylistSnap = await getDoc(oldPlaylistRef);
+
+		if (oldPlaylistSnap.exists) {
+			const newPlaylistRef = doc(firestore, collectionName, newPlaylistName);
+			const oldData = oldPlaylistSnap.data();
+			const { musics } = oldData;
+			const updatedMusics = musics.map((music) => {
+				return { ...music, playlist: newPlaylistName };
+			});
+
+			const updatedData = {
+				...oldData,
+				musics: updatedMusics,
+				name: newPlaylistName,
+				updatedAt: new Date().toLocaleDateString(),
+			};
+			await setDoc(newPlaylistRef, updatedData);
+			await deleteDoc(oldPlaylistRef);
+
+			// instant update
+			const updatedPlaylists = [];
+			currentPlaylists.forEach((playlist) => {
+				if (playlist.name === oldPlaylistName) {
+					updatedPlaylists.push(updatedData);
+				} else {
+					updatedPlaylists.push(playlist);
+				}
+			});
+			return {
+				status: "ok",
+				updatedPlaylists: updatedPlaylists,
+				updatedSelectedPlaylist: updatedData,
+			};
+		} else {
+			return {
+				status: "error",
+				error: `Unable to access ${oldPlaylistName} from storage, Check you connection`,
+			};
+		}
+	} catch (error) {
+		return {
+			status: "error",
+			error: `Unable to update ${oldPlaylistName}, Check you connection`,
+		};
+	}
+};
