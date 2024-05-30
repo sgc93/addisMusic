@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { IoWarning } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../config/firebase_config";
+import { useClearUpdateState } from "../../hooks/useClearUpdateState";
 import {
 	CreateError,
 	FormPage,
@@ -77,7 +78,7 @@ const BtnBox = styled.div`
 	gap: 0.6rem;
 `;
 
-const PlaylistDeleteCard = ({ setIsOpened, playlistName }) => {
+const PlaylistDeleteCard = ({ setIsOpened, playlistName, setIsDetailing }) => {
 	const { isUpdating, isUpdated, updateError, allPlaylists } = useSelector(
 		(state) => state.playlist
 	);
@@ -86,18 +87,20 @@ const PlaylistDeleteCard = ({ setIsOpened, playlistName }) => {
 
 	useEffect(() => {
 		let timeoutId;
-		if (isUpdated || updateError) {
+		if (updateError) {
 			timeoutId = setTimeout(() => {
 				setIsOpened(false);
-			}, 2000);
+			}, 1500);
 		}
 
 		return () => clearTimeout(timeoutId);
-	}, [isUpdated, updateError]);
+	}, [updateError]);
 
 	const closePopup = () => {
 		setIsOpened(false);
 	};
+
+	useClearUpdateState(closePopup);
 
 	const handleDeletingPlaylist = (event) => {
 		event.preventDefault();
@@ -110,6 +113,7 @@ const PlaylistDeleteCard = ({ setIsOpened, playlistName }) => {
 					currentPlaylists: allPlaylists,
 				})
 			);
+			setIsDetailing(false);
 		}
 	};
 
