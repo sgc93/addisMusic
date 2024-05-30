@@ -1,7 +1,7 @@
-import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
-import { auth, firestore } from "../../config/firebase_config";
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../../config/firebase_config";
 import {
 	CreateError,
 	Form,
@@ -20,40 +20,27 @@ import {
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
+import { playlistAdd, playlistAddClose } from "./playlistSlice";
 
-const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
+const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 	const user = auth.currentUser;
+	const { isAdding, addError, isPlaylistAdded } = useSelector(
+		(state) => state.playlist
+	);
+	const dispatch = useDispatch();
 	const [name, setName] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(false);
-	const [isSucceed, setIsSucceed] = useState(false);
 
-	// working
-	const createNewPlaylist = async (collectionName) => {
-		if (name.length == 0) {
-			setError("enter playlist name first");
-		} else {
-			setIsLoading(true);
-			setError("");
-			const playlistData = {
-				name: name,
-				createdAt: new Date().toLocaleDateString(),
-				updatedAt: new Date().toLocaleDateString(),
-			};
-			try {
-				const docRef = doc(firestore, collectionName, name);
-				await setDoc(docRef, {
-					...playlistData,
-					musics: [],
-				});
-				setIsSucceed(true);
-			} catch (error) {
-				setError("Unable to create new playlist, Check you connection");
-			} finally {
-				setIsLoading(false);
-			}
+	useEffect(() => {
+		let timeoutId;
+		if (isPlaylistAdded) {
+			timeoutId = setTimeout(() => {
+				closePopup();
+				dispatch(playlistAddClose());
+			}, 1500);
 		}
-	};
+		return () => clearTimeout(timeoutId);
+	}, [isPlaylistAdded]);
 
 	const closePopup = () => {
 		setIsOpened(false);
@@ -64,7 +51,13 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 		if (name.length == 0) {
 			setError("Please enter playlist name!");
 		} else {
-			createNewPlaylist(`playlists${user.uid}`);
+			dispatch(
+				playlistAdd({
+					name: name,
+					collectionName: `playlists${user.uid}`,
+					currentPlaylists: currentPlaylists,
+				})
+			);
 		}
 	};
 
@@ -80,7 +73,7 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 						<MdClose />
 					</IconButton>
 				</FormHeader>
-				{isSucceed && (
+				{isPlaylistAdded && (
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
@@ -89,11 +82,12 @@ const PlaylistAddCard = ({ isOpened, setIsOpened }) => {
 						</SuccessMessage>
 					</SuccessBox>
 				)}
-				{error && <CreateError>{error}</CreateError>}
-				{isLoading ? (
+				{error && !addError && <CreateError>{error}</CreateError>}
+				{!error && addError && <CreateError>{addError}</CreateError>}
+				{isAdding ? (
 					<LoaderNote loadingMessage={`Creating ${name} ...`} />
 				) : (
-					!isSucceed && (
+					!isPlaylistAdded && (
 						<Form>
 							<FormInput
 								type="text"
