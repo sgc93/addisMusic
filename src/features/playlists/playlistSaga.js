@@ -5,7 +5,6 @@ import { firestore } from "../../config/firebase_config";
 function* workPlaylistLoad(action) {
 	const uid = action.payload;
 
-	console.log(uid);
 	try {
 		// Create a query to retrieve all documents from the collection
 		const colRef = collection(firestore, `playlists${uid}`);
@@ -24,7 +23,6 @@ function* workPlaylistLoad(action) {
 			payload: userPlaylists,
 		});
 	} catch (error) {
-		console.log("error from playlist saga: " + error);
 		yield put({
 			type: "playlist/playlistLoadFailure",
 			payload: error,
@@ -46,20 +44,19 @@ function* workPlaylistAdd(action) {
 		yield setDoc(docRef, newPlaylist);
 		const updatedPlaylists = [...currentPlaylists, newPlaylist];
 		yield put({
-			type: "playlist/playlistAddSuccess",
+			type: "playlist/playlistUpdateSuccess",
 			payload: updatedPlaylists,
 		});
 	} catch (error) {
-		console.log(error);
 		yield put({
-			type: "playlist/playlistAddFailure",
+			type: "playlist/playlistUpdateFailure",
 			payload: "Unable to create new playlist, Check you connection",
 		});
 	}
 }
 
 export function* playlistAddSaga() {
-	yield takeEvery("playlist/playlistAdd", workPlaylistAdd);
+	yield takeEvery("playlist/playlistUpdate", workPlaylistAdd);
 }
 
 function* playlistSaga() {
