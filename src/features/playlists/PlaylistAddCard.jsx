@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../config/firebase_config";
+import { useClearUpdateState } from "../../hooks/useClearUpdateState";
 import {
 	CreateError,
 	Form,
@@ -20,7 +21,7 @@ import {
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
-import { playlistUpdate, playlistUpdateClose } from "./playlistSlice";
+import { playlistUpdate } from "./playlistSlice";
 
 const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 	const user = auth.currentUser;
@@ -31,20 +32,11 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 	const [name, setName] = useState("");
 	const [error, setError] = useState(false);
 
-	useEffect(() => {
-		let timeoutId;
-		if (isUpdated) {
-			timeoutId = setTimeout(() => {
-				closePopup();
-				dispatch(playlistUpdateClose());
-			}, 1500);
-		}
-		return () => clearTimeout(timeoutId);
-	}, [isUpdated]);
-
 	const closePopup = () => {
 		setIsOpened(false);
 	};
+
+	useClearUpdateState(closePopup);
 
 	const handleCreatePlaylist = (event) => {
 		event.preventDefault();
