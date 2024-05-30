@@ -7,6 +7,7 @@ const initialState = {
 	isUpdating: false,
 	updateError: "",
 	isUpdated: false,
+	selectedPlaylist: null,
 };
 
 const playListSlice = createSlice({
@@ -18,8 +19,6 @@ const playListSlice = createSlice({
 			state.isLoading = true;
 		},
 		playlistLoadSuccess(state, action) {
-			console.log(action.payload);
-
 			state.error = "";
 			state.isLoading = false;
 			state.allPlaylists = action.payload;
@@ -27,6 +26,9 @@ const playListSlice = createSlice({
 		playlistLoadFailure(state, action) {
 			state.error = action.payload;
 			state.isLoading = false;
+		},
+		playlistSelect(state, action) {
+			state.selectedPlaylist = action.payload;
 		},
 		playlistUpdate(state) {
 			state.updateError = "";
@@ -46,6 +48,13 @@ const playListSlice = createSlice({
 			state.isUpdating = false;
 			state.updateError = action.payload;
 		},
+		playlistReset(state) {
+			state.isUpdated = false;
+			state.isLoading = false;
+			state.isUpdated = false;
+			state.updateError = "";
+			state.error = "";
+		},
 	},
 });
 
@@ -57,6 +66,8 @@ export const {
 	playlistUpdateSuccess,
 	playlistUpdateClose,
 	playlistUpdateFailure,
+	playlistReset,
+	playlistSelect,
 } = playListSlice.actions;
 
 export default playListSlice.reducer;
