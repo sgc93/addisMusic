@@ -20,11 +20,11 @@ import {
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
-import { playlistAdd, playlistAddClose } from "./playlistSlice";
+import { playlistUpdate, playlistUpdateClose } from "./playlistSlice";
 
 const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 	const user = auth.currentUser;
-	const { isAdding, addError, isPlaylistAdded } = useSelector(
+	const { isUpdating, updateError, isUpdated } = useSelector(
 		(state) => state.playlist
 	);
 	const dispatch = useDispatch();
@@ -33,14 +33,14 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 
 	useEffect(() => {
 		let timeoutId;
-		if (isPlaylistAdded) {
+		if (isUpdated) {
 			timeoutId = setTimeout(() => {
 				closePopup();
-				dispatch(playlistAddClose());
+				dispatch(playlistUpdateClose());
 			}, 1500);
 		}
 		return () => clearTimeout(timeoutId);
-	}, [isPlaylistAdded]);
+	}, [isUpdated]);
 
 	const closePopup = () => {
 		setIsOpened(false);
@@ -52,7 +52,7 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 			setError("Please enter playlist name!");
 		} else {
 			dispatch(
-				playlistAdd({
+				playlistUpdate({
 					name: name,
 					collectionName: `playlists${user.uid}`,
 					currentPlaylists: currentPlaylists,
@@ -73,7 +73,7 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 						<MdClose />
 					</IconButton>
 				</FormHeader>
-				{isPlaylistAdded && (
+				{isUpdated && (
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
@@ -82,12 +82,12 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 						</SuccessMessage>
 					</SuccessBox>
 				)}
-				{error && !addError && <CreateError>{error}</CreateError>}
-				{!error && addError && <CreateError>{addError}</CreateError>}
-				{isAdding ? (
+				{error && !updateError && <CreateError>{error}</CreateError>}
+				{!error && updateError && <CreateError>{updateError}</CreateError>}
+				{isUpdating ? (
 					<LoaderNote loadingMessage={`Creating ${name} ...`} />
 				) : (
-					!isPlaylistAdded && (
+					!isUpdated && (
 						<Form>
 							<FormInput
 								type="text"
