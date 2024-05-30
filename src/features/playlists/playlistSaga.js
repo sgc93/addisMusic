@@ -1,6 +1,11 @@
-import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { put, takeEvery } from "redux-saga/effects";
 import { firestore } from "../../config/firebase_config";
+import {
+	addPlaylist,
+	deletePlaylist,
+	renamePlaylist,
+} from "../../services/user_playlists";
 
 function* workPlaylistLoad(action) {
 	const uid = action.payload;
@@ -31,26 +36,35 @@ function* workPlaylistLoad(action) {
 }
 
 function* workPlaylistAdd(action) {
-	const { name, collectionName, currentPlaylists } = action.payload;
-
-	const newPlaylist = {
-		name: name,
-		createdAt: new Date().toLocaleDateString(),
-		updatedAt: new Date().toLocaleDateString(),
-		musics: [],
-	};
+	const { updateType, name, collectionName, currentPlaylists } = action.payload;
 	try {
-		const docRef = doc(firestore, collectionName, name);
-		yield setDoc(docRef, newPlaylist);
-		const updatedPlaylists = [...currentPlaylists, newPlaylist];
-		yield put({
-			type: "playlist/playlistUpdateSuccess",
-			payload: updatedPlaylists,
-		});
+		let response;
+		switch (updateType) {
+			case "create":
+				response = yield addPlaylist(name, collectionName, currentPlaylists);
+				break;
+			case "update":
+				response = yield renamePlaylist();
+				break;
+			case "delete":
+				response = yield deletePlaylist();
+				break;
+		}
+		if (response.status === "ok") {
+			yield put({
+				type: "playlist/playlistUpdateSuccess",
+				payload: response.updatedPlaylists,
+			});
+		} else {
+			yield put({
+				type: "playlist/playlistUpdateFailure",
+				payload: response.error,
+			});
+		}
 	} catch (error) {
 		yield put({
 			type: "playlist/playlistUpdateFailure",
-			payload: "Unable to create new playlist, Check you connection",
+			payload: "Unable to handle this operation, Check you connection",
 		});
 	}
 }
