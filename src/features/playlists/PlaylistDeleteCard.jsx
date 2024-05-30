@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
-import { deleteObject, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IoWarning } from "react-icons/io5";
-import { auth, firestore, storage } from "../../config/firebase_config";
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../../config/firebase_config";
 import {
 	CreateError,
 	FormPage,
@@ -12,6 +11,7 @@ import {
 	SuccessMessage,
 } from "../../styles/styled_components";
 import LoaderNote from "../../ui/LoaderNote";
+import { playlistUpdate } from "./playlistSlice";
 
 const DeleteBox = styled.div`
 	display: flex;
@@ -77,76 +77,23 @@ const BtnBox = styled.div`
 	gap: 0.6rem;
 `;
 
-const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
+const PlaylistDeleteCard = ({ setIsOpened, playlistName }) => {
+	const { isUpdating, isUpdated, updateError, allPlaylists } = useSelector(
+		(state) => state.playlist
+	);
+	const dispatch = useDispatch();
 	const user = auth.currentUser;
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState(false);
-	const [isSucceed, setIsSucceed] = useState(false);
-	const [deletingStatus, setDeletingStatus] = useState("");
 
 	useEffect(() => {
 		let timeoutId;
-		if (isSucceed || error) {
+		if (isUpdated || updateError) {
 			timeoutId = setTimeout(() => {
 				setIsOpened(false);
 			}, 2000);
 		}
 
 		return () => clearTimeout(timeoutId);
-	}, [isSucceed, error]);
-
-	const deletePlaylist = async (collectionName, playlistId) => {
-		try {
-			setIsLoading(true);
-			setError("");
-			setIsSucceed(false);
-			setDeletingStatus("");
-
-			const playlistRef = doc(firestore, collectionName, playlistId);
-			setDeletingStatus("Navigating to playlist ...");
-			const playlistSnap = await getDoc(playlistRef);
-			if (playlistSnap.exists) {
-				setDeletingStatus(`Deleting ${playlistName}'s metadata ...`);
-				await deleteDoc(playlistRef);
-
-				const { musics } = playlistSnap.data();
-
-				musics.forEach((music, index) => {
-					setDeletingStatus(`Deleting songs (${index + 1}/${musics.length})`);
-					const songRef = ref(storage, music.songRef);
-					const coverRef = ref(storage, music.coverRef);
-
-					setDeletingStatus("Deleting music file ...");
-					deleteObject(songRef)
-						.then(() => {
-							//
-						})
-						.catch((error) => {
-							setError("Unable to delete song file.");
-						});
-
-					setDeletingStatus("Deleting music's cover art file ...");
-					deleteObject(coverRef)
-						.then(() => {
-							//
-						})
-						.catch((error) => {
-							setError("Unable to delete cover art file.");
-						});
-				});
-
-				setIsSucceed(true);
-			} else {
-				console.log("playlist doesnot exist andymore");
-				throw new Error(`${playlistName} doesn't exist anymore!`);
-			}
-		} catch (error) {
-			console.log(error);
-			setError(`Unable to delete ${playlistName}, Check you connection`);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+	}, [isUpdated, updateError]);
 
 	const closePopup = () => {
 		setIsOpened(false);
@@ -155,14 +102,21 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const handleDeletingPlaylist = (event) => {
 		event.preventDefault();
 		if (user) {
-			deletePlaylist(`playlists${user.uid}`, playlistName);
+			dispatch(
+				playlistUpdate({
+					updateType: "delete",
+					collectionName: `playlists${user.uid}`,
+					playlistName: playlistName,
+					currentPlaylists: allPlaylists,
+				})
+			);
 		}
 	};
 
 	return (
 		<FormPage>
 			<DeleteBox>
-				{isSucceed && (
+				{isUpdated && (
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
@@ -181,12 +135,12 @@ const PlaylistDeleteCard = ({ isOpened, setIsOpened, playlistName }) => {
 					</SuccessBox>
 				)}
 
-				{error && <CreateError>{error}</CreateError>}
-				{isLoading ? (
-					<LoaderNote loadingMessage={deletingStatus} />
+				{updateError && <CreateError>{updateError}</CreateError>}
+				{isUpdating ? (
+					<LoaderNote loadingMessage={`Deleting ${playlistName}...`} />
 				) : (
-					!isSucceed &&
-					!error && (
+					!isUpdated &&
+					!updateError && (
 						<>
 							<MessageBox>
 								<IconStyle>
