@@ -4,6 +4,11 @@ const initialState = {
 	allPlaylists: [],
 	error: "",
 	isLoading: false,
+	isAdding: false,
+	addError: "",
+	isPlaylistAdded: false,
+	isDeleting: false,
+	deleteError: "",
 };
 
 const playListSlice = createSlice({
@@ -25,10 +30,32 @@ const playListSlice = createSlice({
 			state.error = action.payload;
 			state.isLoading = false;
 		},
+		playlistAdd(state) {
+			state.addError = "";
+			state.isPlaylistAdded = false;
+			state.isAdding = true;
+		},
+		playlistAddSuccess(state, action) {
+			console.log(action);
+			state.addError = "";
+			state.isAdding = false;
+			state.allPlaylists = action.payload;
+			state.isPlaylistAdded = true;
+		},
+		playlistAddFailure(state, action) {
+			state.isAdding = false;
+			state.addError = action.payload;
+		},
 	},
 });
 
-export const { playlistLoad, playlistLoadSuccess, playlistLoadFailure } =
-	playListSlice.actions;
+export const {
+	playlistLoad,
+	playlistLoadSuccess,
+	playlistLoadFailure,
+	playlistAdd,
+	playlistAddSuccess,
+	playlistAddFailure,
+} = playListSlice.actions;
 
 export default playListSlice.reducer;
