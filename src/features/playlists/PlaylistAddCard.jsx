@@ -53,6 +53,7 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 		} else {
 			dispatch(
 				playlistUpdate({
+					updateType: "create",
 					name: name,
 					collectionName: `playlists${user.uid}`,
 					currentPlaylists: currentPlaylists,
