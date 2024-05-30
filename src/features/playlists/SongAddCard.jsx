@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { CgImage, CgMusic } from "react-icons/cg";
 import { IoWarning } from "react-icons/io5";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { firestore, storage } from "../../config/firebase_config";
 import { useSignedInUser } from "../../hooks/CheckAuth";
 import {
@@ -32,6 +33,7 @@ import {
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
 import FileRename from "./FileRename";
+import { playlistSelect, playlistUpdateAll } from "./playlistSlice";
 
 const PlaylistName = styled.span`
 	color: var(--color-gradient-2);
@@ -64,8 +66,13 @@ const FavoriteBtn = styled.button`
 	cursor: pointer;
 `;
 
-const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
-	// to have music data > title, artist name, duration, cover url and music url
+const SongAddCard = ({ setIsOpened }) => {
+	const { selectedPlaylist, allPlaylists } = useSelector(
+		(state) => state.playlist
+	);
+	const dispatch = useDispatch();
+	const playlistName = selectedPlaylist.name;
+
 	const [title, setTitle] = useState("");
 	const [artist, setArtist] = useState("");
 	const [duration, setDuration] = useState(0);
@@ -202,6 +209,16 @@ const SongAddCard = ({ isOpened, setIsOpened, playlistName }) => {
 
 			await updateDoc(playlistDocRef, playlistData);
 			setIsSuccess(true);
+			const updatedPlaylists = [];
+			allPlaylists.forEach((playlist) => {
+				if (playlist.name === selectedPlaylist.name) {
+					updatedPlaylists.push(playlistData);
+				} else {
+					updatedPlaylists.push(playlist);
+				}
+			});
+			dispatch(playlistUpdateAll(updatedPlaylists));
+			dispatch(playlistSelect(playlistData));
 		} catch (error) {
 			setError("Unable to upload music to your list, try again!");
 		} finally {
