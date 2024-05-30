@@ -15,6 +15,8 @@ const playListSlice = createSlice({
 			state.isLoading = true;
 		},
 		playlistLoadSuccess(state, action) {
+			console.log(action.payload);
+
 			state.error = "";
 			state.isLoading = false;
 			state.allPlaylists = action.payload;
@@ -27,6 +29,6 @@ const playListSlice = createSlice({
 });
 
 export const { playlistLoad, playlistLoadSuccess, playlistLoadFailure } =
-	playListSlice.reducer;
+	playListSlice.actions;
 
-export default playListSlice.actions;
+export default playListSlice.reducer;
