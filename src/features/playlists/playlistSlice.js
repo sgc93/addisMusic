@@ -4,11 +4,9 @@ const initialState = {
 	allPlaylists: [],
 	error: "",
 	isLoading: false,
-	isAdding: false,
-	addError: "",
-	isPlaylistAdded: false,
-	isDeleting: false,
-	deleteError: "",
+	isUpdating: false,
+	updateError: "",
+	isUpdated: false,
 };
 
 const playListSlice = createSlice({
@@ -31,22 +29,22 @@ const playListSlice = createSlice({
 			state.isLoading = false;
 		},
 		playlistAdd(state) {
-			state.addError = "";
-			state.isPlaylistAdded = false;
-			state.isAdding = true;
+			state.updateError = "";
+			state.isUpdated = false;
+			state.isUpdating = true;
 		},
 		playlistAddSuccess(state, action) {
-			state.addError = "";
-			state.isAdding = false;
+			state.updateError = "";
+			state.isUpdating = false;
 			state.allPlaylists = action.payload;
-			state.isPlaylistAdded = true;
+			state.isUpdated = true;
 		},
 		playlistAddClose(state) {
-			state.isPlaylistAdded = false;
+			state.isUpdated = false;
 		},
 		playlistAddFailure(state, action) {
-			state.isAdding = false;
-			state.addError = action.payload;
+			state.isUpdating = false;
+			state.updateError = action.payload;
 		},
 	},
 });
