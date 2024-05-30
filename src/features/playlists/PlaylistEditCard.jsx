@@ -25,9 +25,7 @@ import {
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
 
-const PlaylistEditCard = ({ setIsOpened, playlistName }) => {
-	const { allPlaylists } = useSelector((state) => state.playlist);
-
+const PlaylistEditCard = ({ isOpened, setIsOpened, playlistName }) => {
 	const user = auth.currentUser;
 	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
