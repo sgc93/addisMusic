@@ -239,7 +239,7 @@ const PlaylistDetail = ({ playlist, setIsDetailing }) => {
 		detailData;
 
 	useEffect(() => {
-		if (playlist) {
+		if (playlist.musics.length > 0) {
 			setDetailData(playlist_summarizer(playlist));
 			dispatch(currentMusicList(playlist.musics));
 			dispatch(currentMusicIndex(0));
