@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { put, takeEvery } from "redux-saga/effects";
 import { firestore } from "../../config/firebase_config";
 
@@ -34,7 +34,6 @@ function* workPlaylistLoad(action) {
 
 function* workPlaylistAdd(action) {
 	const { name, collectionName, currentPlaylists } = action.payload;
-	console.log(action);
 
 	const newPlaylist = {
 		name: name,
@@ -44,9 +43,8 @@ function* workPlaylistAdd(action) {
 	};
 	try {
 		const docRef = doc(firestore, collectionName, name);
-		// yield setDoc(docRef, newPlaylist);
-		const updatedPlaylists = currentPlaylists;
-		updatedPlaylists.push(newPlaylist);
+		yield setDoc(docRef, newPlaylist);
+		const updatedPlaylists = [...currentPlaylists, newPlaylist];
 		yield put({
 			type: "playlist/playlistAddSuccess",
 			payload: updatedPlaylists,
