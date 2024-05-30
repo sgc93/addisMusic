@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../config/firebase_config";
@@ -21,7 +21,7 @@ import {
 } from "../../styles/styled_components";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
-import { playlistUpdate } from "./playlistSlice";
+import { playlistReset, playlistUpdate } from "./playlistSlice";
 
 const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 	const user = auth.currentUser;
@@ -31,6 +31,9 @@ const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
 	const dispatch = useDispatch();
 	const [name, setName] = useState("");
 	const [error, setError] = useState(false);
+	useEffect(() => {
+		dispatch(playlistReset());
+	}, []);
 
 	const closePopup = () => {
 		setIsOpened(false);
