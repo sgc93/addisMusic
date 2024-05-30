@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import { collection, getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, firestore } from "../../config/firebase_config";
+import { useSignedInUser } from "../../hooks/CheckAuth";
 import { fadeClose, fadeOpen } from "../../styles/animation";
 import { AnimatedBtn } from "../../styles/styled_components";
 import FetchError from "../../ui/FetchError";
@@ -12,6 +11,7 @@ import PlaylistCard from "../../ui/PlaylistCard";
 import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
+import { playlistLoad } from "../playlists/playlistSlice";
 
 const PlayListBox = styled.div`
 	width: 97%;
@@ -86,53 +86,28 @@ const AddBtnToolTip = styled.span`
 `;
 
 const PlayList = () => {
-	const { allPlaylists } = useSelector((state) => state.playlist);
+	const { allPlaylists, isLoading, error } = useSelector(
+		(state) => state.playlist
+	);
 
 	const dispatch = useDispatch();
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 
-	const user = auth.currentUser;
+	const user = useSignedInUser();
 
-	const [error, setError] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
 	const [isDetailing, setIsDetailing] = useState(false);
 	const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
 	const [shouldDisplayed, setShouldDisplayed] = useState();
 
-	const [userPlaylists, setUserPlaylists] = useState([]);
-
 	useEffect(() => {
 		if (user) {
-			setIsLoading(false);
-			getAllPlaylistDocs();
-		} else {
-			setIsLoading(true);
+			dispatch(playlistLoad(user.uid));
 		}
 	}, [user]);
 
-	const getAllPlaylistDocs = async () => {
-		setIsLoading(true);
-		setError("");
-		try {
-			// Create a query to retrieve all documents from the collection
-			const colRef = collection(firestore, `playlists${user.uid}`);
-			const q = query(colRef);
-
-			const playlists = await getDocs(q);
-
-			const allPlaylists = [];
-			playlists.forEach((playlistDoc) => {
-				const playlistData = playlistDoc.data();
-				allPlaylists.push(playlistData);
-				console.log(playlistData);
-			});
-			setUserPlaylists(allPlaylists);
-		} catch (error) {
-			setError(error);
-		} finally {
-			setIsLoading(false);
-		}
+	const tryRetrievingAgain = () => {
+		if (user) dispatch(playlistLoad(user.uid));
 	};
 
 	const openPlaylistAdd = () => {
@@ -161,13 +136,13 @@ const PlayList = () => {
 						detail={
 							"Unable to fetch user playlists for some kind of technical issues, please check you connection and try again!"
 						}
-						tryAgain={() => getAllPlaylistDocs()}
+						tryAgain={() => tryRetrievingAgain()}
 					>
 						{error}
 					</FetchError>
 				</LoadingBox>
 			)}
-			{!isLoading && userPlaylists.length > 0 && !isDetailing && (
+			{!isLoading && allPlaylists.length > 0 && !isDetailing && (
 				<PlaylistListBox>
 					<PlaylistTitle>
 						<span>
@@ -178,7 +153,7 @@ const PlayList = () => {
 						</span>
 					</PlaylistTitle>
 					<ListBox>
-						{userPlaylists.map((playlist) => (
+						{allPlaylists.map((playlist) => (
 							<PlaylistCard
 								key={playlist.name}
 								playlist={playlist}
@@ -207,11 +182,11 @@ const PlayList = () => {
 					setIsDetailing={setIsDetailing}
 				/>
 			)}
-			{userPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
+			{allPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
 
 			{isAddPlaylistOpen && (
 				<PlaylistAddCard
-					isOpened={isAddPlaylistOpen}
+					currentPlaylists={allPlaylists}
 					setIsOpened={setIsAddPlaylistOpen}
 				/>
 			)}
