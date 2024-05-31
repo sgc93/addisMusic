@@ -149,9 +149,7 @@ const PlayList = () => {
 				<PlaylistListBox>
 					<PlaylistTitle>
 						<span>
-							{user.displayName
-								? `${user.displayName.split(" ")[0]}'s `
-								: "your"}
+							{user ? `${user.displayName.split(" ")[0]}'s ` : "your"}
 							Playlists
 						</span>
 					</PlaylistTitle>
