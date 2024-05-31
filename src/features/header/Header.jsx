@@ -57,11 +57,12 @@ const Header = () => {
 	const [isAbout, setIsAbout] = useState(false);
 	const [isContact, setIsContact] = useState(false);
 	const [isLike, setIsLike] = useState(false);
-	const shouldOpened = isAbout || isContact;
+	const shouldOpened = isAbout || isContact || isLike;
 
 	const closeModal = () => {
 		setIsAbout(false);
 		setIsContact(false);
+		setIsLike(false);
 	};
 
 	return (
@@ -70,9 +71,9 @@ const Header = () => {
 				<SearchBtn />
 				<TextBtn onClick={() => setIsAbout(true)}>About</TextBtn>
 				<TextBtn onClick={() => setIsContact(true)}>Contact</TextBtn>
-				<LikeBtn>
+				<TextBtn onClick={() => setIsLike(true)}>
 					<FaThumbsUp />
-				</LikeBtn>
+				</TextBtn>
 			</HeaderLeft>
 			<SignInUp />
 			{shouldOpened && (
