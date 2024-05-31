@@ -4,13 +4,11 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../../config/firebase_config";
-import { fadeClose, fadeOpen } from "../../styles/animation";
+import { fadeOpen } from "../../styles/animation";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
 import TrackCard from "../../ui/TrackCard";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
-import PlaylistAddCard from "../playlists/PlaylistAddCard";
-import PlaylistDetail from "../playlists/PlaylistDetail";
 
 const PlayListBox = styled.div`
 	width: 97%;
@@ -58,30 +56,6 @@ const Loader = styled.div`
 	background-color: var(--color-bg-primary);
 `;
 
-const AddBtnBox = styled.div`
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 1rem 2rem;
-
-	width: calc(50% - 5rem);
-`;
-const AddBtnToolTip = styled.span`
-	position: absolute;
-	bottom: -1.7rem;
-	padding: 0.3rem 0.7rem;
-	margin: 1.7rem 0rem 0rem 1rem;
-	border-radius: 0.4rem;
-	width: 11rem;
-	background-color: var(--color-text-primary);
-	color: var(--color-bg-primary);
-	display: ${(props) => (props.shouldDisplayed ? "flex" : "none")};
-
-	transition: 0.7s;
-	transition: ${(props) => (props.display ? fadeOpen : fadeClose)} 0.7s linear;
-`;
-
 const EmptyFavorites = styled.div`
 	width: 100%;
 	height: 100%;
@@ -114,22 +88,16 @@ const EmptyBtn = styled.button`
 `;
 
 const Favorite = () => {
-	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
-
 	const user = auth.currentUser;
-
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [isDetailing, setIsDetailing] = useState(false);
-	const [selectedPlaylist, setSelectedPlaylist] = useState("");
-
 	const [allFavorites, setAllFavorites] = useState([]);
 	const navigateTo = useNavigate();
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (allFavorites) {
+		if (allFavorites.length > 0) {
 			dispatch(currentMusicList(allFavorites));
 			dispatch(currentMusicIndex(0));
 		}
@@ -189,7 +157,7 @@ const Favorite = () => {
 			{error && (
 				<LoadingBox>
 					<FetchError
-						error={"Unable to fetch Playlists, please try again!"}
+						error={"Unable to fetch your favorites, please try again!"}
 						detail={
 							"Unable to fetch favorite songs for some kind of technical issues, please check you connection and try again!"
 						}
@@ -200,14 +168,11 @@ const Favorite = () => {
 				</LoadingBox>
 			)}
 			{!isLoading &&
-				!isDetailing &&
 				(allFavorites.length > 0 ? (
 					<PlaylistListBox>
 						<PlaylistTitle>
 							<span>
-								{user.displayName
-									? `${user.displayName.split(" ")[0]}'s `
-									: "your"}
+								{user ? `${user.displayName.split(" ")[0]}'s ` : "your"}
 								<span style={{ color: "pink" }}>favorite</span> songs
 							</span>
 						</PlaylistTitle>
@@ -229,19 +194,6 @@ const Favorite = () => {
 						</EmptyBtn>
 					</EmptyFavorites>
 				))}
-			{isDetailing && (
-				<PlaylistDetail
-					playlist={selectedPlaylist}
-					setIsDetailing={setIsDetailing}
-				/>
-			)}
-
-			{isAddPlaylistOpen && (
-				<PlaylistAddCard
-					isOpened={isAddPlaylistOpen}
-					setIsOpened={setIsAddPlaylistOpen}
-				/>
-			)}
 		</PlayListBox>
 	);
 };
