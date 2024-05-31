@@ -15,6 +15,10 @@ import {
 	currentMusicPausePlay,
 	currentMusicTouch,
 } from "../features/music/musicSlice";
+import {
+	playlistSelect,
+	playlistUpdateAll,
+} from "../features/playlists/playlistSlice";
 import { fadeClose, fadeOpen, rotate360 } from "../styles/animation";
 import {
 	SuccessBox,
@@ -272,6 +276,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 
 	const { music, isPaused, currMusicIndex, touchedIndex, openedIndex } =
 		useSelector((state) => state.currMusic);
+	const { allPlaylists } = useSelector((state) => state.playlist);
 	const isSelected = currMusicIndex == index;
 	const isTouched = touchedIndex === index;
 	const isDetailOpened = openedIndex === index;
@@ -353,6 +358,16 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 				// updating the playlist with the updated music list
 				const updatedDocData = { ...docData, musics: updatedMusicList };
 				await updateDoc(docRef, updatedDocData);
+				const updatedPlaylists = [];
+				allPlaylists.forEach((playlist) => {
+					if (playlist.name === song.playlist) {
+						updatedPlaylists.push(updatedDocData);
+					} else {
+						updatedPlaylists.push(playlist);
+					}
+				});
+				dispatch(playlistUpdateAll(updatedPlaylists));
+				dispatch(playlistSelect(updatedDocData));
 				setIsSucceed(true);
 			}
 		} catch (error) {
