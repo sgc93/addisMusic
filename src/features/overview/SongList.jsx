@@ -86,7 +86,7 @@ const SongList = () => {
 		<ListBox>
 			<ListHeader>
 				<ListBtn isSelected>For you</ListBtn>
-				<ListBtn onClick={() => openMenu("/songs")}>Your songs</ListBtn>
+				<ListBtn onClick={() => openMenu("songs")}>Your songs</ListBtn>
 				<ListBtn onClick={() => navigateTo("/local")}>Play Locals</ListBtn>
 			</ListHeader>
 			<List>
