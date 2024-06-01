@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
-import { collection, getDocs, query } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { auth, firestore } from "../../config/firebase_config";
+import { auth } from "../../config/firebase_config";
 import { fadeOpen } from "../../styles/animation";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
 import TrackCard from "../../ui/TrackCard";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
+import { playlistLoad } from "../playlists/playlistSlice";
 
 const PlayListBox = styled.div`
 	width: 97%;
@@ -88,61 +88,30 @@ const EmptyBtn = styled.button`
 `;
 
 const Favorite = () => {
+	const { allFavorites, error, isLoading } = useSelector(
+		(state) => state.playlist
+	);
 	const user = auth.currentUser;
-	const [error, setError] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [allFavorites, setAllFavorites] = useState([]);
 	const navigateTo = useNavigate();
-
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (allFavorites.length > 0) {
-			dispatch(currentMusicList(allFavorites));
-			dispatch(currentMusicIndex(0));
+		if (allFavorites) {
+			if (allFavorites.length > 0) {
+				dispatch(currentMusicList(allFavorites));
+				dispatch(currentMusicIndex(0));
+			}
 		}
 	}, [allFavorites]);
 
 	useEffect(() => {
-		if (user) {
-			setIsLoading(false);
+		if (user && !allFavorites) {
 			getAllPlaylistDocs();
-		} else {
-			setIsLoading(true);
 		}
 	}, [user]);
 
 	const getAllPlaylistDocs = async () => {
-		setIsLoading(true);
-		setError();
-		try {
-			// Create a query to retrieve all documents from the collection
-			const colRef = collection(firestore, `playlists${user.uid}`);
-			const q = query(colRef);
-
-			const playlistDocs = await getDocs(q);
-			if (playlistDocs.docs.length == 0) {
-				throw new Error(
-					"Unable to fetch playlist, Check you connection please!"
-				);
-			}
-
-			const favorites = [];
-			playlistDocs.forEach((playlistDoc) => {
-				const playlistData = playlistDoc.data();
-				playlistData.musics.forEach((music) => {
-					if (music.isFavorite) {
-						favorites.push(music);
-					}
-				});
-			});
-
-			setAllFavorites(favorites);
-		} catch (error) {
-			setError(error);
-		} finally {
-			setIsLoading(false);
-		}
+		dispatch(playlistLoad(user.uid));
 	};
 
 	return (
@@ -167,33 +136,32 @@ const Favorite = () => {
 					</FetchError>
 				</LoadingBox>
 			)}
-			{!isLoading &&
-				(allFavorites.length > 0 ? (
-					<PlaylistListBox>
-						<PlaylistTitle>
-							<span>
-								{user ? `${user.displayName.split(" ")[0]}'s ` : "your"}
-								<span style={{ color: "pink" }}>favorite</span> songs
-							</span>
-						</PlaylistTitle>
-						<ListBox>
-							{allFavorites.length > 0 && (
-								<>
-									{allFavorites.map((favorite, index) => (
-										<TrackCard song={favorite} index={index} key={index} />
-									))}
-								</>
-							)}
-						</ListBox>
-					</PlaylistListBox>
-				) : (
-					<EmptyFavorites>
-						<EmptyMessage>You have no favorites!</EmptyMessage>
-						<EmptyBtn onClick={() => navigateTo("/playlists")}>
-							Your playlistst
-						</EmptyBtn>
-					</EmptyFavorites>
-				))}
+			{!isLoading && !error && allFavorites && allFavorites.length > 0 ? (
+				<PlaylistListBox>
+					<PlaylistTitle>
+						<span>
+							{user ? `${user.displayName.split(" ")[0]}'s ` : "your"}
+							<span style={{ color: "pink" }}>favorite</span> songs
+						</span>
+					</PlaylistTitle>
+					<ListBox>
+						{allFavorites.length > 0 && (
+							<>
+								{allFavorites.map((favorite, index) => (
+									<TrackCard song={favorite} index={index} key={index} />
+								))}
+							</>
+						)}
+					</ListBox>
+				</PlaylistListBox>
+			) : (
+				<EmptyFavorites>
+					<EmptyMessage>You have no favorites!</EmptyMessage>
+					<EmptyBtn onClick={() => navigateTo("/playlists")}>
+						Your playlistst
+					</EmptyBtn>
+				</EmptyFavorites>
+			)}
 		</PlayListBox>
 	);
 };
