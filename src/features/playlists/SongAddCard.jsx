@@ -33,7 +33,11 @@ import {
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
 import FileRename from "./FileRename";
-import { playlistSelect, playlistUpdateAll } from "./playlistSlice";
+import {
+	playlistSelect,
+	playlistUpdateAll,
+	playlistUpdateFavorite,
+} from "./playlistSlice";
 
 const PlaylistName = styled.span`
 	color: var(--color-gradient-2);
@@ -67,7 +71,7 @@ const FavoriteBtn = styled.button`
 `;
 
 const SongAddCard = ({ setIsOpened }) => {
-	const { selectedPlaylist, allPlaylists } = useSelector(
+	const { selectedPlaylist, allPlaylists, allFavorites } = useSelector(
 		(state) => state.playlist
 	);
 	const dispatch = useDispatch();
@@ -219,6 +223,9 @@ const SongAddCard = ({ setIsOpened }) => {
 			});
 			dispatch(playlistUpdateAll(updatedPlaylists));
 			dispatch(playlistSelect(playlistData));
+			if (isFavorite) {
+				dispatch(playlistUpdateFavorite([...allFavorites, musicData]));
+			}
 		} catch (error) {
 			setError("Unable to upload music to your list, try again!");
 		} finally {
