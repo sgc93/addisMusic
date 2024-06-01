@@ -18,6 +18,7 @@ import {
 import {
 	playlistSelect,
 	playlistUpdateAll,
+	playlistUpdateFavorite,
 } from "../features/playlists/playlistSlice";
 import { fadeClose, fadeOpen, rotate360 } from "../styles/animation";
 import {
@@ -276,7 +277,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 
 	const { music, isPaused, currMusicIndex, touchedIndex, openedIndex } =
 		useSelector((state) => state.currMusic);
-	const { allPlaylists } = useSelector((state) => state.playlist);
+	const { allPlaylists, allFavorites } = useSelector((state) => state.playlist);
 	const isSelected = currMusicIndex == index;
 	const isTouched = touchedIndex === index;
 	const isDetailOpened = openedIndex === index;
@@ -359,6 +360,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 				const updatedDocData = { ...docData, musics: updatedMusicList };
 				await updateDoc(docRef, updatedDocData);
 				const updatedPlaylists = [];
+				const favorites = [];
 				allPlaylists.forEach((playlist) => {
 					if (playlist.name === song.playlist) {
 						updatedPlaylists.push(updatedDocData);
@@ -366,8 +368,22 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 						updatedPlaylists.push(playlist);
 					}
 				});
+				if (isFavorite) {
+					allFavorites.forEach((music) => {
+						favorites.push(music);
+					});
+					favorites.push({ ...song, isFavorite: true });
+				} else {
+					allFavorites.forEach((music) => {
+						if (music.title !== song.title) {
+							favorites.push(music);
+						}
+					});
+				}
+				console.log(favorites);
 				dispatch(playlistUpdateAll(updatedPlaylists));
 				dispatch(playlistSelect(updatedDocData));
+				dispatch(playlistUpdateFavorite(favorites));
 				setIsSucceed(true);
 			}
 		} catch (error) {
