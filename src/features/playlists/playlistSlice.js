@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	allPlaylists: [],
 	allFavorites: null,
+	allSongs: null,
 	error: "",
 	isLoading: false,
 	isUpdating: false,
@@ -24,6 +25,7 @@ const playListSlice = createSlice({
 			state.isLoading = false;
 			state.allPlaylists = action.payload.allPlaylists;
 			state.allFavorites = action.payload.allFavorites;
+			state.allSongs = action.payload.allSongs;
 		},
 		playlistLoadFailure(state, action) {
 			state.error = action.payload;
@@ -63,6 +65,9 @@ const playListSlice = createSlice({
 		playlistUpdateFavorite(state, action) {
 			state.allFavorites = action.payload;
 		},
+		playlistUpdateSong(state, action) {
+			state.allSongs = action.payload;
+		},
 	},
 });
 
@@ -78,6 +83,7 @@ export const {
 	playlistSelect,
 	playlistUpdateAll,
 	playlistUpdateFavorite,
+	playlistUpdateSong,
 } = playListSlice.actions;
 
 export default playListSlice.reducer;
