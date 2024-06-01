@@ -413,7 +413,6 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	};
 
 	const handleDeletingMusic = async (song) => {
-		console.log(song);
 		try {
 			setIsLoading(true);
 			setError("");
@@ -435,6 +434,16 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 
 				setDeleteStatus("Deleting music metadata ...");
 				const newPlaylistData = { ...docData, musics: updatedMusicList };
+				const updatedPlaylists = [];
+				allPlaylists.forEach((playlist) => {
+					if (playlist.name === song.playlist) {
+						updatedPlaylists.push(newPlaylistData);
+					} else {
+						updatedPlaylists.push(playlist);
+					}
+				});
+				dispatch(playlistUpdateAll(updatedPlaylists));
+				dispatch(playlistSelect(newPlaylistData));
 				await updateDoc(docRef, newPlaylistData);
 
 				// Create a reference to the file to delete
