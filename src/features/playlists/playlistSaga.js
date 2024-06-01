@@ -18,14 +18,20 @@ function* workPlaylistLoad(action) {
 		const playlists = yield getDocs(q);
 
 		const userPlaylists = [];
+		const favorites = [];
 		playlists.forEach((playlistDoc) => {
 			const playlistData = playlistDoc.data();
 			userPlaylists.push(playlistData);
+			playlistData.musics.forEach((music) => {
+				if (music.isFavorite) {
+					favorites.push(music);
+				}
+			});
 		});
 
 		yield put({
 			type: "playlist/playlistLoadSuccess",
-			payload: userPlaylists,
+			payload: { allPlaylists: userPlaylists, allFavorites: favorites },
 		});
 	} catch (error) {
 		yield put({
