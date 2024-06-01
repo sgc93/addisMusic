@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { musicList } from "../../assets/music_list";
 import { useNavigateMenu } from "../../hooks/useNavigateMenu";
 import FetchError from "../../ui/FetchError";
 import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
 import TrackCard from "../../ui/TrackCard";
-import { currentMusicList } from "../music/musicSlice";
+import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
+import { publicLoad } from "./publicSongsSlice";
 
 const ListBox = styled.div`
 	width: 100%;
@@ -70,17 +71,26 @@ const ListBtn = styled.button`
 `;
 
 const SongList = () => {
+	const { isLoading, error, publicSongs } = useSelector(
+		(state) => state.public
+	);
 	const dispatch = useDispatch();
 	const navigateTo = useNavigate();
 	const openMenu = useNavigateMenu();
 
-	const tracks = musicList;
-	const isLoading = false;
-	const error = "";
+	useEffect(() => {
+		dispatch(publicLoad());
+	}, []);
 
-	if (tracks) {
-		dispatch(currentMusicList(tracks));
-	}
+	useEffect(() => {
+		if (publicSongs) {
+			if (publicSongs.length > 0) {
+				dispatch(currentMusicList(publicSongs));
+				dispatch(currentMusicIndex(0));
+				console.log(publicSongs);
+			}
+		}
+	}, [publicSongs]);
 
 	return (
 		<ListBox>
@@ -90,31 +100,31 @@ const SongList = () => {
 				<ListBtn onClick={() => navigateTo("/local")}>Play Locals</ListBtn>
 			</ListHeader>
 			<List>
-				{isLoading &&
-					Array.from({ length: 8 }).map((index) => (
-						<LoaderBox key={index}>
-							<LoaderNote loadingMessage={"fetching ..."} />
-						</LoaderBox>
-					))}
+				{isLoading && (
+					<LoaderBox>
+						<LoaderNote loadingMessage={"fetching ..."} />
+					</LoaderBox>
+				)}
 				{error && (
 					<FetchError
 						error={error}
 						detail={
-							"Unable to fetch list of recommended musics due to some kind of technical issue, check your network connection and refresh this page."
+							"Unable to fetch list of songs due to some kind of technical issue, check your network connection and refresh this page."
 						}
 					/>
 				)}
-				{tracks &&
-					!isLoading &&
-					!error &&
-					tracks.map((song, index) => (
+				{publicSongs && !isLoading && !error && publicSongs.length > 0 ? (
+					publicSongs.map((song, index) => (
 						<TrackCard
-							key={song?.id}
+							key={index}
 							shouldMore={true}
 							song={song}
 							index={index}
 						/>
-					))}
+					))
+				) : (
+					<span>there no songs streamed from addis music</span>
+				)}
 			</List>
 		</ListBox>
 	);
