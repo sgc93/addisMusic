@@ -18,7 +18,7 @@ const HeaderBox = styled.div`
 	margin: 0.6rem;
 
 	backdrop-filter: blur(4px);
-	z-index: 1;
+	z-index: 6;
 `;
 
 const HeaderLeft = styled.div`

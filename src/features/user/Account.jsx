@@ -55,7 +55,7 @@ const ProfileBox = styled.div`
 	background-color: var(--color-bg-primary);
 	border-radius: 1rem;
 
-	z-index: 1;
+	z-index: 779;
 `;
 
 const Part = styled.div`
@@ -169,7 +169,7 @@ const PassResetBox = styled.div`
 	background-color: var(--color-bg-primary);
 	border-radius: 1rem;
 
-	z-index: 1;
+	z-index: 800;
 `;
 
 const ResetPart = styled.div`

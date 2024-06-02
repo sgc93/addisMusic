@@ -11,7 +11,7 @@ export const AuthPage = styled.section`
 	width: 100dvw;
 	height: 100dvh;
 	backdrop-filter: blur(10px);
-	z-index: 2;
+	z-index: 788;
 `;
 export const AuthBox = styled.div`
 	display: flex;

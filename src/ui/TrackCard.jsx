@@ -211,7 +211,7 @@ const DotBtnDetail = styled.div`
 
 	animation: ${(props) => (props.isOpened ? fadeOpen : fadeClose)} 0.8s;
 
-	z-index: 1;
+	z-index: 10;
 `;
 
 const DetailTitle = styled.div`

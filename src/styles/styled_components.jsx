@@ -12,7 +12,7 @@ export const FormPage = styled.section`
 	width: 100%;
 	height: 100%;
 	backdrop-filter: blur(10px);
-	z-index: 2;
+	z-index: 100;
 `;
 export const FormBox = styled.div`
 	display: flex;
@@ -210,7 +210,7 @@ export const TogglerBtn = styled.button`
 
 export const AnimatedBtn = styled.button`
 	position: relative;
-	z-index: 2;
+	z-index: 9;
 	display: flex;
 	align-items: center;
 	justify-content: center;
