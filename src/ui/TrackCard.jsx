@@ -54,6 +54,8 @@ const Card = styled.div`
 		background-color: var(--color-border-primary);
 		color: var(--color-bg-primary);
 	}
+
+	animation: ${fadeOpen} 0.4s linear;
 `;
 
 const ImgBox = styled.div`
