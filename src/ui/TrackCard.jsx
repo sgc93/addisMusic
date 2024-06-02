@@ -1,8 +1,14 @@
 import styled from "@emotion/styled";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
-import { BiCheckCircle, BiError, BiPause, BiPlay } from "react-icons/bi";
+import { useEffect, useRef, useState } from "react";
+import {
+	BiCheckCircle,
+	BiDownload,
+	BiError,
+	BiPause,
+	BiPlay,
+} from "react-icons/bi";
 import { BsMusicNote } from "react-icons/bs";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { HiDotsVertical } from "react-icons/hi";
@@ -180,6 +186,28 @@ const Btn = styled.button`
 
 	&:hover {
 		background-color: var(--color-bg-primary);
+	}
+`;
+const DownloadBtn = styled.a`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 1.5rem;
+	border: none;
+	border-radius: 50%;
+	padding: 0.3rem;
+	background: none;
+	color: var(--color-text-primary);
+	cursor: pointer;
+	transition: all 0.4s;
+
+	&:hover {
+		background-color: var(--color-bg-primary);
+	}
+
+	&:active {
+		background-color: var(--color-bg-secondary);
 	}
 `;
 
@@ -362,6 +390,8 @@ const TrackCard = ({
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [isSucceed, setIsSucceed] = useState(false);
+
+	const downloadRef = useRef();
 
 	useEffect(() => {
 		let timeoutId;
@@ -592,6 +622,38 @@ const TrackCard = ({
 		handleOpenDetail();
 	};
 
+	const downloadSong = async (song) => {
+		try {
+			try {
+				// Fetch the file from the URL
+				const response = await fetch(song.url);
+
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+
+				// Read the response as a Blob
+				const blob = await response.blob();
+
+				// Create a link element
+				const link = document.createElement("a");
+				link.href = window.URL.createObjectURL(blob);
+				link.download = song.url + ".mp3";
+
+				// Append the link to the document body and click it to start the download
+				document.body.appendChild(link);
+				link.click();
+
+				// Clean up and remove the link
+				link.parentNode.removeChild(link);
+			} catch (error) {
+				//
+			}
+		} catch (error) {
+			//
+		}
+	};
+
 	return (
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
@@ -776,6 +838,18 @@ const TrackCard = ({
 							)}
 						</Btn>
 					)}
+					<Btn
+						onMouseEnter={() => {
+							setHint("download");
+						}}
+						onMouseLeave={() => {
+							setHint("");
+						}}
+						onClick={() => downloadSong(song)}
+					>
+						<BiDownload />
+						<a ref={downloadRef} hidden />
+					</Btn>
 					<Btn
 						onClick={() => handlePlay(index)}
 						onMouseEnter={() => {
