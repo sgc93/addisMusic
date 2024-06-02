@@ -43,43 +43,46 @@ const TextBtn = styled.button`
 	cursor: pointer;
 `;
 
-const LikeBtn = styled.button`
-	font-size: 1.1rem;
+const LikeBtn = styled.a`
 	font-weight: bold;
 	color: var(--color-text-primary);
 	background: var(--color-bg-secondary);
 	padding: 0.3rem 0.5rem;
 	border: none;
 	border-radius: 0.4rem;
+
+	cursor: pointer;
 `;
 
 const Header = () => {
 	const [isAbout, setIsAbout] = useState(false);
 	const [isContact, setIsContact] = useState(false);
-	const [isLike, setIsLike] = useState(false);
-	const shouldOpened = isAbout || isContact || isLike;
+	const shouldOpened = isAbout || isContact;
 
 	const closeModal = () => {
 		setIsAbout(false);
 		setIsContact(false);
-		setIsLike(false);
+	};
+
+	const openModal = (isAbout, isContact) => {
+		setIsContact(isContact);
+		setIsAbout(isAbout);
 	};
 
 	return (
 		<HeaderBox>
 			<HeaderLeft>
 				<SearchBtn />
-				<TextBtn onClick={() => setIsAbout(true)}>About</TextBtn>
-				<TextBtn onClick={() => setIsContact(true)}>Contact</TextBtn>
-				<TextBtn onClick={() => setIsLike(true)}>
+				<TextBtn onClick={() => openModal(false, true)}>About</TextBtn>
+				<TextBtn onClick={() => openModal(true, false)}>Contact</TextBtn>
+				<LikeBtn href="https://github.com/sgc93/addismusic" target="_blank">
 					<FaThumbsUp />
-				</TextBtn>
+				</LikeBtn>
 			</HeaderLeft>
 			<SignInUp />
 			{shouldOpened && (
 				<HeaderModal
 					isAbout={isAbout}
-					isLike={isLike}
 					isContact={isContact}
 					closeModal={closeModal}
 				/>

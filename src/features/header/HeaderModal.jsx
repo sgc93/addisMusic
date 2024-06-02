@@ -141,7 +141,7 @@ const FeatureBody = styled.span`
 	color: var(--color-bg-4);
 `;
 
-const HeaderModal = ({ isAbout, isContact, isLike, closeModal }) => {
+const HeaderModal = ({ isAbout, isContact, closeModal }) => {
 	return (
 		<ModalWindow isAbout={isAbout}>
 			<ModalBox>
@@ -152,34 +152,40 @@ const HeaderModal = ({ isAbout, isContact, isLike, closeModal }) => {
 					</IconButton>
 				</ModalHeader>
 				<ModalBody>
-					<BodyText>
-						<BodyTextHeader>AddisMusic</BodyTextHeader>
-						<BodyTextContent>
-							Welcome to AddisMusic, your ultimate destination for a seamless
-							music streaming, storage, and playing experience. AddisMusic is
-							designed with ease of use in mind, providing music enthusiasts
-							with a platform to enjoy their favorite tunes effortlessly.
-							Whether you’re storing your personal music collection or exploring
-							new tracks, AddisMusic has got you covered.
-						</BodyTextContent>
-					</BodyText>
-					<Features>
-						<span>Key features:</span>
-						{features.map((feature, index) => (
-							<Feature key={index}>
-								<FeatureTitle>
-									<TbMusicBolt />
-									{feature.title}
-								</FeatureTitle>
-								<FeatureBody>{feature.body}</FeatureBody>
-							</Feature>
-						))}
-					</Features>
-					<BodyTextContent>
-						At AddisMusic, we are committed to enhancing your musical journey
-						with features that are both powerful and user-friendly. Join us and
-						transform the way you experience music today!
-					</BodyTextContent>
+					{isAbout && (
+						<>
+							<BodyText>
+								<BodyTextHeader>AddisMusic</BodyTextHeader>
+								<BodyTextContent>
+									Welcome to AddisMusic, your ultimate destination for a
+									seamless music streaming, storage, and playing experience.
+									AddisMusic is designed with ease of use in mind, providing
+									music enthusiasts with a platform to enjoy their favorite
+									tunes effortlessly. Whether you’re storing your personal music
+									collection or exploring new tracks, AddisMusic has got you
+									covered.
+								</BodyTextContent>
+							</BodyText>
+							<Features>
+								<span>Key features:</span>
+								{features.map((feature, index) => (
+									<Feature key={index}>
+										<FeatureTitle>
+											<TbMusicBolt />
+											{feature.title}
+										</FeatureTitle>
+										<FeatureBody>{feature.body}</FeatureBody>
+									</Feature>
+								))}
+							</Features>
+							<BodyTextContent>
+								At AddisMusic, we are committed to enhancing your musical
+								journey with features that are both powerful and user-friendly.
+								Join us and transform the way you experience music today!
+							</BodyTextContent>
+						</>
+					)}
+					{isContact && <BodyText>contact</BodyText>}
 				</ModalBody>
 			</ModalBox>
 		</ModalWindow>
