@@ -8,8 +8,8 @@ import Search from "./features/search/Search";
 import Favorite from "./features/user/Favorite";
 import PlayList from "./features/user/PlayList";
 import UserSong from "./features/user/UserSong";
-import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // defining routes
 const router = createBrowserRouter([
@@ -56,8 +56,8 @@ const router = createBrowserRouter([
 		],
 	},
 	{
-		path: "auth",
-		element: <AuthPage />,
+		path: "*",
+		element: <NotFoundPage />,
 	},
 ]);
 
