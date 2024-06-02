@@ -1,8 +1,11 @@
 import styled from "@emotion/styled";
+import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
+import { auth } from "../config/firebase_config";
 import Auth from "../features/auth/Auth";
+import { authUserSet } from "../features/auth/authSlice";
 import { loadCategories } from "../features/categories/categoriesSlice";
 import Footer from "../features/footer/Footer";
 import Header from "../features/header/Header";
@@ -45,6 +48,13 @@ const HomePage = () => {
 	useEffect(() => {
 		dispatch(loadCategories());
 	}, []);
+
+	useEffect(() => {
+		const authChange = () =>
+			onAuthStateChanged(auth, (currUser) => dispatch(authUserSet(currUser)));
+
+		return authChange;
+	}, [auth]);
 
 	return (
 		<HomeSection>
