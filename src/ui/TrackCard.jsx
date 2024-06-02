@@ -16,6 +16,7 @@ import {
 	currentMusicTouch,
 } from "../features/music/musicSlice";
 import {
+	playlistLoad,
 	playlistSelect,
 	playlistUpdateAll,
 	playlistUpdateFavorite,
@@ -291,6 +292,10 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const [error, setError] = useState("");
 	const [isSucceed, setIsSucceed] = useState(false);
 
+	const [userPlaylists, setUserPlaylists] = useState(null);
+	const [hasPlaylist, setHasPlaylist] = useState(false);
+	const [isAdding, setIsAdding] = useState(false);
+
 	useEffect(() => {
 		let timeoutId;
 		if (isSucceed || error) {
@@ -479,6 +484,24 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 		}
 	};
 
+	const addToPlaylist = (song) => {
+		// check if user signed in
+		if (user) {
+			if (allPlaylists) {
+				if (allPlaylists.length > 0) {
+					const playlists = [];
+					allPlaylists.forEach((playlist) => playlists.push(playlist.name));
+					setHasPlaylist(true);
+					setUserPlaylists(playlists);
+				} else {
+					setHasPlaylist(false);
+				}
+			} else {
+				dispatch(playlistLoad(user.uid));
+			}
+		}
+	};
+
 	return (
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
@@ -516,22 +539,17 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 									</DetailTitle>
 									<DetailChoice>
 										{shouldMoreAdd && (
-											<>
-												<Choice>
-													<ChoiceTitle>
-														Build thicker one of your playlist with this track
-													</ChoiceTitle>
-													<ChoiceBtn onClick={() => {}}>
-														Add to playlist
-													</ChoiceBtn>
-												</Choice>
-												<Choice>
-													<ChoiceTitle>
-														Enrich your song list by one more track
-													</ChoiceTitle>
-													<ChoiceBtn onClick={() => {}}>Add to songs</ChoiceBtn>
-												</Choice>
-											</>
+											<Choice>
+												<ChoiceTitle>
+													Build thicker one of your playlist with{" "}
+													<span style={{ color: "var(--color-gradient-2)" }}>
+														{song.title}
+													</span>
+												</ChoiceTitle>
+												<ChoiceBtn onClick={() => addToPlaylist(song)}>
+													Add to playlist
+												</ChoiceBtn>
+											</Choice>
 										)}
 										{isLoading && <LoaderNote loadingMessage={deleteStatus} />}
 										{isSucceed && (
