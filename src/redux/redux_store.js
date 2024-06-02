@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
+import authReducer from "../features/auth/authSlice";
 import signUpReducer from "../features/auth/signUp/signUpSlice";
 import signInReducer from "../features/auth/singIn/signInSlice";
 import categoriesReducer from "../features/categories/categoriesSlice";
@@ -11,6 +12,7 @@ export const saga = createSagaMiddleware();
 
 export const store = configureStore({
 	reducer: {
+		authUser: authReducer,
 		signUpCheck: signUpReducer,
 		signInCheck: signInReducer,
 		currMusic: currMusicReducer,
