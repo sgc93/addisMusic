@@ -20,9 +20,14 @@ function* workPlaylistLoad(action) {
 		const userPlaylists = [];
 		const favorites = [];
 		const songs = [];
+		const playlistNames = [];
 		playlists.forEach((playlistDoc) => {
 			const playlistData = playlistDoc.data();
 			userPlaylists.push(playlistData);
+			playlistNames.push({
+				name: playlistData.name,
+				musics: playlistData.musics.length,
+			});
 			playlistData.musics.forEach((music) => {
 				songs.push(music);
 				if (music.isFavorite) {
@@ -30,12 +35,12 @@ function* workPlaylistLoad(action) {
 				}
 			});
 		});
-		console.log(songs);
 
 		yield put({
 			type: "playlist/playlistLoadSuccess",
 			payload: {
 				allPlaylists: userPlaylists,
+				playlistNames: playlistNames,
 				allFavorites: favorites,
 				allSongs: songs,
 			},
