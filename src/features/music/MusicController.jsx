@@ -92,9 +92,8 @@ const MusicController = () => {
 	}, [isOpened, isHovered]);
 
 	useEffect(() => {
-		if (music && isMusicFinished) {
-			handlePlayingMusic(true);
-			resetMusicTime();
+		if (isMusicFinished) {
+			playNextPrev(1);
 		}
 	}, [isMusicFinished]);
 
