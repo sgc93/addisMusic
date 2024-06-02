@@ -244,7 +244,7 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 			setIsSuccess(true);
 			const updatedPlaylists = [];
 			allPlaylists.forEach((playlist) => {
-				if (playlist.name === selectedPlaylist.name) {
+				if (playlist.name === playlistName) {
 					updatedPlaylists.push(playlistData);
 				} else {
 					updatedPlaylists.push(playlist);
