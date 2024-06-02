@@ -102,7 +102,7 @@ const PlayList = () => {
 	const [shouldDisplayed, setShouldDisplayed] = useState();
 
 	useEffect(() => {
-		if (user) {
+		if (user && !allPlaylists) {
 			dispatch(playlistLoad(user.uid));
 		}
 	}, [user]);
@@ -145,44 +145,49 @@ const PlayList = () => {
 					</FetchError>
 				</LoadingBox>
 			)}
-			{!isLoading && allPlaylists.length > 0 && !isDetailing && (
-				<PlaylistListBox>
-					<PlaylistTitle>
-						<span>
-							{user ? `${user.displayName.split(" ")[0]}'s ` : "your"}
-							Playlists
-						</span>
-					</PlaylistTitle>
-					<ListBox>
-						{allPlaylists.map((playlist, index) => (
-							<PlaylistCard
-								key={index}
-								playlist={playlist}
-								handleClick={showPlaylistDetail}
-							/>
-						))}
-						<AddBtnBox>
-							<AddBtnToolTip shouldDisplayed={shouldDisplayed}>
-								Add one more playlist
-							</AddBtnToolTip>
-							<AnimatedBtn
-								onClick={() => openPlaylistAdd()}
-								onMouseEnter={() => handleHovering()}
-								onMouseLeave={() => handleHovering()}
-							>
-								<TbMusicPlus />
-							</AnimatedBtn>
-						</AddBtnBox>
-					</ListBox>
-				</PlaylistListBox>
-			)}
+			{!isLoading &&
+				allPlaylists &&
+				allPlaylists.length > 0 &&
+				!isDetailing && (
+					<PlaylistListBox>
+						<PlaylistTitle>
+							<span>
+								{user ? `${user.displayName.split(" ")[0]}'s ` : "your"}
+								Playlists
+							</span>
+						</PlaylistTitle>
+						<ListBox>
+							{allPlaylists.map((playlist, index) => (
+								<PlaylistCard
+									key={index}
+									playlist={playlist}
+									handleClick={showPlaylistDetail}
+								/>
+							))}
+							<AddBtnBox>
+								<AddBtnToolTip shouldDisplayed={shouldDisplayed}>
+									Add one more playlist
+								</AddBtnToolTip>
+								<AnimatedBtn
+									onClick={() => openPlaylistAdd()}
+									onMouseEnter={() => handleHovering()}
+									onMouseLeave={() => handleHovering()}
+								>
+									<TbMusicPlus />
+								</AnimatedBtn>
+							</AddBtnBox>
+						</ListBox>
+					</PlaylistListBox>
+				)}
 			{isDetailing && (
 				<PlaylistDetail
 					setIsDetailing={setIsDetailing}
 					setIsPlaylistDeleteOpened={setIsPlaylistDeleteOpened}
 				/>
 			)}
-			{allPlaylists.length == 0 && !isLoading && !error && <EmptyPlaylist />}
+			{allPlaylists && allPlaylists.length == 0 && !isLoading && !error && (
+				<EmptyPlaylist />
+			)}
 
 			{isAddPlaylistOpen && (
 				<PlaylistAddCard
