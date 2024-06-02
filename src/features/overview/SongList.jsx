@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useNavigateMenu } from "../../hooks/useNavigateMenu";
@@ -7,6 +7,7 @@ import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
 import TrackCard from "../../ui/TrackCard";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
+import SongAddCard from "../playlists/SongAddCard";
 import { publicLoad } from "./publicSongsSlice";
 
 const ListBox = styled.div`
@@ -86,6 +87,8 @@ const SongList = () => {
 	const navigateTo = useNavigate();
 	const openMenu = useNavigateMenu();
 
+	const [addFromList, setAddFromList] = useState(null);
+
 	useEffect(() => {
 		if (!publicSongs) {
 			dispatch(publicLoad());
@@ -103,6 +106,12 @@ const SongList = () => {
 
 	return (
 		<ListBox>
+			{addFromList && (
+				<SongAddCard
+					addFromList={addFromList}
+					setAddFromList={setAddFromList}
+				/>
+			)}
 			<ListHeader>
 				<ListBtn isSelected>For you</ListBtn>
 				<ListBtn onClick={() => openMenu("songs")}>Your songs</ListBtn>
@@ -131,6 +140,7 @@ const SongList = () => {
 							isLocal
 							song={song}
 							index={index}
+							setAddFromList={setAddFromList}
 						/>
 					))
 				) : (
