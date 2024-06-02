@@ -274,13 +274,28 @@ const btnStyle = {
 	backgroundColor: "var(--color-text-primary)",
 };
 
+const Playlists = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+
+	width: 100%;
+`;
+
 const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
 
 	const { music, isPaused, currMusicIndex, touchedIndex, openedIndex } =
 		useSelector((state) => state.currMusic);
-	const { allPlaylists, allFavorites } = useSelector((state) => state.playlist);
+	const { allPlaylists, allFavorites, playlistNames } = useSelector(
+		(state) => state.playlist
+	);
+	const isAdding = useSelector((state) => state.playlist.isLoading);
+	const addError = useSelector((state) => state.playlist.error);
+	const [hasPlaylist, setHasPlaylist] = useState(false);
+	const [isAddingTo, setIsAddingTo] = useState(false);
+
 	const isSelected = currMusicIndex == index;
 	const isTouched = touchedIndex === index;
 	const isDetailOpened = openedIndex === index;
@@ -291,10 +306,6 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [isSucceed, setIsSucceed] = useState(false);
-
-	const [userPlaylists, setUserPlaylists] = useState(null);
-	const [hasPlaylist, setHasPlaylist] = useState(false);
-	const [isAdding, setIsAdding] = useState(false);
 
 	useEffect(() => {
 		let timeoutId;
@@ -414,6 +425,7 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const handleOpenDetail = () => {
 		if (isDetailOpened) {
 			dispatch(currentMusicOpenedIndex(null));
+			setIsAddingTo(false);
 		} else {
 			dispatch(currentMusicOpenedIndex(index));
 		}
@@ -487,18 +499,18 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const addToPlaylist = (song) => {
 		// check if user signed in
 		if (user) {
-			if (allPlaylists) {
-				if (allPlaylists.length > 0) {
-					const playlists = [];
-					allPlaylists.forEach((playlist) => playlists.push(playlist.name));
+			setIsAddingTo(true);
+			if (playlistNames) {
+				if (playlistNames.length > 0) {
 					setHasPlaylist(true);
-					setUserPlaylists(playlists);
 				} else {
 					setHasPlaylist(false);
 				}
 			} else {
 				dispatch(playlistLoad(user.uid));
 			}
+		} else {
+			console.log("signed in first please");
 		}
 	};
 
@@ -535,22 +547,43 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 										{" "}
 										{isLoading && !isSucceed
 											? `Deleting ${song.title} ...`
+											: isAddingTo
+											? "Select playlist"
 											: song.title}
 									</DetailTitle>
 									<DetailChoice>
-										{shouldMoreAdd && (
-											<Choice>
-												<ChoiceTitle>
-													Build thicker one of your playlist with{" "}
-													<span style={{ color: "var(--color-gradient-2)" }}>
-														{song.title}
-													</span>
-												</ChoiceTitle>
-												<ChoiceBtn onClick={() => addToPlaylist(song)}>
-													Add to playlist
-												</ChoiceBtn>
-											</Choice>
-										)}
+										{shouldMoreAdd &&
+											(isAdding ? (
+												<>
+													<LoaderNote
+														loadingMessage={"loading playlists ..."}
+													/>
+												</>
+											) : (
+												<Choice>
+													{isAddingTo ? (
+														<Playlists>
+															{playlistNames.map((name) => (
+																<ChoiceBtn>{name}</ChoiceBtn>
+															))}
+														</Playlists>
+													) : (
+														<>
+															<ChoiceTitle>
+																Build thicker one of your playlist with{" "}
+																<span
+																	style={{ color: "var(--color-gradient-2)" }}
+																>
+																	{song.title}
+																</span>
+															</ChoiceTitle>
+															<ChoiceBtn onClick={() => addToPlaylist(song)}>
+																Add to playlist
+															</ChoiceBtn>
+														</>
+													)}
+												</Choice>
+											))}
 										{isLoading && <LoaderNote loadingMessage={deleteStatus} />}
 										{isSucceed && (
 											<SuccessBox>
