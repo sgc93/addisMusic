@@ -571,6 +571,7 @@ const TrackCard = ({
 
 	const addSongTo = (song, playlistName) => {
 		setAddFromList({ song: song, playlistName: playlistName });
+		handleOpenDetail();
 	};
 
 	return (
