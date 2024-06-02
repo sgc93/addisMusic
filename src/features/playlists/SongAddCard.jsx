@@ -203,7 +203,6 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 					if (playlist.name === playlistName) {
 						playlist.musics.forEach((music) => {
 							if (music.title.toLowerCase() === title.toLowerCase()) {
-								console.log(music.title, title);
 								setWarning(`${title} is already exists in ${playlistName}!`);
 								return;
 							}
@@ -222,7 +221,7 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 			setIsLoading(true);
 			setError("");
 			setIsSuccess(false);
-			return;
+
 			// upload music and cover art if they are not already from storage
 
 			let musicDownloadUrl;
@@ -280,7 +279,6 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 				dispatch(playlistUpdateFavorite([...allFavorites, musicData]));
 			}
 		} catch (error) {
-			console.log(error);
 			setError("Unable to upload music to your list, try again!");
 		} finally {
 			setIsLoading(false);

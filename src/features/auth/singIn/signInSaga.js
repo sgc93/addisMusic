@@ -19,7 +19,7 @@ function* workCheckSignIn(action) {
 		} else {
 			if (!isEmailValid(email) && !isPasswordValid(password)) {
 				yield signInWithEmailAndPassword(auth, email, password);
-				console.log("signed in successfully: " + auth.currentUser);
+				console.log("signed in successfully: " + auth.currentUser.displayName);
 				yield { type: "signInCheck/checkSignInSuccess" };
 				yield put({ type: "signInCheck/checkSignInOpen" });
 			} else {
