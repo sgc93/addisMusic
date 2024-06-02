@@ -3,11 +3,11 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { BiCheckCircle, BiError, BiPause, BiPlay } from "react-icons/bi";
+import { BsMusicNote } from "react-icons/bs";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { HiDotsVertical } from "react-icons/hi";
 import { LuLoader2 } from "react-icons/lu";
 import { MdClose, MdError } from "react-icons/md";
-import { TbFileMusic } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, firestore, storage } from "../config/firebase_config";
 import {
@@ -21,6 +21,7 @@ import {
 	playlistSelect,
 	playlistUpdateAll,
 	playlistUpdateFavorite,
+	playlistUpdateNames,
 } from "../features/playlists/playlistSlice";
 import { useNavigateMenu } from "../hooks/useNavigateMenu";
 import { fadeClose, fadeOpen, rotate360 } from "../styles/animation";
@@ -391,6 +392,17 @@ const TrackCard = ({
 		return () => clearTimeout(timeoutId);
 	}, [isSucceed, error]);
 
+	useEffect(() => {
+		const playlists = [];
+		if (allPlaylists) {
+			allPlaylists.forEach((playlist) =>
+				playlists.push({ name: playlist.name, musics: playlist.musics.length })
+			);
+			dispatch(playlistUpdateNames(playlists));
+			setHasPlaylist(true);
+		}
+	}, [allPlaylists]);
+
 	const handlePlay = (index) => {
 		if (currMusicIndex != index) {
 			dispatch(currentMusicIndex(index));
@@ -633,7 +645,7 @@ const TrackCard = ({
 																	>
 																		<Name>{playlist.name}</Name>
 																		<Musics>
-																			<TbFileMusic />
+																			<BsMusicNote />
 																			<span>{playlist.musics}</span>
 																		</Musics>
 																	</PlaylistBtn>

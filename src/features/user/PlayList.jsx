@@ -12,11 +12,7 @@ import EmptyPlaylist from "../playlists/EmptyPlylist";
 import PlaylistAddCard from "../playlists/PlaylistAddCard";
 import PlaylistDeleteCard from "../playlists/PlaylistDeleteCard";
 import PlaylistDetail from "../playlists/PlaylistDetail";
-import {
-	playlistLoad,
-	playlistSelect,
-	playlistUpdateNames,
-} from "../playlists/playlistSlice";
+import { playlistLoad, playlistSelect } from "../playlists/playlistSlice";
 
 const PlayListBox = styled.div`
 	width: 97%;
@@ -110,16 +106,6 @@ const PlayList = () => {
 			dispatch(playlistLoad(user.uid));
 		}
 	}, [user]);
-
-	useEffect(() => {
-		const playlists = [];
-		if (allPlaylists) {
-			allPlaylists.forEach((playlist) =>
-				playlists.push({ name: playlist.name, musics: playlist.musics.length })
-			);
-			dispatch(playlistUpdateNames(playlists));
-		}
-	}, [allPlaylists]);
 
 	const tryRetrievingAgain = () => {
 		if (user) dispatch(playlistLoad(user.uid));
