@@ -70,12 +70,14 @@ const FavoriteBtn = styled.button`
 	cursor: pointer;
 `;
 
-const SongAddCard = ({ setIsOpened }) => {
+const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 	const { selectedPlaylist, allPlaylists, allFavorites } = useSelector(
 		(state) => state.playlist
 	);
 	const dispatch = useDispatch();
-	const playlistName = selectedPlaylist.name;
+	const playlistName = addFromList
+		? addFromList.playlistName
+		: selectedPlaylist.name;
 
 	const [title, setTitle] = useState("");
 	const [artist, setArtist] = useState("");
@@ -104,6 +106,15 @@ const SongAddCard = ({ setIsOpened }) => {
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [status, setStatus] = useState("");
 	const [warning, setWarning] = useState("");
+
+	useEffect(() => {
+		if (addFromList) {
+			const { title, artist } = addFromList.song;
+			setTitle(title);
+			setArtist(artist);
+			setMusicName(title);
+		}
+	}, [addFromList]);
 
 	useEffect(() => {
 		setMusicName(musicFile.name);
@@ -160,45 +171,63 @@ const SongAddCard = ({ setIsOpened }) => {
 	async function addMusicToPlaylist(playlistId) {
 		try {
 			// do validation
-			if (!musicFile) {
-				setError("Music is not selected!");
-				return;
-			} else if (!coverFile) {
-				setError("Cover art is not selected!");
-				return;
-			} else if (!title || !artist) {
+
+			if (!addFromList) {
+				if (!musicFile) {
+					setWarning("Music is not selected!");
+					return;
+				} else if (!coverFile) {
+					setWarning("Cover art is not selected!");
+					return;
+				}
+			}
+
+			if (!title || !artist) {
 				let message;
 				if (!title && !artist) {
 					message = " Title & artist aren't specified!";
 					setWarning(message);
+					return;
 				} else if (!title && artist) {
 					message = "This music has no title!";
 					setWarning(message);
+					return;
 				} else if (title && !artist) {
 					message = "No artist is specified!";
 					setWarning(message);
+					return;
 				}
 			}
 			setIsLoading(true);
 			setError("");
 			setIsSuccess(false);
 
-			// upload music and cover art
-			const musicDownloadUrl = await uploadMusic();
-			const coverDownloadUrl = await uploadCoverArt();
+			// upload music and cover art if they are not already from storage
+
+			let musicDownloadUrl = addFromList.song.url;
+			let coverDownloadUrl = addFromList.song.coverArt;
+
+			if (!addFromList) {
+				musicDownloadUrl = await uploadMusic();
+				coverDownloadUrl = await uploadCoverArt();
+			}
 
 			// music data
 			const musicData = {
 				title: title,
 				artist: artist,
 				playlist: playlistName,
-				duration: duration,
+				duration: addFromList ? addFromList.song.duration : duration,
 				isPlayable: true,
 				isFavorite: isFavorite,
 				coverArt: coverDownloadUrl,
 				url: musicDownloadUrl,
-				songRef: `fileList${user.uid}/${title}/${musicName}`,
-				coverRef: `fileList${user.uid}/${title}/${coverName}`,
+				songRef: addFromList
+					? addFromList.song.songRef
+					: `fileList${user.uid}/${title}/${musicName}`,
+				coverRef: addFromList
+					? addFromList.song.coverRef
+					: `fileList${user.uid}/${title}/${coverName}`,
 			};
 
 			// store the uploaded files to user's storage
@@ -235,10 +264,15 @@ const SongAddCard = ({ setIsOpened }) => {
 	}
 
 	const closePopup = () => {
-		setIsOpened(false);
+		if (addFromList) {
+			setAddFromList(null);
+		} else {
+			setIsOpened(false);
+		}
 	};
 
 	const handleMusicInput = (event) => {
+		setWarning("");
 		setIsMusic(true);
 		const file = event.target.files[0];
 		if (file && file.type === "audio/mpeg") {
@@ -252,6 +286,7 @@ const SongAddCard = ({ setIsOpened }) => {
 	};
 
 	const handleImgInput = (event) => {
+		setWarning("");
 		setIsMusic(false);
 		const file = event.target.files[0];
 		if (file) {
@@ -285,8 +320,7 @@ const SongAddCard = ({ setIsOpened }) => {
 					<SuccessBox>
 						<SuccessImg src="./thumbsup.gif" />
 						<SuccessMessage>
-							<span style={{ textTransform: "capitalize" }}>{name}</span> You
-							have added {musicName} in {playlistName} successfully!
+							You have added {musicName} in {playlistName} successfully!
 						</SuccessMessage>
 					</SuccessBox>
 				)}
@@ -302,75 +336,85 @@ const SongAddCard = ({ setIsOpened }) => {
 				)}
 				{!isLoading && !isSuccess && (
 					<Form>
-						<audio src={musicSrc} ref={musicRef} hidden />
+						{!addFromList && <audio src={musicSrc} ref={musicRef} hidden />}
 						<FormInput
 							type="text"
 							placeholder="Song title"
 							value={title}
-							onChange={(event) => setTitle(event.target.value)}
+							onChange={(event) => {
+								setTitle(event.target.value);
+								setWarning("");
+							}}
 						/>
 						<FormInput
 							type="text"
 							placeholder="Artist Name"
 							value={artist}
-							onChange={(event) => setArtist(event.target.value)}
+							onChange={(event) => {
+								setArtist(event.target.value);
+								setWarning("");
+							}}
 						/>
-						<FileBox>
-							<FormFileInput
-								type="file"
-								accept="image/*"
-								id="coverArtInput"
-								onChange={handleImgInput}
-								hidden
-							/>
-							<FormInputLabel htmlFor="coverArtInput">
-								<FormPlaceholder>
-									{coverFile.name ? coverFile.name : "Upload cover art"}
-								</FormPlaceholder>
-								<LabelIcon>
-									<CgImage />
-								</LabelIcon>
-							</FormInputLabel>
-							{!isMusic && isRenameBoxOpened && (
-								<FileRename
-									file={coverFile}
-									setFile={setCoverFile}
-									setName={setCoverName}
-									question={"would you like to rename the Cover Art?"}
-									title={"Enter new cover art name"}
-									isRenameBoxOpened={isRenameBoxOpened}
-									setIsRenameBoxOpened={setIsRenameBoxOpened}
-								/>
-							)}
-						</FileBox>
-						<FileBox>
-							<FormFileInput
-								type="file"
-								accept=".mp3"
-								id="musicInput"
-								onChange={handleMusicInput}
-								hidden
-							/>
-							<FormInputLabel htmlFor="musicInput">
-								<FormPlaceholder>
-									{musicFile.name ? musicFile.name : "Upload song"}
-								</FormPlaceholder>
-								<LabelIcon>
-									<CgMusic />
-								</LabelIcon>
-							</FormInputLabel>
-							{isMusic && isRenameBoxOpened && (
-								<FileRename
-									file={musicFile}
-									setFile={setMusicFile}
-									setName={setMusicName}
-									question={"would you like to rename this music?"}
-									title={"Enter new music name"}
-									isRenameBoxOpened={isRenameBoxOpened}
-									setIsRenameBoxOpened={setIsRenameBoxOpened}
-								/>
-							)}
-						</FileBox>
+						{!addFromList && (
+							<>
+								<FileBox>
+									<FormFileInput
+										type="file"
+										accept="image/*"
+										id="coverArtInput"
+										onChange={handleImgInput}
+										hidden
+									/>
+									<FormInputLabel htmlFor="coverArtInput">
+										<FormPlaceholder>
+											{coverFile.name ? coverFile.name : "Upload cover art"}
+										</FormPlaceholder>
+										<LabelIcon>
+											<CgImage />
+										</LabelIcon>
+									</FormInputLabel>
+									{!isMusic && isRenameBoxOpened && (
+										<FileRename
+											file={coverFile}
+											setFile={setCoverFile}
+											setName={setCoverName}
+											question={"would you like to rename the Cover Art?"}
+											title={"Enter new cover art name"}
+											isRenameBoxOpened={isRenameBoxOpened}
+											setIsRenameBoxOpened={setIsRenameBoxOpened}
+										/>
+									)}
+								</FileBox>
+								<FileBox>
+									<FormFileInput
+										type="file"
+										accept=".mp3"
+										id="musicInput"
+										onChange={handleMusicInput}
+										hidden
+									/>
+									<FormInputLabel htmlFor="musicInput">
+										<FormPlaceholder>
+											{musicFile.name ? musicFile.name : "Upload song"}
+										</FormPlaceholder>
+										<LabelIcon>
+											<CgMusic />
+										</LabelIcon>
+									</FormInputLabel>
+									{isMusic && isRenameBoxOpened && (
+										<FileRename
+											file={musicFile}
+											setFile={setMusicFile}
+											setName={setMusicName}
+											question={"would you like to rename this music?"}
+											title={"Enter new music name"}
+											isRenameBoxOpened={isRenameBoxOpened}
+											setIsRenameBoxOpened={setIsRenameBoxOpened}
+										/>
+									)}
+								</FileBox>
+							</>
+						)}
 						<FavoriteBox>
 							<FavoriteText>Favorite? </FavoriteText>
 							<FavoriteBtn isFavorite={isFavorite} onClick={handleFavorite}>
