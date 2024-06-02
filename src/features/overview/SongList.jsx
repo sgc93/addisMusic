@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useNavigateMenu } from "../../hooks/useNavigateMenu";
 import FetchError from "../../ui/FetchError";
-import LoaderBox from "../../ui/LoaderBox";
 import LoaderNote from "../../ui/LoaderNote";
 import TrackCard from "../../ui/TrackCard";
 import { currentMusicIndex, currentMusicList } from "../music/musicSlice";
@@ -70,6 +69,15 @@ const ListBtn = styled.button`
 	}
 `;
 
+const Loading = styled.div`
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
 const SongList = () => {
 	const { isLoading, error, publicSongs } = useSelector(
 		(state) => state.public
@@ -101,9 +109,9 @@ const SongList = () => {
 			</ListHeader>
 			<List>
 				{isLoading && (
-					<LoaderBox>
-						<LoaderNote loadingMessage={"fetching ..."} />
-					</LoaderBox>
+					<Loading>
+						<LoaderNote loadingMessage={"Loading songs ..."} />
+					</Loading>
 				)}
 				{error && (
 					<FetchError
@@ -117,7 +125,9 @@ const SongList = () => {
 					publicSongs.map((song, index) => (
 						<TrackCard
 							key={index}
-							shouldMore={true}
+							shouldMoreAdd
+							shouldMore
+							isLocal
 							song={song}
 							index={index}
 						/>
