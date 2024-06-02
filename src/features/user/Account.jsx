@@ -10,6 +10,7 @@ import Error from "../../ui/Error";
 import FetchError from "../../ui/FetchError";
 import IconButton from "../../ui/IconButton";
 import LoaderNote from "../../ui/LoaderNote";
+import { authUserSet } from "../auth/authSlice";
 import {
 	checkSignInReset,
 	checkSignInResetSuccess,
@@ -229,6 +230,7 @@ const Account = ({ user }) => {
 		) {
 			navigateTo("/");
 		}
+		dispatch(authUserSet(null));
 		signOut(auth);
 	};
 
