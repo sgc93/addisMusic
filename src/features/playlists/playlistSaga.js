@@ -31,7 +31,7 @@ function* workPlaylistLoad(action) {
 			playlistData.musics.forEach((music) => {
 				let count = 0;
 				songs.forEach((song) => {
-					if (song.title === music.title || song.artist === music.artist) {
+					if (song.title === music.title && song.artist === music.artist) {
 						count++;
 					}
 				});

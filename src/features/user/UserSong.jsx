@@ -128,7 +128,7 @@ const UserSong = () => {
 			playlist.musics.forEach((music) => {
 				let count = 0;
 				updatedSongs.forEach((song) => {
-					if (song.title === music.title || song.artist === music.artist) {
+					if (song.title === music.title && song.artist === music.artist) {
 						count++;
 					}
 				});
