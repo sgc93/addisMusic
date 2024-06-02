@@ -14,13 +14,20 @@ function* workCheckSignIn(action) {
 	try {
 		if (isWithGoogle) {
 			yield signInWithPopup(auth, googleProvider);
+			yield put({
+				type: "authUser/authUserSet",
+				payload: auth.currentUser,
+			});
 			yield put({ type: "signInCheck/checkSignInSuccess" });
 			yield put({ type: "signInCheck/checkSignInOpen" });
 		} else {
 			if (!isEmailValid(email) && !isPasswordValid(password)) {
 				yield signInWithEmailAndPassword(auth, email, password);
-				console.log("signed in successfully: " + auth.currentUser.displayName);
-				yield { type: "signInCheck/checkSignInSuccess" };
+				yield put({
+					type: "authUser/authUserSet",
+					payload: auth.currentUser,
+				});
+				yield put({ type: "signInCheck/checkSignInSuccess" });
 				yield put({ type: "signInCheck/checkSignInOpen" });
 			} else {
 				let error = "";
@@ -37,7 +44,6 @@ function* workCheckSignIn(action) {
 		}
 	} catch (error) {
 		if (error instanceof FirebaseError) {
-			console.log(error);
 			let customizedError = error.message.toString();
 			if (error.code == "auth/invalid-credential") {
 				customizedError =
