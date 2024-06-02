@@ -16,6 +16,7 @@ import { LuLoader2 } from "react-icons/lu";
 import { MdClose, MdError } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, firestore, storage } from "../config/firebase_config";
+import { checkSignInOpen } from "../features/auth/singIn/signInSlice";
 import {
 	currentMusicIndex,
 	currentMusicOpenedIndex,
@@ -611,7 +612,7 @@ const TrackCard = ({
 				dispatch(playlistLoad(user.uid));
 			}
 		} else {
-			console.log("signed in first please");
+			dispatch(checkSignInOpen());
 		}
 	};
 
