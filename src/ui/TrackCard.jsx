@@ -329,7 +329,14 @@ const Musics = styled.span`
 	font-weight: 100;
 `;
 
-const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
+const TrackCard = ({
+	song,
+	index,
+	shouldMore,
+	shouldMoreAdd,
+	isLocal,
+	setAddFromList,
+}) => {
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
 	const openRoute = useNavigateMenu();
@@ -562,6 +569,10 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 		}
 	};
 
+	const addSongTo = (song, playlistName) => {
+		setAddFromList({ song: song, playlistName: playlistName });
+	};
+
 	return (
 		<Card isSelected={isSelected}>
 			<TrackNo>{index + 1}</TrackNo>
@@ -613,7 +624,12 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 														hasPlaylist ? (
 															<Playlists>
 																{playlistNames.map((playlist, index) => (
-																	<PlaylistBtn key={index}>
+																	<PlaylistBtn
+																		key={index}
+																		onClick={() =>
+																			addSongTo(song, playlist.name)
+																		}
+																	>
 																		<Name>{playlist.name}</Name>
 																		<Musics>
 																			<TbFileMusic />
