@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../../config/firebase_config";
 import { useClearUpdateState } from "../../hooks/useClearUpdateState";
 import {
 	CreateError,
@@ -24,7 +23,7 @@ import LoaderNote from "../../ui/LoaderNote";
 import { playlistReset, playlistUpdate } from "./playlistSlice";
 
 const PlaylistAddCard = ({ currentPlaylists, setIsOpened }) => {
-	const user = auth.currentUser;
+	const { user } = useSelector((state) => state.authUser);
 	const { isUpdating, updateError, isUpdated } = useSelector(
 		(state) => state.playlist
 	);

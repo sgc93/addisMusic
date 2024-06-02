@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { IoWarning } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../../config/firebase_config";
 import { useClearUpdateState } from "../../hooks/useClearUpdateState";
 import {
 	CreateError,
@@ -81,9 +80,9 @@ const BtnBox = styled.div`
 const PlaylistDeleteCard = ({ setIsOpened, setIsDetailing }) => {
 	const { isUpdating, isUpdated, updateError, allPlaylists, selectedPlaylist } =
 		useSelector((state) => state.playlist);
+	const { user } = useSelector((state) => state.authUser);
 	const playlistName = selectedPlaylist.name;
 	const dispatch = useDispatch();
-	const user = auth.currentUser;
 
 	useEffect(() => {
 		dispatch(playlistReset());

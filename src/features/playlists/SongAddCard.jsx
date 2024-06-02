@@ -6,7 +6,7 @@ import { CgImage, CgMusic } from "react-icons/cg";
 import { IoWarning } from "react-icons/io5";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, firestore, storage } from "../../config/firebase_config";
+import { firestore, storage } from "../../config/firebase_config";
 import {
 	CreateError,
 	CreateWarning,
@@ -97,7 +97,7 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 	const [isRenameBoxOpened, setIsRenameBoxOpened] = useState(false);
 
 	const musicRef = useRef();
-	const user = auth.currentUser;
+	const { user } = useSelector((state) => state.authUser);
 
 	// uploading state handler states
 	const [isLoading, setIsLoading] = useState(false);
@@ -218,65 +218,71 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 				});
 			}
 
-			setIsLoading(true);
-			setError("");
-			setIsSuccess(false);
+			if (!warning) {
+				setIsLoading(true);
+				setError("");
+				setIsSuccess(false);
 
-			// upload music and cover art if they are not already from storage
+				// upload music and cover art if they are not already from storage
 
-			let musicDownloadUrl;
-			let coverDownloadUrl;
+				let musicDownloadUrl;
+				let coverDownloadUrl;
 
-			if (addFromList) {
-				musicDownloadUrl = addFromList.song.url;
-				coverDownloadUrl = addFromList.song.coverArt;
-			} else {
-				musicDownloadUrl = await uploadMusic();
-				coverDownloadUrl = await uploadCoverArt();
-			}
-
-			// music data
-			const musicData = {
-				title: title,
-				artist: artist,
-				playlist: playlistName,
-				duration: addFromList ? addFromList.song.duration : duration,
-				isPlayable: true,
-				isFavorite: isFavorite,
-				coverArt: coverDownloadUrl,
-				url: musicDownloadUrl,
-				songRef: addFromList
-					? addFromList.song.songRef
-					: `fileList${user.uid}/${title}/${musicName}`,
-				coverRef: addFromList
-					? addFromList.song.coverRef
-					: `fileList${user.uid}/${title}/${coverName}`,
-			};
-
-			// store the uploaded files to user's storage
-			setStatus(`Uploading music Data to ${playlistName}...`);
-			const playlistDocRef = doc(firestore, `playlists${user.uid}`, playlistId);
-			const playlistSnapshot = await getDoc(playlistDocRef);
-			if (!playlistSnapshot.exists) {
-				return;
-			}
-			const playlistData = playlistSnapshot.data();
-			playlistData.musics.push(musicData);
-
-			await updateDoc(playlistDocRef, playlistData);
-			setIsSuccess(true);
-			const updatedPlaylists = [];
-			allPlaylists.forEach((playlist) => {
-				if (playlist.name === playlistName) {
-					updatedPlaylists.push(playlistData);
+				if (addFromList) {
+					musicDownloadUrl = addFromList.song.url;
+					coverDownloadUrl = addFromList.song.coverArt;
 				} else {
-					updatedPlaylists.push(playlist);
+					musicDownloadUrl = await uploadMusic();
+					coverDownloadUrl = await uploadCoverArt();
 				}
-			});
-			dispatch(playlistUpdateAll(updatedPlaylists));
-			dispatch(playlistSelect(playlistData));
-			if (isFavorite) {
-				dispatch(playlistUpdateFavorite([...allFavorites, musicData]));
+
+				// music data
+				const musicData = {
+					title: title,
+					artist: artist,
+					playlist: playlistName,
+					duration: addFromList ? addFromList.song.duration : duration,
+					isPlayable: true,
+					isFavorite: isFavorite,
+					coverArt: coverDownloadUrl,
+					url: musicDownloadUrl,
+					songRef: addFromList
+						? addFromList.song.songRef
+						: `fileList${user.uid}/${title}/${musicName}`,
+					coverRef: addFromList
+						? addFromList.song.coverRef
+						: `fileList${user.uid}/${title}/${coverName}`,
+				};
+
+				// store the uploaded files to user's storage
+				setStatus(`Uploading music Data to ${playlistName}...`);
+				const playlistDocRef = doc(
+					firestore,
+					`playlists${user.uid}`,
+					playlistId
+				);
+				const playlistSnapshot = await getDoc(playlistDocRef);
+				if (!playlistSnapshot.exists) {
+					return;
+				}
+				const playlistData = playlistSnapshot.data();
+				playlistData.musics.push(musicData);
+
+				await updateDoc(playlistDocRef, playlistData);
+				setIsSuccess(true);
+				const updatedPlaylists = [];
+				allPlaylists.forEach((playlist) => {
+					if (playlist.name === playlistName) {
+						updatedPlaylists.push(playlistData);
+					} else {
+						updatedPlaylists.push(playlist);
+					}
+				});
+				dispatch(playlistUpdateAll(updatedPlaylists));
+				dispatch(playlistSelect(playlistData));
+				if (isFavorite) {
+					dispatch(playlistUpdateFavorite([...allFavorites, musicData]));
+				}
 			}
 		} catch (error) {
 			setError("Unable to upload music to your list, try again!");

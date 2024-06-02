@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../config/firebase_config";
 import { fadeOpen } from "../../styles/animation";
 import FetchError from "../../ui/FetchError";
 import LoaderNote from "../../ui/LoaderNote";
@@ -91,7 +90,8 @@ const Favorite = () => {
 	const { allFavorites, error, isLoading } = useSelector(
 		(state) => state.playlist
 	);
-	const user = auth.currentUser;
+	const { user } = useSelector((state) => state.authUser);
+
 	const navigateTo = useNavigate();
 	const dispatch = useDispatch();
 
