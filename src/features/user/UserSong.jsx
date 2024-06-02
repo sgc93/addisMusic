@@ -101,11 +101,15 @@ const UserSong = () => {
 				dispatch(currentMusicList(allSongs));
 				dispatch(currentMusicIndex(0));
 			}
+		} else {
+			getAllPlaylistDocs();
 		}
 	}, [allSongs]);
 
 	useEffect(() => {
-		updateSongs();
+		if (allPlaylists) {
+			updateSongs();
+		}
 	}, [allPlaylists]);
 
 	useEffect(() => {
@@ -124,7 +128,6 @@ const UserSong = () => {
 			playlist.musics.forEach((music) => updatedSongs.push(music));
 		});
 
-		console.log(updatedSongs);
 		dispatch(playlistUpdateSong(updatedSongs));
 	};
 
