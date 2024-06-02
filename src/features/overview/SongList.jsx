@@ -87,7 +87,9 @@ const SongList = () => {
 	const openMenu = useNavigateMenu();
 
 	useEffect(() => {
-		dispatch(publicLoad());
+		if (!publicSongs) {
+			dispatch(publicLoad());
+		}
 	}, []);
 
 	useEffect(() => {
@@ -95,7 +97,6 @@ const SongList = () => {
 			if (publicSongs.length > 0) {
 				dispatch(currentMusicList(publicSongs));
 				dispatch(currentMusicIndex(0));
-				console.log(publicSongs);
 			}
 		}
 	}, [publicSongs]);
