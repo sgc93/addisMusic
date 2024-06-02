@@ -10,12 +10,20 @@ function* workCheckSignUP(action) {
 	try {
 		if (isWithGoogle) {
 			yield signInWithPopup(auth, googleProvider);
+			yield put({
+				type: "authUser/authUserSet",
+				payload: auth.currentUser,
+			});
 			yield put({ type: "signUpCheck/checkSignUpSuccess" });
 			yield put({ type: "signUpCheck/checkSignUpOpen" });
 		} else {
 			if (!isEmailValid(email) && !isPasswordValid(password)) {
 				yield createUserWithEmailAndPassword(auth, email, password);
-				yield { type: "signUpCheck/checkSignUpSuccess" };
+				yield put({
+					type: "authUser/authUserSet",
+					payload: auth.currentUser,
+				});
+				yield put({ type: "signUpCheck/checkSignUpSuccess" });
 				yield put({ type: "signUpCheck/checkSignUpOpen" });
 			} else {
 				let error = "";
