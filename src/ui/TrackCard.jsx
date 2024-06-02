@@ -22,6 +22,7 @@ import {
 	playlistUpdateAll,
 	playlistUpdateFavorite,
 } from "../features/playlists/playlistSlice";
+import { useNavigateMenu } from "../hooks/useNavigateMenu";
 import { fadeClose, fadeOpen, rotate360 } from "../styles/animation";
 import {
 	SuccessBox,
@@ -331,6 +332,7 @@ const Musics = styled.span`
 const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 	const dispatch = useDispatch();
 	const user = auth.currentUser;
+	const openRoute = useNavigateMenu();
 
 	const { music, isPaused, currMusicIndex, touchedIndex, openedIndex } =
 		useSelector((state) => state.currMusic);
@@ -608,17 +610,35 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 											) : (
 												<Choice>
 													{isAddingTo ? (
-														<Playlists>
-															{playlistNames.map((playlist, index) => (
-																<PlaylistBtn key={index}>
-																	<Name>{playlist.name}</Name>
-																	<Musics>
-																		<TbFileMusic />
-																		<span>{playlist.musics}</span>
-																	</Musics>
-																</PlaylistBtn>
-															))}
-														</Playlists>
+														hasPlaylist ? (
+															<Playlists>
+																{playlistNames.map((playlist, index) => (
+																	<PlaylistBtn key={index}>
+																		<Name>{playlist.name}</Name>
+																		<Musics>
+																			<TbFileMusic />
+																			<span>{playlist.musics}</span>
+																		</Musics>
+																	</PlaylistBtn>
+																))}
+															</Playlists>
+														) : (
+															<Playlists>
+																<span
+																	style={{
+																		color: "var(--color-text-secondary)",
+																		textAlign: "center",
+																	}}
+																>
+																	You have no playlists yet, create on first!
+																</span>
+																<ChoiceBtn
+																	onClick={() => openRoute("playlists")}
+																>
+																	Create playlist
+																</ChoiceBtn>
+															</Playlists>
+														)
 													) : (
 														<>
 															<ChoiceTitle>
