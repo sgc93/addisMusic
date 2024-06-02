@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
+import { BiPhone } from "react-icons/bi";
+import { BsGithub } from "react-icons/bs";
+import { GrContact } from "react-icons/gr";
 import { MdClose } from "react-icons/md";
 import { TbMusicBolt } from "react-icons/tb";
+import { TfiEmail } from "react-icons/tfi";
 import IconButton from "../../ui/IconButton";
 
 const ModalWindow = styled.div`
@@ -9,7 +13,7 @@ const ModalWindow = styled.div`
 	left: ${(props) => (props.isAbout ? "26.7%" : "33.5%")};
 	display: flex;
 
-	height: 50dvh;
+	max-height: 50dvh;
 `;
 
 const ModalBox = styled.div`
@@ -22,7 +26,7 @@ const ModalBox = styled.div`
 	background: radial-gradient(var(--color-rad-center), var(--color-rad-outer));
 	border: 3px solid var(--color-border-primary);
 	border-radius: 1rem;
-	height: 100%;
+	max-height: 100%;
 
 	box-shadow: 1rem 1rem 1rem 1rem var(--color-bg-tertiary);
 	overflow-y: scroll;
@@ -141,6 +145,28 @@ const FeatureBody = styled.span`
 	color: var(--color-bg-4);
 `;
 
+const Contacts = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+
+	padding: 1rem;
+`;
+const Contact = styled.a`
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
+
+	text-decoration: none;
+	font-weight: bold;
+
+	transition: all 0.4s;
+
+	&:hover {
+		color: var(--color-bg-primary);
+	}
+`;
+
 const HeaderModal = ({ isAbout, isContact, closeModal }) => {
 	return (
 		<ModalWindow isAbout={isAbout}>
@@ -185,7 +211,26 @@ const HeaderModal = ({ isAbout, isContact, closeModal }) => {
 							</BodyTextContent>
 						</>
 					)}
-					{isContact && <BodyText>contact</BodyText>}
+					{isContact && (
+						<>
+							<FeatureTitle>
+								<GrContact />
+								<span>Feel free to contact via:</span>
+							</FeatureTitle>
+							<Contacts>
+								<Contact href="mailto:smachewgedefaw@gmail.com">
+									<TfiEmail /> <span>smachewgedefaw@gmail.com</span>
+								</Contact>
+								<Contact href="call:0989669943">
+									{" "}
+									<BiPhone /> <span>+2519669943</span>
+								</Contact>
+								<Contact href="sjdf">
+									<BsGithub /> <span>sgc93</span>
+								</Contact>
+							</Contacts>
+						</>
+					)}
 				</ModalBody>
 			</ModalBox>
 		</ModalWindow>
