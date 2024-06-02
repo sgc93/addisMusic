@@ -198,16 +198,41 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 					return;
 				}
 			}
+
+			if (addFromList) {
+				allPlaylists.forEach((playlist) => {
+					if (playlist.name === playlistName) {
+						playlist.musics.forEach((music) => {
+							if (music.title.toLowerCase() === title.toLowerCase()) {
+								console.log(music.title, title);
+								setWarning(`${title} is already exists in ${playlistName}!`);
+								return;
+							}
+						});
+					}
+				});
+			} else {
+				selectedPlaylist.musics.forEach((music) => {
+					if (music.title.toLowerCase() === title.toLowerCase()) {
+						setWarning(`${title} is already exists in ${playlistName}!`);
+						return;
+					}
+				});
+			}
+
 			setIsLoading(true);
 			setError("");
 			setIsSuccess(false);
-
+			return;
 			// upload music and cover art if they are not already from storage
 
-			let musicDownloadUrl = addFromList.song.url;
-			let coverDownloadUrl = addFromList.song.coverArt;
+			let musicDownloadUrl;
+			let coverDownloadUrl;
 
-			if (!addFromList) {
+			if (addFromList) {
+				musicDownloadUrl = addFromList.song.url;
+				coverDownloadUrl = addFromList.song.coverArt;
+			} else {
 				musicDownloadUrl = await uploadMusic();
 				coverDownloadUrl = await uploadCoverArt();
 			}
@@ -256,6 +281,7 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 				dispatch(playlistUpdateFavorite([...allFavorites, musicData]));
 			}
 		} catch (error) {
+			console.log(error);
 			setError("Unable to upload music to your list, try again!");
 		} finally {
 			setIsLoading(false);
