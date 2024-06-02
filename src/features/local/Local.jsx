@@ -163,14 +163,7 @@ const Local = () => {
 					</LocalHeader>
 					<MusicList>
 						{files.map((songFile, index) => (
-							<TrackCard
-								key={index}
-								song={songFile}
-								index={index}
-								shouldMore
-								shouldMoreAdd
-								isLocal
-							/>
+							<TrackCard key={index} song={songFile} index={index} isLocal />
 						))}
 					</MusicList>
 				</>
