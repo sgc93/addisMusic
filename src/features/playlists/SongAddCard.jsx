@@ -6,8 +6,7 @@ import { CgImage, CgMusic } from "react-icons/cg";
 import { IoWarning } from "react-icons/io5";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { firestore, storage } from "../../config/firebase_config";
-import { useSignedInUser } from "../../hooks/CheckAuth";
+import { auth, firestore, storage } from "../../config/firebase_config";
 import {
 	CreateError,
 	CreateWarning,
@@ -98,7 +97,7 @@ const SongAddCard = ({ setIsOpened, addFromList, setAddFromList }) => {
 	const [isRenameBoxOpened, setIsRenameBoxOpened] = useState(false);
 
 	const musicRef = useRef();
-	const user = useSignedInUser();
+	const user = auth.currentUser;
 
 	// uploading state handler states
 	const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
-import { useSignedInUser } from "../../hooks/CheckAuth";
+import { auth } from "../../config/firebase_config";
 import { checkSignUpOpen } from "../auth/signUp/signUpSlice";
 import { checkSignInOpen } from "../auth/singIn/signInSlice";
 import Account from "../user/Account";
@@ -50,7 +50,7 @@ const LogInBtn = styled.button`
 
 const SignInUp = () => {
 	const dispatch = useDispatch();
-	const user = useSignedInUser();
+	const user = auth.currentUser;
 
 	const openSignUp = () => dispatch(checkSignUpOpen());
 	const openSignIn = () => dispatch(checkSignInOpen());

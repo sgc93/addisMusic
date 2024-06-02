@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { TbMusicPlus } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { useSignedInUser } from "../../hooks/CheckAuth";
+import { auth } from "../../config/firebase_config";
 import { fadeClose, fadeOpen } from "../../styles/animation";
 import { AnimatedBtn } from "../../styles/styled_components";
 import FetchError from "../../ui/FetchError";
@@ -94,7 +94,7 @@ const PlayList = () => {
 	const dispatch = useDispatch();
 	const [isAddPlaylistOpen, setIsAddPlaylistOpen] = useState(false);
 
-	const user = useSignedInUser();
+	const user = auth.currentUser;
 
 	const [isDetailing, setIsDetailing] = useState(false);
 	const [isPlaylistDeleteOpened, setIsPlaylistDeleteOpened] = useState(false);
