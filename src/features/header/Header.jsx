@@ -73,8 +73,8 @@ const Header = () => {
 		<HeaderBox>
 			<HeaderLeft>
 				<SearchBtn />
-				<TextBtn onClick={() => openModal(false, true)}>About</TextBtn>
-				<TextBtn onClick={() => openModal(true, false)}>Contact</TextBtn>
+				<TextBtn onClick={() => openModal(true, false)}>About</TextBtn>
+				<TextBtn onClick={() => openModal(false, true)}>Contact</TextBtn>
 				<LikeBtn href="https://github.com/sgc93/addismusic" target="_blank">
 					<FaThumbsUp />
 				</LikeBtn>
