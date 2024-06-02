@@ -29,7 +29,15 @@ function* workPlaylistLoad(action) {
 				musics: playlistData.musics.length,
 			});
 			playlistData.musics.forEach((music) => {
-				songs.push(music);
+				let count = 0;
+				songs.forEach((song) => {
+					if (song.title === music.title || song.artist === music.artist) {
+						count++;
+					}
+				});
+				if (count === 0) {
+					songs.push(music);
+				}
 				if (music.isFavorite) {
 					favorites.push(music);
 				}

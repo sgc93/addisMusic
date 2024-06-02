@@ -125,7 +125,17 @@ const UserSong = () => {
 	const updateSongs = () => {
 		const updatedSongs = [];
 		allPlaylists.forEach((playlist) => {
-			playlist.musics.forEach((music) => updatedSongs.push(music));
+			playlist.musics.forEach((music) => {
+				let count = 0;
+				updatedSongs.forEach((song) => {
+					if (song.title === music.title || song.artist === music.artist) {
+						count++;
+					}
+				});
+				if (count === 0) {
+					updatedSongs.push(music);
+				}
+			});
 		});
 
 		dispatch(playlistUpdateSong(updatedSongs));
