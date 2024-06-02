@@ -403,6 +403,12 @@ const TrackCard = ({
 		}
 	}, [allPlaylists]);
 
+	useEffect(() => {
+		if (addError) {
+			setIsAddingTo(false);
+		}
+	}, [addError]);
+
 	const handlePlay = (index) => {
 		if (currMusicIndex != index) {
 			dispatch(currentMusicIndex(index));
