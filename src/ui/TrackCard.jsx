@@ -15,7 +15,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { LuLoader2 } from "react-icons/lu";
 import { MdClose, MdError } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, firestore, storage } from "../config/firebase_config";
+import { firestore, storage } from "../config/firebase_config";
 import { checkSignInOpen } from "../features/auth/singIn/signInSlice";
 import {
 	currentMusicIndex,
@@ -368,7 +368,8 @@ const TrackCard = ({
 	setAddFromList,
 }) => {
 	const dispatch = useDispatch();
-	const user = auth.currentUser;
+	const { user } = useSelector((state) => state.authUser);
+
 	const openRoute = useNavigateMenu();
 
 	const { music, isPaused, currMusicIndex, touchedIndex, openedIndex } =

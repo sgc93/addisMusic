@@ -1,10 +1,10 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../config/firebase_config";
 import { checkSignInOpen } from "../features/auth/singIn/signInSlice";
 
 export const useNavigateMenu = () => {
-	const user = auth.currentUser;
+	const { user } = useSelector((state) => state.authUser);
+
 	const navigateTo = useNavigate();
 	const dispatch = useDispatch();
 
