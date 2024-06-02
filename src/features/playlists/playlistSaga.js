@@ -71,7 +71,6 @@ function* workPlaylistAdd(action) {
 		playlistName,
 		currentPlaylists,
 	} = action.payload;
-	console.log("list: " + currentPlaylists);
 	try {
 		let response;
 		switch (updateType) {

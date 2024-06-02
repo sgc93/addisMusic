@@ -36,7 +36,6 @@ function* workCheckSignIn(action) {
 		}
 	} catch (error) {
 		if (error instanceof FirebaseError) {
-			console.log(error.code);
 			let customizedError = error.message.toString();
 			if (error.code == "auth/invalid-credential") {
 				customizedError =

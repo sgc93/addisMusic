@@ -71,7 +71,6 @@ export const deletePlaylist = async (
 					});
 			});
 
-			console.log(updatedPlaylists);
 			return { status: "ok", updatedPlaylists: updatedPlaylists };
 		} else {
 			return {

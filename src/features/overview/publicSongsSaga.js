@@ -9,8 +9,6 @@ function* workPublicLoad() {
 	try {
 		const colRef = collection(firestore, `playlists${id}`);
 		const q = query(colRef);
-
-		console.log("loading playlists");
 		const playlists = yield getDocs(q);
 
 		const songs = [];

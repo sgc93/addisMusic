@@ -9,7 +9,7 @@ const AuthPage = () => {
 		try {
 			await signOut(auth);
 		} catch (error) {
-			console.log(`error while signing out: ${error}`);
+			//
 		}
 	};
 

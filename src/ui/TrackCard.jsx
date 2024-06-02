@@ -501,14 +501,12 @@ const TrackCard = ({
 						}
 					});
 				}
-				console.log(favorites);
 				dispatch(playlistUpdateAll(updatedPlaylists));
 				dispatch(playlistSelect(updatedDocData));
 				dispatch(playlistUpdateFavorite(favorites));
 				setIsSucceed(true);
 			}
 		} catch (error) {
-			console.log(error);
 			setError(error.message);
 		} finally {
 			setIsLoading(false);

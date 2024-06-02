@@ -123,7 +123,6 @@ const SignIn = () => {
 			dispatch(checkSignInFailure("Please enter reset link receiver email!"));
 		} else {
 			dispatch(checkSignInReset(email));
-			console.log("passed email is:" + email);
 		}
 	};
 

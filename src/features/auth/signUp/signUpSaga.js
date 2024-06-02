@@ -32,7 +32,6 @@ function* workCheckSignUP(action) {
 		}
 	} catch (error) {
 		if (error instanceof FirebaseError) {
-			console.log(error.log);
 			let customizedError = error.message.toString();
 			if (error.code == "auth/email-already-in-use") {
 				customizedError = "This email is already in use, login instead!";

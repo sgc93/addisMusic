@@ -117,7 +117,6 @@ const FileRename = ({
 				setFile(response);
 				setIsRenameOpened(false);
 			} catch (error) {
-				console.log(error);
 				setError(error.message);
 			}
 		} else {
