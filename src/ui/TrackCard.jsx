@@ -7,6 +7,7 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import { HiDotsVertical } from "react-icons/hi";
 import { LuLoader2 } from "react-icons/lu";
 import { MdClose, MdError } from "react-icons/md";
+import { TbFileMusic } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, firestore, storage } from "../config/firebase_config";
 import {
@@ -280,6 +281,51 @@ const Playlists = styled.div`
 	gap: 0.4rem;
 
 	width: 100%;
+`;
+
+const PlaylistBtn = styled.button`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	padding: 0.3rem 0.6rem;
+	background-color: var(--color-bg-primary);
+	color: var(--color-text-primary);
+	font-weight: bold;
+	border-radius: 0.4rem;
+	border: 2px solid var(--color-bg-primary);
+	outline: none;
+
+	opacity: 0.8;
+	cursor: pointer;
+	transition: all 0.4s;
+	&:hover {
+		opacity: 1;
+		border-color: var(--color-text-tertiary);
+	}
+	&:active {
+		opacity: 1;
+		border-color: var(--color-border-primary);
+	}
+`;
+
+const Name = styled.span`
+	width: 80%;
+	height: 1rem;
+	text-align: start;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+`;
+
+const Musics = styled.span`
+	display: flex;
+	align-items: center;
+	gap: 0.1rem;
+
+	color: var(--color-text-tertiary);
+	font-weight: 100;
 `;
 
 const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
@@ -563,8 +609,14 @@ const TrackCard = ({ song, index, shouldMore, shouldMoreAdd, isLocal }) => {
 												<Choice>
 													{isAddingTo ? (
 														<Playlists>
-															{playlistNames.map((name) => (
-																<ChoiceBtn>{name}</ChoiceBtn>
+															{playlistNames.map((playlist, index) => (
+																<PlaylistBtn key={index}>
+																	<Name>{playlist.name}</Name>
+																	<Musics>
+																		<TbFileMusic />
+																		<span>{playlist.musics}</span>
+																	</Musics>
+																</PlaylistBtn>
 															))}
 														</Playlists>
 													) : (
