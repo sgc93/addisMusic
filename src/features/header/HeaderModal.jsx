@@ -1,15 +1,15 @@
 import styled from "@emotion/styled";
 import { MdClose } from "react-icons/md";
+import { TbMusicBolt } from "react-icons/tb";
 import IconButton from "../../ui/IconButton";
-import { AuthHeader, SubTitle, Title, TitleBox } from "../auth/Components";
 
 const ModalWindow = styled.div`
 	position: absolute;
 	top: 2.7rem;
-	left: ${(props) => (props.isAbout ? "26.7%" : "40%")};
+	left: ${(props) => (props.isAbout ? "26.7%" : "33.5%")};
 	display: flex;
-	align-items: center;
-	justify-content: center;
+
+	height: 50dvh;
 `;
 
 const ModalBox = styled.div`
@@ -22,9 +22,64 @@ const ModalBox = styled.div`
 	background: radial-gradient(var(--color-rad-center), var(--color-rad-outer));
 	border: 3px solid var(--color-border-primary);
 	border-radius: 1rem;
+	height: 100%;
+
+	box-shadow: 1rem 1rem 1rem 1rem var(--color-bg-tertiary);
+	overflow-y: scroll;
+	overflow-x: hidden;
+	&::-webkit-scrollbar {
+		background-color: transparent;
+		width: 12px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: var(--color-bg-secondary);
+
+		border-radius: 1rem;
+	}
 `;
 
-const ModalBody = styled.div``;
+const ModalHeader = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	width: calc(100% - 2rem);
+	padding: 0.5rem 1rem;
+	border-bottom: 1px solid var(--color-border-primary);
+`;
+
+const HeaderTitle = styled.span`
+	font-size: 1.3rem;
+	font-weight: bold;
+	color: var(--color-text-secondary);
+`;
+
+const ModalBody = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 1rem;
+`;
+
+const BodyText = styled.span`
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+`;
+
+const BodyTextHeader = styled.span`
+	writing-mode: vertical-lr;
+	font-size: 1.2rem;
+	font-weight: bold;
+
+	color: var(--color-gradient-2);
+`;
+const BodyTextContent = styled.span`
+	font-size: 1.07rem;
+	color: var(--color-bg-primary);
+`;
 
 const features = [
 	{
@@ -57,59 +112,74 @@ const Features = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+
+	margin-top: 1rem;
+	font-weight: bold;
+	font-size: 1.2rem;
+	color: var(--color-bg-primary);
 `;
+
 const Feature = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
-	margin-top: 1rem;
+	padding: 0rem 1rem;
 `;
+
 const FeatureTitle = styled.span`
-	color: var(--color-bg-primary);
+	color: var(--color-bg-4);
 	font-weight: bold;
-	font-size: 1.2rem;
+	font-size: large;
+
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
 `;
-const FeatureBody = styled.span``;
+const FeatureBody = styled.span`
+	font-size: small;
+	padding: 0rem 1rem;
+	color: var(--color-bg-4);
+`;
 
 const HeaderModal = ({ isAbout, isContact, isLike, closeModal }) => {
 	return (
 		<ModalWindow isAbout={isAbout}>
 			<ModalBox>
-				<AuthHeader>
-					<TitleBox>
-						<Title>{isAbout ? "About" : "Contact"}</Title>
-						<SubTitle>
-							{isAbout
-								? "it is important to know the intension of what we are looking intensionally!"
-								: "feel free to contact for good reasons!"}
-						</SubTitle>
-					</TitleBox>
+				<ModalHeader>
+					<HeaderTitle>{isAbout ? "About" : "Contact"}</HeaderTitle>
 					<IconButton handleClick={() => closeModal()}>
 						<MdClose />
 					</IconButton>
-				</AuthHeader>
+				</ModalHeader>
 				<ModalBody>
-					<span>
-						Welcome to AddisMusic, your ultimate destination for a seamless
-						music streaming, storage, and playing experience. <br /> AddisMusic
-						is designed with ease of use in mind, providing music enthusiasts
-						with a platform to enjoy their favorite tunes effortlessly. Whether
-						you’re storing your personal music collection or exploring new
-						tracks, AddisMusic has got you covered.
-					</span>
+					<BodyText>
+						<BodyTextHeader>AddisMusic</BodyTextHeader>
+						<BodyTextContent>
+							Welcome to AddisMusic, your ultimate destination for a seamless
+							music streaming, storage, and playing experience. AddisMusic is
+							designed with ease of use in mind, providing music enthusiasts
+							with a platform to enjoy their favorite tunes effortlessly.
+							Whether you’re storing your personal music collection or exploring
+							new tracks, AddisMusic has got you covered.
+						</BodyTextContent>
+					</BodyText>
 					<Features>
+						<span>Key features:</span>
 						{features.map((feature, index) => (
 							<Feature key={index}>
-								<FeatureTitle>{feature.title}</FeatureTitle>
+								<FeatureTitle>
+									<TbMusicBolt />
+									{feature.title}
+								</FeatureTitle>
 								<FeatureBody>{feature.body}</FeatureBody>
 							</Feature>
 						))}
 					</Features>
-					<span>
+					<BodyTextContent>
 						At AddisMusic, we are committed to enhancing your musical journey
 						with features that are both powerful and user-friendly. Join us and
 						transform the way you experience music today!
-					</span>
+					</BodyTextContent>
 				</ModalBody>
 			</ModalBox>
 		</ModalWindow>
