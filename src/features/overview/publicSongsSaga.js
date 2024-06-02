@@ -17,10 +17,17 @@ function* workPublicLoad() {
 		playlists.forEach((playlistDoc) => {
 			const playlistData = playlistDoc.data();
 			playlistData.musics.forEach((music) => {
-				songs.push(music);
+				let count = 0;
+				songs.forEach((song) => {
+					if (song.title === music.title) {
+						count++;
+					}
+				});
+				if (count === 0) {
+					songs.push(music);
+				}
 			});
 		});
-		console.log(songs);
 
 		yield put({
 			type: "public/publicLoadSuccess",
