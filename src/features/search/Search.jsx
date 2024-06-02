@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { TbMusicExclamation } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { musicList } from "../../assets/music_list";
 import { fadeOpen } from "../../styles/animation";
 import TrackCard from "../../ui/TrackCard";
 
@@ -65,23 +65,30 @@ const EmptyTitle = styled.span`
 const EmptySubTitle = styled.span``;
 
 const Search = () => {
-	const songs = musicList;
+	const { allSongs, isLoading, error } = useSelector((state) => state.playlist);
+	const { publicSongs } = useSelector((state) => state.public);
+	const isPublicLoading = useSelector((state) => state.public.isLoading);
+	const publicError = useSelector((state) => state.public.error);
+
+	const isSearchLoading = isLoading || isPublicLoading;
+	const searchError = error || publicError;
+
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get("q");
 	const [results, setResults] = useState([]);
 
 	useEffect(() => {
 		const search = (query) => {
-			try {
+			if (publicSongs) {
 				const validSongs = [];
-				songs.forEach((music) => {
+				publicSongs.forEach((music) => {
 					const str = (music.title + " " + music.artist).toLowerCase();
 					if (str.includes(query.toLowerCase())) {
 						validSongs.push(music);
 					}
 				});
 				setResults(validSongs);
-			} catch (error) {
+			} else {
 				//
 			}
 		};
