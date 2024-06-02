@@ -18,6 +18,18 @@ const MusicBox = styled.div`
 	backdrop-filter: blur(5rem);
 `;
 
+const EmptyMuscList = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	width: 100%;
+
+	font-weight: bold;
+	color: var(--color-text-primary);
+	font-size: 1.4rem;
+`;
+
 const Music = () => {
 	const { isPaused, musicList, currMusicIndex } = useSelector(
 		(state) => state.currMusic
@@ -49,16 +61,28 @@ const Music = () => {
 
 	return (
 		<MusicBox>
-			<audio
-				src={musicList[currMusicIndex]?.url}
-				hidden
-				ref={musicRef}
-				onLoadStart={handleLoadStart}
-				onTimeUpdate={handleTimeUpdate}
-			/>
-			<PlayedMusic playedMusic={musicList[currMusicIndex]} />
-			<MusicController />
-			<MusicLine />
+			{musicList.length > 0 ? (
+				<>
+					<audio
+						src={musicList[currMusicIndex]?.url}
+						hidden
+						ref={musicRef}
+						onLoadStart={handleLoadStart}
+						onTimeUpdate={handleTimeUpdate}
+					/>
+					<PlayedMusic playedMusic={musicList[currMusicIndex]} />
+					<MusicController />
+					<MusicLine />
+				</>
+			) : (
+				<EmptyMuscList>
+					<img src="./logo.png" alt="" width={40} />
+					<span>
+						AddisMusic is an ease to use music streaming and player web app!
+					</span>
+					<img src="./logo.png" alt="" width={40} />
+				</EmptyMuscList>
+			)}
 		</MusicBox>
 	);
 };
