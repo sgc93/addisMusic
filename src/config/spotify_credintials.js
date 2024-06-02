@@ -1,1 +1,1 @@
-export const SPOTIFY_API = process.env.REACT_APP_SPOTIFY_API_KEY;
+export const SPOTIFY_API = import.meta.env.VITE_REACT_APP_SPOTIFY_API_KEY;

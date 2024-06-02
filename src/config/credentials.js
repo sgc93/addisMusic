@@ -1,1 +1,1 @@
-export const adminId = process.env.REACT_APP_ADMIN_ID;
+export const adminId = import.meta.env.VITE_REACT_APP_ADMIN_ID;
